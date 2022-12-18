@@ -34,6 +34,14 @@ export class BusinessComponent implements OnInit {
       searching: true,
       search: false,
       info: false,
+      language: {
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          previous: "<",
+          next: ">",
+        }
+      }
     };
     this.loadData();
   }
