@@ -1,10 +1,32 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+// import { LoginComponent } from './auth/login/login.component';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { LoginGuard } from './shared/guards/login.guard';
 
-const routes: Routes = [];
+
+export const routes: Routes = [
+  {
+    path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    canActivate: [LoginGuard],
+  },
+  {
+    path: 'pages',
+    loadChildren: () => import('./pages/pages.module')
+    .then( m => m.PagesModule ),
+    canLoad: [AuthGuard]
+  },
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'auth/home' },
+];
+
+const config: ExtraOptions = {
+  useHash: false,
+};
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, config)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

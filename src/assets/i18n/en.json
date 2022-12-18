@@ -1,0 +1,26 @@
+{
+    "MODULES": 
+     {
+        "LOGIN": {
+            "TITLE": "Welcome!",
+            "LOGIN": "Login",
+            "EMAIL": "Email",
+            "EMAIL-P": "Enter your email",
+            "PASSWORD-P": "Enter your password",
+            "SUBMIT": "Sign in",
+            "REMEMBER": "Remember me",
+            "FORGOT-PASS": "Remember me"
+        },
+        "BUSINESS": {
+            "TITLE": "Business",
+            "ADD": "Add Business",
+            "EDIT": "Edit Business",
+            "DELETE": "Delete Business",
+            "NAME": "Name",
+            "PHONE": "Phone"
+        }
+    },
+    "BUTTONS": {
+        "CREATE": "Create"
+    }
+}

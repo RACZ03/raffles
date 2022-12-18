@@ -1,0 +1,27 @@
+
+{
+    "MODULES": 
+     {
+        "LOGIN": {
+            "TITLE": "¡Bienvenido!",
+            "LOGIN": "Iniciar Sesión",
+            "EMAIL": "Correo",
+            "EMAIL-P": "Ingrese su correo",
+            "PASSWORD-P": "Ingrese su contraseña",
+            "SUBMIT": "Ingresar",
+            "REMEMBER": "Recordar usuario",
+            "FORGOT-PASS": "¿Has olvidado tu contraseña?"
+        },
+        "BUSINESS": {
+            "TITLE": "Empresa",
+            "ADD": "Agregar Empresa",
+            "EDIT": "Editar Empresa",
+            "DELETE": "Eliminar Empresa",
+            "NAME": "Nombre",
+            "PHONE": "Teléfono"
+        }
+    },
+    "BUTTONS": {
+        "CREATE": "Crear"
+    }
+}
