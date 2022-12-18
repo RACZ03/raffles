@@ -1,6 +1,6 @@
-<div class="row">
-    <div class="col-xl-4 col-lg-4 col-md-2 col-sm-1 col-xs-12"></div>
-    <div class="col-xl-4 col-lg-4 col-md-8 col-sm-10 col-xs-12">
+<div class="row ml-2 mr-2">
+    <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
+    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
         <div class="mt-4">
             <h4>{{ 'MODULES.BUSINESS.ADD' | translate }}</h4>
         </div>
@@ -9,15 +9,42 @@
             <div class="form-group">
                 <label for="" class="form-label">{{ 'MODULES.BUSINESS.NAME' | translate }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" formControlName="nombre"/>
+                <span *ngIf="validInput('nombre')" class="text-danger mt-1">
+                    {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                </span>
             </div>
-            <!-- Phone -->
+            <!-- Phone and Email -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.BUSINESS.PHONE' | translate }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="telefono"  [mask]="'0000 0000'" placeholder="0000 0000"
+                                onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"/>
+                        <span *ngIf="validInput('telefono')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.BUSINESS.EMAIL' | translate }}</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="mail@mail.com"/>
+                    </div>
+                    <span *ngIf="validEmail('email')" class="text-danger mt-1">
+                        {{ 'VALIDATIONS.INVALID_EMAIL' | translate }}
+                    </span>
+                </div>
+            </div>
+            <!-- Address -->
             <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.BUSINESS.PHONE' | translate }} <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="telefono"  [mask]="'(000) 0000 0000'"
-                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"/>
-            </div>
+                <label for="" class="form-label">{{ 'MODULES.BUSINESS.ADDRESS' | translate }}</label>
+                <textarea class="form-control" name="direccion" id="direccion" rows="5" formControlName="direccion"></textarea>
+            </div>            
             <div class="text-center mb-5">
-                <button class="btn btn-sm btn-primary">Save</button>
+                <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                <button class="btn btn-sm btn-primary" [disabled]="businessForm.invalid">
+                    {{ 'BUTTONS.SAVE' | translate }}
+                </button>
             </div>
         </form>
     </div>

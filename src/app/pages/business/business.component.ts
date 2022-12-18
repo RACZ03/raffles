@@ -17,6 +17,7 @@ export class BusinessComponent implements OnInit {
 
   public data: any[] = [];
   public showForm: boolean = false;
+  public businessSelected: any = null;
 
   constructor(
     private businessService: BusinessService,
@@ -52,8 +53,40 @@ export class BusinessComponent implements OnInit {
     this.dtTrigger.next(this.dtOptions);
   }
 
+  // Actions
   add() {
     this.showForm = true;
+  }
+
+  onEdit(item: any) {
+    this.businessSelected = item;
+    this.showForm = true;
+  }
+
+  close(e: boolean) {
+    if ( !e ) {
+      this.showForm = false;
+      return;
+    }
+
+    this.showForm = false;
+    this.renderer();
+    this.loadData();
+  }
+
+  async onDelete(item: any) {
+    let resp = await this.alertSvc.showConfirm('Eliminar', '¿Está seguro de eliminar el registro?');
+    if (resp) {
+      let resp = await this.businessService.delete(item.id);
+      let { status } = resp;
+      if ( status && status == 200) {
+        this.alertSvc.showAlert(1, '', 'Registro eliminado');
+        this.renderer();
+        this.loadData();
+      } else {
+        this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
+      }
+    }
   }
 
 

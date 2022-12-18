@@ -18,8 +18,24 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'route', loadChildren: () => import('./route/route.module').then(m => m.RouteModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
+        path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
+        path: 'award-catalog', loadChildren: () => import('./awar-catalog/awar-catalog.module').then(m => m.AwarCatalogModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
+        path: 'limit', loadChildren: () => import('./limit/limit.module').then(m => m.LimitModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
       // {

@@ -14,8 +14,17 @@ export class BusinessService {
     return this.connectionSvc.send('get', `negocio`);
   }
 
-  add(data: any): Promise<any> {
+  add(data: any, isEdit: boolean = false): Promise<any> {
     let params = JSON.stringify(data);
-    return this.connectionSvc.send('post', `negocio/guardar`, params);
+    if (isEdit) {
+      let { id } = data;
+      return this.connectionSvc.send('put', `negocio/actualizar/${ id }`, params);
+    } else {
+      return this.connectionSvc.send('post', `negocio/guardar`, params);
+    }
+  }
+
+  delete(id: number): Promise<any> {
+    return this.connectionSvc.send('delete', `negocio/eliminar/${ id }`);
   }
 }

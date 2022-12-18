@@ -8,6 +8,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { AddBusinessComponent } from './add-business/add-business.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -23,7 +24,8 @@ import { NgxMaskModule } from 'ngx-mask';
     ThemeModule,
     DataTablesModule,
     ReactiveFormsModule,
-    NgxMaskModule
+    NgxMaskModule,
+    NgbModule
   ]
 })
 export class BusinessModule { }

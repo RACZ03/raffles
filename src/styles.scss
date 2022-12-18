@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Importing Bootstrap SCSS file. */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 .text-dark {
     color: #172b4d !important
@@ -22,6 +23,19 @@
 
 .form-group {
     margin-bottom: 1rem !important;
+
+    span {
+        font-size: 11px;
+        color: #172b4d;
+    }
+}
+
+.form-control-placeholder::placeholder {
+    font-size: 12px;
+}
+
+button i {
+    font-size: 18px;
 }
 
 /* Switch styles */

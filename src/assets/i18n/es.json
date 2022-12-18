@@ -13,15 +13,27 @@
             "FORGOT-PASS": "¿Has olvidado tu contraseña?"
         },
         "BUSINESS": {
-            "TITLE": "Empresa",
-            "ADD": "Agregar Empresa",
-            "EDIT": "Editar Empresa",
-            "DELETE": "Eliminar Empresa",
+            "TITLE": "Negocio",
+            "ADD": "Agregar Negocio",
+            "EDIT": "Editar Negocio",
+            "DELETE": "Eliminar Negocio",
             "NAME": "Nombre",
-            "PHONE": "Teléfono"
+            "PHONE": "Teléfono",
+            "EMAIL": "Correo",
+            "ADDRESS": "Dirección",
+            "INVALID_EMAIL": "Correo inválido"
         }
     },
     "BUTTONS": {
-        "CREATE": "Crear"
+        "ADD": "Agregar",
+        "CREATE": "Crear",
+        "EDIT": "Editar",
+        "DELETE": "Eliminar",
+        "SAVE": "Guardar",
+        "CANCEL": "Cancelar"
+    },
+    "VALIDATIONS": {
+        "INVALID_EMAIL": "Correo inválido",
+        "REQUIRED_FIELD": "Campo requerido"
     }
 }

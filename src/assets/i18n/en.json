@@ -17,10 +17,21 @@
             "EDIT": "Edit Business",
             "DELETE": "Delete Business",
             "NAME": "Name",
-            "PHONE": "Phone"
+            "PHONE": "Phone",
+            "EMAIL": "Email",
+            "ADDRESS": "Address"
         }
     },
     "BUTTONS": {
-        "CREATE": "Create"
+        "ADD": "Add",
+        "CREATE": "Create",
+        "EDIT": "Edit",
+        "DELETE": "Delete",
+        "CANCEL": "Cancel",
+        "SAVE": "Save"
+    },
+    "VALIDATIONS": {
+        "INVALID_EMAIL": "Invalid email",
+        "REQUIRED_FIELD": "Required field"
     }
 }
