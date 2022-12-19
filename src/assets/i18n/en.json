@@ -20,7 +20,18 @@
             "PHONE": "Phone",
             "EMAIL": "Email",
             "ADDRESS": "Address"
-        }
+        },
+        "ROUTE": {
+            "TITLE": "Route",
+            "ADD": "Add Route",
+            "EDIT": "Edit Route",
+            "DELETE": "Delete Route",
+            "NAME": "Name",
+            "BUSINESS": "Business",
+            "BUSINESS-PLACEHOLDER": "Select a business",
+            "ORDER": "Order",
+            "ORDER-PLACEHOLDER": "Select an order"
+        },
     },
     "BUTTONS": {
         "ADD": "Add",

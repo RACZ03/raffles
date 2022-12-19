@@ -22,6 +22,17 @@
             "EMAIL": "Correo",
             "ADDRESS": "Dirección",
             "INVALID_EMAIL": "Correo inválido"
+        },
+        "ROUTE": {
+            "TITLE": "Rutas",
+            "ADD": "Agregar Ruta",
+            "EDIT": "Editar Ruta",
+            "DELETE": "Eliminar Ruta",
+            "NAME": "Nombre",
+            "DESCRIPTION": "Descripción",
+            "BUSINESS": "Negocio",
+            "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
+            "INVALID_EMAIL": "Correo inválido"
         }
     },
     "BUTTONS": {

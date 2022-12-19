@@ -1,7 +1,82 @@
 <!-- always keep -->
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
-    <div class="container-fluid">
-      <div class="header-body">
-      </div>
+  <div class="container-fluid">
+    <div class="header-body">
     </div>
+  </div>
+</div>
+<!-- Contents -->
+<div class="container-fluid mt--7">
+  <div class="row">
+      <div class="col-12 mb-5 mb-xl-0">
+          <div class="card shadow" id="card-container-tables">
+              <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                      <div class="col">
+                          <!-- Switch background -->
+                          <label class="switch float-right">
+                              <input type="checkbox" id="toggleTable" appToggleTable>
+                              <span class="slider round"></span>
+                          </label>
+                          <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.ROUTE.TITLE' | translate }}</h4>
+                      </div>
+                      <div></div>
+                  </div>
+              </div>
+              <!-- TABLE -->
+              <div class="card-body" *ngIf="!showFormRoute">
+                <div class="row">
+                  <div class="col-6">
+                    <button class="btn btn-primary btn-sm" (click)="addRoute()">{{ 'BUTTONS.ADD' | translate }}</button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button class="btn btn-sm btn-warning" title="Exporta a PDF">
+                      <i class="bi bi-filetype-pdf"></i>
+                    </button>
+                    <button class="btn btn-sm btn-warning" title="Exporta a Excel">
+                      <i class="bi bi-file-earmark-excel"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive mt-2">
+                    <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                      <thead class="thead-light" id="thead-table">
+                        <tr>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Descripcion</th>
+                          <th scope="col aling-center">
+                            Acciones
+                          </th>
+                        </tr>
+                        <tr>
+                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)" /></th>
+                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por descripcion" name="search-descripcion" (keyup)="searchData($event)" /></th>
+                          <th>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody-table">
+                        <tr *ngFor="let item of data">
+                            <td>{{ item?.nombre }}</td>
+                            <td>{{ item?.descripcion }}</td>
+                            <td class="text-right">
+                              <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEditRoute(item)">
+                                <i class="bi bi-pencil-square"></i>
+                              </button>
+                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDeleteRoute(item)">
+                                <i class="bi bi-x-circle"></i>
+                              </button>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+              <!-- FORM -->
+              <div *ngIf="showFormRoute">
+                <app-add-route [route]="RouteSelected" (goBack)="closeRoute($event)"></app-add-route>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
