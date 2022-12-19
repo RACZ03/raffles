@@ -33,6 +33,17 @@
             "BUSINESS": "Negocio",
             "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
             "INVALID_EMAIL": "Correo inválido"
+        },
+        "AWARD": {
+            "TITLE": "Premios",
+            "ADD": "Agregar Premio",
+            "EDIT": "Editar Premio",
+            "DELETE": "Eliminar Premio",
+            "NAME": "Nombre",
+            "DESCRIPTION": "Descripción",
+            "BUSINESS": "Negocio",
+            "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
+            "INVALID_EMAIL": "Correo inválido"
         }
     },
     "BUTTONS": {

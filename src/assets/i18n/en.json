@@ -32,6 +32,20 @@
             "ORDER": "Order",
             "ORDER-PLACEHOLDER": "Select an order"
         },
+        "AWARD": {
+            "TITLE": "Award",
+            "ADD": "Add Award",
+            "EDIT": "Edit Award",
+            "DELETE": "Delete Award",
+            "NAME": "Name",
+            "DESCRIPTION": "Description",
+            "BUSINESS": "Business",
+            "BUSINESS-PLACEHOLDER": "Select a business",
+            "ROUTE": "Route",
+            "ROUTE-PLACEHOLDER": "Select a route",
+            "ORDER": "Order",
+            "ORDER-PLACEHOLDER": "Select an order"
+        }
     },
     "BUTTONS": {
         "ADD": "Add",
