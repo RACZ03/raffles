@@ -14,8 +14,11 @@ export class AwarCatalogComponent implements OnInit {
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  flag = 'normal';
+  public dataNormal: any[] = [];
+  public dataEspecial: any[] = [];
 
-  public data: any[] = [];
+  public dataA: any[] = [];
   public showFormAward: boolean = false;
   public awardSelected: any = null;
 
@@ -26,7 +29,7 @@ export class AwarCatalogComponent implements OnInit {
   ) { 
     this.dtOptions = {
       pagingType: "simple_numbers",
-      pageLength: 3,
+      pageLength: 5,
       scrollX: true,
       autoWidth: false,
       destroy: true,
@@ -54,15 +57,47 @@ export class AwarCatalogComponent implements OnInit {
   async loadData() {
     let resp = await this.awardServ.getAwardCatalog();
     console.log(resp)
+    this.dataNormal = [];
+    this.dataEspecial = [];
+    this.dataA=[];
     let { status, data } = resp;
     if ( status && status == 200) {
-      this.data = data;
-      // console.log(this.data)
+     for (let i = 0; i < data.length; i++) {
+        if(data[i].especial == false){
+          this.dataNormal.push(data[i]);
+        }else{
+          this.dataEspecial.push(data[i]);
+        }
+      }
+      console.log(this.dataNormal)
+      this.dataA = this.dataNormal;
+      if(this.flag == 'especial'){
+       this.flag = 'normal';
+      }
+      
     } else {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
+    if ( this.dtElement != undefined ) {
+      this.renderer();
+    }
     this.dtTrigger.next(this.dtOptions);
   }
+
+ async changeFlag(){
+    if(this.flag == 'normal'){
+      this.flag = 'especial';
+      this.dataA=[];
+      if ( this.dtElement != undefined ) {
+        this.renderer();
+      }
+      setTimeout(() => {
+        this.dataA = this.dataEspecial;
+        this.dtTrigger.next(this.dtOptions);
+      }, 100);     
+    }
+  
+ }
 
   // Actions
   addAward() {
@@ -80,7 +115,9 @@ export class AwarCatalogComponent implements OnInit {
       return;
     }
     this.showFormAward = false;
-    this.renderer();
+    if ( this.dtElement != undefined ) {
+      this.renderer();
+    }
     this.loadData();
   }
 
@@ -109,7 +146,7 @@ export class AwarCatalogComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
- this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+ this.dtElement.dtInstance?.then((dtInstance: DataTables.Api) => {
    dtInstance.destroy();
   });
 }

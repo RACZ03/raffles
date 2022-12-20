@@ -79,7 +79,9 @@ export class RouteComponent implements OnInit {
       return;
     }
     this.showFormRoute = false;
-    this.renderer();
+    if ( this.dtElement != undefined ) {
+      this.renderer();
+    }
     this.loadData();
   }
 
@@ -90,7 +92,9 @@ export class RouteComponent implements OnInit {
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        this.renderer();
+        if ( this.dtElement != undefined ) {
+          this.renderer();
+        }
         this.loadData();
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
@@ -108,7 +112,7 @@ export class RouteComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
- this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
    dtInstance.destroy();
   });
 }
@@ -116,6 +120,9 @@ export class RouteComponent implements OnInit {
   /* Destroy components */
   ngOnDestroy(): void {
     // this.renderer
+    if ( this.dtElement != undefined ) {
+      this.renderer();
+    }
     this.dtTrigger.unsubscribe();
   }
 
