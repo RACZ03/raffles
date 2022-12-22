@@ -3,6 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { BusinessService } from 'src/app/@core/services/business.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 
 @Component({
   selector: 'app-business',
@@ -21,7 +22,8 @@ export class BusinessComponent implements OnInit {
 
   constructor(
     private businessService: BusinessService,
-    private alertSvc: AlertService
+    private alertSvc: AlertService,
+    private exportSvc: ExporterDataService
   ) { 
     this.dtOptions = {
       pagingType: "simple_numbers",
@@ -51,6 +53,7 @@ export class BusinessComponent implements OnInit {
   }
 
   async loadData() {
+    this.data = [];
     let resp = await this.businessService.getBusiness();
     let { status, data } = resp;
     if ( status && status == 200) {
@@ -109,6 +112,8 @@ export class BusinessComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
+    if ( !this.dtElement ) return;
+
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first
       dtInstance.destroy();
@@ -121,5 +126,29 @@ export class BusinessComponent implements OnInit {
     this.dtTrigger.unsubscribe();
   }
 
+  /* Export to Excel */
+  exportToExcel() {
+    let json = this.data.map((item: any) => {
+      return {
+        'Nombre': item.nombre,
+        'email': item.email,
+        'telefono': item.telefono,
+        'direccion': item.direccion
+      }
+    });
+    this.exportSvc.exportToExcel(json, 'negocios');
+  }
+
+  exportToPDF() {
+    let json = this.data.map((item: any) => {
+      return {
+        'Nombre': item.nombre,
+        'email': item.email,
+        'telefono': item.telefono,
+        'direccion': item.direccion
+      }
+    });
+    this.exportSvc.exportPdf(json, 'negocios');
+  }
  
 }
