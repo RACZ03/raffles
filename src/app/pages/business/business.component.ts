@@ -49,6 +49,7 @@ export class BusinessComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  
   }
 
   async loadData() {

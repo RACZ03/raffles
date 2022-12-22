@@ -66,10 +66,10 @@
                               <td>{{ item?.telefono }}</td>
                               <td>{{ item?.direccion }}</td>
                               <td class="text-right">
-                                <button class="btn btn-sm text-orange" title="Editar" (click)="onEdit(item)">
+                                <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar"  (click)="onEdit(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <button class="btn btn-sm text-danger" title="Editar" (click)="onDelete(item)">
+                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar"  (click)="onDelete(item)">
                                   <i class="bi bi-x-circle"></i>
                                 </button>
                               </td>
