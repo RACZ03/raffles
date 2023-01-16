@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
@@ -9,7 +9,7 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
   templateUrl: './awar-catalog.component.html',
   styleUrls: ['./awar-catalog.component.scss']
 })
-export class AwarCatalogComponent implements OnInit {
+export class AwarCatalogComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -34,7 +34,7 @@ export class AwarCatalogComponent implements OnInit {
       autoWidth: false,
       destroy: true,
       responsive: true,
-      dom: 'Bfrtip',
+      dom: 't',
       searching: true,
       search: false,
       info: false,
@@ -56,7 +56,7 @@ export class AwarCatalogComponent implements OnInit {
 
   async loadData() {
     let resp = await this.awardServ.getAwardCatalog();
-    console.log(resp)
+    // console.log(resp)
     this.dataNormal = [];
     this.dataEspecial = [];
     this.dataA=[];
@@ -69,7 +69,7 @@ export class AwarCatalogComponent implements OnInit {
           this.dataEspecial.push(data[i]);
         }
       }
-      console.log(this.dataNormal)
+      // console.log(this.dataNormal)
       this.dataA = this.dataNormal;
       if(this.flag == 'especial'){
        this.flag = 'normal';
@@ -112,8 +112,13 @@ export class AwarCatalogComponent implements OnInit {
   closeAward(e: boolean) {
     if ( !e ) {
       this.showFormAward = false;
+      if ( this.dtElement != undefined ) {
+        this.renderer();
+      }
+      this.loadData();
       return;
     }
+
     this.showFormAward = false;
     if ( this.dtElement != undefined ) {
       this.renderer();
@@ -146,10 +151,10 @@ export class AwarCatalogComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
- this.dtElement.dtInstance?.then((dtInstance: DataTables.Api) => {
-   dtInstance.destroy();
-  });
-}
+  this.dtElement.dtInstance?.then((dtInstance: DataTables.Api) => {
+    dtInstance.destroy();
+    });
+  }
 
   /* Destroy components */
   ngOnDestroy(): void {

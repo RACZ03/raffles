@@ -16,7 +16,7 @@ export class AddAwarCatalogComponent implements OnInit {
   
   public businessSelected: any = null;
   @Input() set award(value: any) {
-    console.log(value);
+    // console.log(value);
     if (value != null) {
       this.awardForm = this.initForm();
       this.loadForm(value);

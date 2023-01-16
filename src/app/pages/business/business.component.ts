@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { BusinessService } from 'src/app/@core/services/business.service';
@@ -10,7 +10,7 @@ import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
   templateUrl: './business.component.html',
   styleUrls: ['./business.component.scss']
 })
-export class BusinessComponent implements OnInit {
+export class BusinessComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -32,9 +32,8 @@ export class BusinessComponent implements OnInit {
       autoWidth: false,
       destroy: true,
       responsive: true,
-      dom: 'Bfrtip',
+      dom: 't',
       searching: true,
-      search: false,
       info: false,
       language: {
         paginate: {
