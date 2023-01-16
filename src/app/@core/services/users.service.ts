@@ -4,7 +4,7 @@ import { ConnectionService } from '../utils/connection.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BusinessService {
+export class UsersService {
 
   constructor(
     private connectionSvc: ConnectionService

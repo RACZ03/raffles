@@ -27,17 +27,21 @@ export class NavbarComponent implements OnInit {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
   }
   getTitle(){
-    var titlee = this.location.prepareExternalUrl(this.location.path());
-    if(titlee.charAt(0) === '#'){
-        titlee = titlee.slice( 1 );
+    var path = this.location.prepareExternalUrl(this.location.path());
+    if(path.charAt(0) === '#'){
+      path = path.slice( 1 );
     }
-
+    let title = '';
     for(var item = 0; item < this.listTitles.length; item++){
-        if(this.listTitles[item].path === titlee){
-            return this.listTitles[item].title;
-        }
+      // remove /pages/ from path
+      let pathWithoutPages = path.replace('/pages/', '');
+      
+      if(this.listTitles[item].path == pathWithoutPages) {
+          title = this.listTitles[item].title;
+          break;
+      }
     }
-    return 'Dashboard';
+    return title;
   }
 
   logout() {

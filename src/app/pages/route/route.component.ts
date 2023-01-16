@@ -30,7 +30,7 @@ export class RouteComponent implements OnInit {
       autoWidth: false,
       destroy: true,
       responsive: true,
-      dom: 'Bfrtip',
+      dom: 't',
       searching: true,
       search: false,
       info: false,

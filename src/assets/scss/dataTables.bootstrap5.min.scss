@@ -572,3 +572,6 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:last-child 
         display: none !important;
     }
 }
+
+
+.dataTables_filter, .dataTables_info { display: none !important; }
