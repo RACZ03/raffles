@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouteService } from 'src/app/@core/services/route.service';
+import { LimitService } from 'src/app/@core/services/limit.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 
 @Component({
-  selector: 'app-add-route',
-  templateUrl: './add-route.component.html',
-  styleUrls: ['./add-route.component.scss']
+  selector: 'app-add-limit',
+  templateUrl: './add-limit.component.html',
+  styleUrls: ['./add-limit.component.scss']
 })
-export class AddRouteComponent implements OnInit {
+export class AddLimitComponent implements OnInit {
+
   public isEdit: boolean = false;
   routeForm!: FormGroup;
   @Output() goBack = new EventEmitter<boolean>();
@@ -26,7 +27,7 @@ export class AddRouteComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private routeSvc: RouteService,
+    private limitSvc: LimitService,
     private alertSvc: AlertService,
   ) { }
 
@@ -44,7 +45,7 @@ export class AddRouteComponent implements OnInit {
       });
     }
 
-    let resp = await this.routeSvc.add(this.routeForm.value, this.isEdit);
+    let resp = await this.limitSvc.add(this.routeForm.value, this.isEdit);
     let { status, data } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
@@ -84,6 +85,7 @@ export class AddRouteComponent implements OnInit {
   close() {
     this.goBack.emit(true);
   }
+
 
 
 }
