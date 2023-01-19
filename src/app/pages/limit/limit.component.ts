@@ -10,122 +10,40 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
   styleUrls: ['./limit.component.scss']
 })
 export class LimitComponent implements OnInit {
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement!: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
 
-  public data: any[] = [];
-  public showFormRoute: boolean = false;
-  public RouteSelected: any = null;
+  public scrollOptions: any[] = [
+    { title: 'Cambio limite de numeros por ruta', active: true },
+    { title: 'Cambio Limite de numeros por vendedor', active: false },
+    { title: 'Cambiar un limite', active: false },
+    { title: 'Cambiar limite a un vendedor', active: false },
+    { title: 'Cambiar limite sin afectar limitados ', active: false },
+    { title: 'Liberar numero a vendedores', active: false },
+    { title: 'Liberar numeros a rutas', active: false },
+    { title: 'Liberar numero al negocio', active: false },
+  ];
+  public optionSelected: number = 0;
 
   constructor(
     private limitServ: LimitService,
     private alertSvc: AlertService,
   ) { 
-    this.dtOptions = {
-      pagingType: "simple_numbers",
-      pageLength: 5,
-      scrollX: true,
-      autoWidth: false,
-      destroy: true,
-      responsive: true,
-      dom: 't',
-      searching: true,
-      search: false,
-      info: false,
-      language: {
-        paginate: {
-          first: "Primero",
-          last: "Último",
-          previous: "<",
-          next: ">",
-        }
-      }
-    };
-    this.loadData();
+  
   }
 
   ngOnInit(): void {
    
   }
 
-  async loadData() {
-    let resp = await this.limitServ.getRoute();
-   // console.log(resp)
-    let { status, data } = resp;
-    if ( status && status == 200) {
-      this.data = data;
-      // console.log(this.data)
-    } else {
-      this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
+  changeOptions(e: any, index: number) {
+    for (let i = 0; i < this.scrollOptions.length; i++) {
+      this.scrollOptions[i].active = false;
+
+      if ( i == index )
+        this.scrollOptions[i].active = true;
+        
     }
-    this.dtTrigger.next(this.dtOptions);
+    this.optionSelected = index;
   }
-
-  // Actions
-  addRoute() {
-    this.showFormRoute = true;
-  }
-
-  onEditRoute(item: any) {
-    this.RouteSelected = item;
-    this.showFormRoute = true;
-  }
-
-  closeRoute(e: boolean) {
-    if ( !e ) {
-      this.showFormRoute = false;
-      return;
-    }
-    this.showFormRoute = false;
-    if ( this.dtElement != undefined ) {
-      this.renderer();
-    }
-    
-    this.loadData();
-  }
-
-  async onDeleteRoute(item: any) {
-    let resp = await this.alertSvc.showConfirm('Eliminar', '¿Está seguro de eliminar el registro?');
-    if (resp) {
-      let resp = await this.limitServ.delete(item.id);
-      let { status } = resp;
-      if ( status && status == 200) {
-        this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        if ( this.dtElement != undefined ) {
-          this.renderer();
-        }
-        this.loadData();
-      } else {
-        this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
-      }
-    }
-  }
-
-   /* Search */
-   searchData(e: any) {
-    let value = e.target.value;
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.search(value).draw();
-    });
-  }
-
-  /* Section Render & Destoy */
-  renderer() {
-  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-   dtInstance.destroy();
-  });
-}
-
-  /* Destroy components */
-  ngOnDestroy(): void {
-    // this.renderer
-    if ( this.dtElement != undefined ) {
-      this.renderer();
-    }
-    this.dtTrigger.unsubscribe();
-  }
-
+  
 
 }

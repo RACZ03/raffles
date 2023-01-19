@@ -8,14 +8,29 @@ import { NgxMaskModule } from 'ngx-mask';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { ThemeModule } from 'src/app/@theme/theme.module';
-import { AddLimitComponent } from './add-limit/add-limit.component';
+import { ChangelimitxrutaComponent } from './changelimitxruta/changelimitxruta.component';
+import { ChangelimitxsellerComponent } from './changelimitxseller/changelimitxseller.component';
+import { ChangeonelimitsComponent } from './changeonelimits/changeonelimits.component';
+import { ChangelimitonesellerComponent } from './changelimitoneseller/changelimitoneseller.component';
+import { ChangelimitoutlimitsComponent } from './changelimitoutlimits/changelimitoutlimits.component';
+import { FreenumbertosellerComponent } from './freenumbertoseller/freenumbertoseller.component';
+import { FreenumbertorouteComponent } from './freenumbertoroute/freenumbertoroute.component';
+import { FreenumbertobisnessComponent } from './freenumbertobisness/freenumbertobisness.component';
 
 
 
 @NgModule({
   declarations: [
     LimitComponent,
-    AddLimitComponent
+    ChangelimitxrutaComponent,
+    ChangelimitxsellerComponent,
+    ChangeonelimitsComponent,
+    ChangelimitonesellerComponent,
+    ChangelimitoutlimitsComponent,
+    FreenumbertosellerComponent,
+    FreenumbertorouteComponent,
+    FreenumbertobisnessComponent,
+
   ],
   imports: [
     CommonModule,

@@ -45,7 +45,24 @@
             "ROUTE-PLACEHOLDER": "Select a route",
             "ORDER": "Order",
             "ORDER-PLACEHOLDER": "Select an order"
+        },
+        "LIMITS":{
+            "TITLE": "Limits",
+            "ADD": "Add Limit",
+            "EDIT": "Edit Limit",
+            "DELETE": "Delete Limit",
+            "NAME": "Name",
+            "DESCRIPTION": "Description",
+            "BUSINESS": "Business",
+            "BUSINESS-PLACEHOLDER": "Select a limits",
+            "ROUTE": "Route",
+            "ROUTE-PLACEHOLDER": "Select a limits",
+            "ORDER": "Order",
+            "ORDER-PLACEHOLDER": "Select an Limit",
+            "LIMIT": "Limit",
+            "LIMIT-PLACEHOLDER": "Select a limit"
         }
+        
     },
     "BUTTONS": {
         "ADD": "Add",
