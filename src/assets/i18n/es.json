@@ -44,6 +44,17 @@
             "BUSINESS": "Negocio",
             "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
             "INVALID_EMAIL": "Correo inválido"
+        },
+        "LIMITS": {
+            "TITLE": "Límites",
+            "ADD": "Agregar Límite",
+            "EDIT": "Editar Límite",
+            "DELETE": "Eliminar Límite",
+            "NAME": "Nombre",
+            "DESCRIPTION": "Descripción",
+            "BUSINESS": "Negocio",
+            "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
+            "INVALID_EMAIL": "Correo inválido"
         }
     },
     "BUTTONS": {

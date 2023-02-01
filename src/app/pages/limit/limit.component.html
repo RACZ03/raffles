@@ -1,7 +1,71 @@
+
 <!-- always keep -->
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
     <div class="container-fluid">
       <div class="header-body">
       </div>
     </div>
-</div>
+  </div>
+  <!-- Contents -->
+  <div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col-12 mb-5 mb-xl-0">
+            <div class="card shadow" id="card-container-tables">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Switch background -->
+                            <label class="switch float-right">
+                                <input type="checkbox" id="toggleTable" appToggleTable>
+                                <span class="slider round"></span>
+                            </label>
+                            <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.LIMITS.TITLE' | translate }}</h4>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- TABLE -->
+                <div class="row m-4" style="margin-left: 0px;"  >
+                    <div class="content-1" style="padding-left: 0px !important;">
+                        <ul class="scroll-menu" style="margin: 0px !important; padding: 0px !important">
+                            <li *ngFor="let item of scrollOptions; let i = index;" [ngClass]="{'active': item.active}"
+                                class="menu-item" (click)="changeOptions(item, i)">
+                                {{ item.title }}
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-2">
+                        <div [ngSwitch]="optionSelected">
+                            <div *ngSwitchCase="0">
+                              <app-changelimitxruta></app-changelimitxruta>
+                            </div>
+                            <div *ngSwitchCase="1">
+                              <app-changelimitxseller></app-changelimitxseller>
+                            </div>
+                            <div *ngSwitchCase="2">
+                              <app-changeonelimits></app-changeonelimits>
+                            </div>
+                            <div *ngSwitchCase="3">
+                             <app-changelimitoneseller></app-changelimitoneseller>
+                            </div>
+                            <div *ngSwitchCase="4">
+                              <app-changelimitoutlimits></app-changelimitoutlimits>
+                            </div>
+                            <div *ngSwitchCase="5">
+                              <app-freenumbertoseller></app-freenumbertoseller>
+                            </div>
+                            <div *ngSwitchCase="6">
+                              <app-freenumbertoroute></app-freenumbertoroute>
+                            </div>
+                            <div *ngSwitchCase="7">
+                              <app-freenumbertobisness></app-freenumbertobisness>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  

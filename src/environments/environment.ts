@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  APIUrl: 'http://tablerodev-env.eba-vjqvpey3.us-east-1.elasticbeanstalk.com'
+  APIUrl: 'http://ndiazproduction-env.eba-vwdsag7x.us-east-2.elasticbeanstalk.com'
 };
 
 /*

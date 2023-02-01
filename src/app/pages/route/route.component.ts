@@ -82,6 +82,7 @@ export class RouteComponent implements OnInit {
     if ( this.dtElement != undefined ) {
       this.renderer();
     }
+    
     this.loadData();
   }
 

@@ -82,7 +82,7 @@ export class AddRouteComponent implements OnInit {
   }
 
   close() {
-    this.goBack.emit(false);
+    this.goBack.emit(true);
   }
 
 
