@@ -22,7 +22,8 @@ export class LimitComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalChangelimitxruta = new window.bootstrap.Modal(
-      document.getElementById('modalchangelimitxruta'));
+      document.getElementById('modalchangelimitxruta')
+    );
   }
 
   openModalchangelimitxruta(){

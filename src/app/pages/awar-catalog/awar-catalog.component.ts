@@ -60,21 +60,25 @@ export class AwarCatalogComponent implements OnInit, OnDestroy {
     this.dataNormal = [];
     this.dataEspecial = [];
     this.dataA=[];
-    let { status, data } = resp;
-    if ( status && status == 200) {
-     for (let i = 0; i < data.length; i++) {
-        if(data[i].especial == false){
-          this.dataNormal.push(data[i]);
-        }else{
-          this.dataEspecial.push(data[i]);
+    if ( resp !== undefined ) {
+      let { status, data } = resp;
+      if ( status && status == 200) {
+      for (let i = 0; i < data.length; i++) {
+          if(data[i].especial == false){
+            this.dataNormal.push(data[i]);
+          }else{
+            this.dataEspecial.push(data[i]);
+          }
         }
+        // console.log(this.dataNormal)
+        this.dataA = this.dataNormal;
+        if(this.flag == 'especial'){
+        this.flag = 'normal';
+        }
+        
+      } else {
+        this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
-      // console.log(this.dataNormal)
-      this.dataA = this.dataNormal;
-      if(this.flag == 'especial'){
-       this.flag = 'normal';
-      }
-      
     } else {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
