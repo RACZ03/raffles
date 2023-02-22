@@ -65,10 +65,13 @@
         "USER": {
             "NAME": "Name",
             "PHONE": "Phone Number",
+            "EMAIL": "Email",
             "PASSWORD": "Password",
             "PASSWORD-CONFIRM": "Confirm Password",
             "BUSINESS": "Business",
-            "ROUTE": "Route"
+            "ROUTE": "Route",
+            "ROLE": "Role",
+            "LIMIT": "Limit"
         }
     },
     "BUTTONS": {

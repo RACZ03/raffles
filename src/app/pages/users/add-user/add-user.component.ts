@@ -1,3 +1,4 @@
+import { rolesList } from './../../../@core/data/roles';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BusinessService } from 'src/app/@core/services/business.service';
@@ -16,6 +17,9 @@ export class AddUserComponent implements OnInit {
   userForm!: FormGroup;
   @Output() goBack = new EventEmitter<boolean>();
 
+  public isAdmin: boolean|string = false;
+  public existsLimit: boolean = false;
+  public roles: any[] = rolesList;
   public businesses: any[] = [];
   public routes: any[] = [];
 
@@ -23,6 +27,7 @@ export class AddUserComponent implements OnInit {
   public inputType2: string = 'password';
   public showPassword: boolean = false;
   public showPassword2: boolean = false;
+  public regexEmail = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
   
   public businessSelected: any = null;
   @Input() set user(value: any) {
@@ -46,7 +51,7 @@ export class AddUserComponent implements OnInit {
       this.userForm = this.initForm();
     }
     this.getBusiness();
-    this.getRoutes();
+    this.isAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
   }
 
   async getBusiness() {
@@ -57,16 +62,25 @@ export class AddUserComponent implements OnInit {
         this.businesses = data;
       }
     }
+    // disabled idRuta
+    this.userForm.get('idRuta')?.disable();
   }
 
-  async getRoutes() {
-    let resp = await this.routeSvc.getRoute();
+  onSelectBusiness() {
+    let { idNegocio } = this.userForm.value;
+    this.getRoutesByIdBusiness(idNegocio);
+  };
+
+  async getRoutesByIdBusiness(id: number = 0) {
+    let resp = await this.routeSvc.getRoutesByIdBusiness(id);
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200 ) {
         this.routes = data;
+        // enabled idRuta
       }
     }
+    this.userForm.get('idRuta')?.enable();
   }
 
   async onSubmit() {
@@ -76,7 +90,7 @@ export class AddUserComponent implements OnInit {
       });
     }
 
-    let resp = await this.userSvc.add(this.userForm.value, this.isEdit);
+    let resp = await this.userSvc.add(this.userForm.value, this.isAdmin, this.isEdit, this.existsLimit);
     let { status, data } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
@@ -107,6 +121,15 @@ export class AddUserComponent implements OnInit {
     }
   }
 
+  onChangeRole() {
+    let role = this.userForm.get('role')?.value;
+    if (role == 'ROLE_VENDEDOR') {
+      this.existsLimit = true;
+    } else {
+      this.existsLimit = false;
+    }
+  }
+
   loadForm(data: any) {
     if ( this.userForm ===  undefined ) {
       return;
@@ -116,6 +139,7 @@ export class AddUserComponent implements OnInit {
       id: data?.id,
       nombre: data?.nombre,
       telefono: data?.telefono,
+      email: data?.email,
       password: data?.password,
       confirm_password: data?.password,
       idNegocio: data?.idNegocio,
@@ -129,16 +153,23 @@ export class AddUserComponent implements OnInit {
     return this.userForm.get(name)?.touched && this.userForm.get(name)?.errors?.['required'];
   }
 
+  validRegex(name: string) {
+    return this.userForm.get(name)?.touched && this.userForm.get(name)?.errors?.['pattern'];
+  }
+
   // Form
   initForm(): FormGroup {
     return this.fb.group({
       id: [null],
       nombre: ['', Validators.required],
       telefono: ['', Validators.required],
+      email: ['', [Validators.pattern(this.regexEmail)]],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
       idNegocio: ['', Validators.required],
       idRuta: ['', Validators.required],
+      role: ['', Validators.required],
+      limit: [0],
     });
   }
 

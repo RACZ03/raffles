@@ -10,6 +10,20 @@ export class UsersService {
     private connectionSvc: ConnectionService
   ) { }
   
+  getRolesByAuth(): any {
+    return JSON.parse(localStorage.getItem('roles') || '') || [];
+  }
+
+  verifyRole(found: string, b: boolean = true): boolean|string {
+    let roles = this.getRolesByAuth();
+    let role = roles.find((item: any) => item.nombre === found);
+
+    if ( b ) 
+      return role !== undefined;
+    else
+      return role;
+  }
+
   getUsers(): Promise<any> {
     return this.connectionSvc.send('get', `usuario?page=1&size=10000`);
   }
@@ -22,11 +36,12 @@ export class UsersService {
     return this.connectionSvc.send('get', `usuario/obtenerPorTelefono/${ phone }`);
   }
 
-  add( data: any, isEdit: boolean = false, isSuperAdmin: boolean = false ): Promise<any> {
+  add( data: any, isSuperAdmin: boolean|string = false, isEdit: boolean = false, existsLimit: boolean = false ): Promise<any> {
 
     let obj = {
       nombre: data.nombre,
       telefono: data.telefono,
+      email: data.email,
       password: data.password,
       idNegocio: data.idNegocio,
       idRuta: data.idRuta,
@@ -35,7 +50,9 @@ export class UsersService {
     let role: string = data.rol;
     let limite: number = data.limite;
 
-    let path = isSuperAdmin ? 'guardarSuperAdmin' : `guardarUsuario?rol=${ role }&limite=${ limite }`;
+    let path = isSuperAdmin ? 'guardarSuperAdmin' : `guardarUsuario?rol=${ role }`;
+    if ( existsLimit) 
+      path = path + `&limite=${ limite }`; 
 
     let params = JSON.stringify(obj);
 

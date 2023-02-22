@@ -59,10 +59,13 @@
         "USER": {
             "NAME": "Nombre",
             "PHONE": "Teléfono",
+            "EMAIL": "Correo",
             "PASSWORD": "Contraseña",
             "PASSWORD-CONFIRM": "Confirmar contraseña",
             "BUSINESS": "Negocio",
-            "ROUTE": "Ruta"
+            "ROUTE": "Ruta",
+            "ROLE": "Rol",
+            "LIMIT": "Límite"
         }
     },
     "BUTTONS": {

@@ -13,13 +13,28 @@
                     {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
                 </span>
             </div>
-            <!-- Phone -->
-            <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.USER.PHONE' | translate }} <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="telefono"/>
-                <span *ngIf="validInput('telefono')" class="text-danger mt-1">
-                    {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                </span>
+            <!-- Email & Phone  -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.PHONE' | translate }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="telefono"/>
+                        <span *ngIf="validInput('telefono')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.EMAIL' | translate }} </label>
+                        <input type="text" class="form-control" formControlName="email"/>
+                        <span *ngIf="validRegex('email')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
             </div>
             <!-- Password -->
             <div class="row">
@@ -56,13 +71,16 @@
                     <!-- ID Business -->
                     <div class="form-group">
                         <label for="" class="form-label">{{ 'MODULES.USER.BUSINESS' | translate }} <span class="text-danger">*</span></label>
-                        <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;">
+                        <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;" (change)="onSelectBusiness()">
                             <option value="0">Seleccione</option>
                             <option *ngFor="let business of businesses" [value]="business.id">{{ business.nombre }}</option>
                         </select>
                         <span *ngIf="validInput('idNegocio')" class="text-danger mt-1">
                             {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
                         </span>
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -80,6 +98,32 @@
                     </div>
                 </div>
             </div> 
+            <!-- Roles & Limit -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- Role -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="role" style="padding: 6px 12px !important;" (click)="onChangeRole()">
+                            <option value="0">Seleccione</option>
+                            <option *ngFor="let route of roles" [value]="route.ref">{{ route.nombre }}</option>
+                        </select>
+                        <span *ngIf="validInput('role')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- LIMIT -->
+                    <div class="form-group" *ngIf="existsLimit">
+                        <label for="" class="form-label">{{ 'MODULES.USER.LIMIT' | translate }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="limit"/>
+                        <span *ngIf="validInput('limit')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+            </div>
             <!--  -->
             <div class="text-center mt-2 mb-5">
                 <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
