@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { data } from 'jquery';
 import { identity } from 'rxjs';
 import { ConnectionService } from '../utils/connection.service';
 
@@ -38,4 +39,50 @@ export class LimitService {
   delete(id: number): Promise<any> {
     return this.connectionSvc.send('delete', `ruta/eliminar/${ id }`);
   }
+
+  // addOnBlur = true;
+  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  // numero: numero[] = [];
+
+  // add(event: MatChipInputEvent): void {
+  //   const value = (event.value || '').trim();
+
+  //   // Add our fruit
+  //   if (value) {
+  //     this.numero.push({ name: value });
+  //   }
+
+  //   // Clear the input value
+  //   event.chipInput!.clear();
+  // }
+
+  // remove(numero: numero): void {
+  //   const index = this.numero.indexOf(numero);
+
+  //   if (index >= 0) {
+  //     this.numero.splice(index, 1);
+  //   }
+  // }
+
+  // edit(numero: numero, event: MatChipEditedEvent) {
+  //   const value = event.value.trim();
+
+  //   // Remove fruit if it no longer has a name
+  //   if (!value) {
+  //     this.remove(numero);
+  //     return;
+  //   }
+
+  //   // Edit existing fruit
+  //   const index = this.numero.indexOf(numero);
+  //   if (index >= 0) {
+  //     this.numero[index].name = value;
+  //   }
+  // }
+ 
+}
+
+
+export interface numero {
+  name: string;
 }

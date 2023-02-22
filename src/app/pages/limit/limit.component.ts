@@ -26,15 +26,14 @@ export class LimitComponent implements OnInit {
     );
   }
 
+  /// Modal Change Limit x Ruta
   openModalchangelimitxruta(){
    this.modalChangelimitxruta.show();
-   console.log('aqui ando');
+   //console.log('aqui ando');
   }
-  
   closeModal(band: boolean) {
     if ( band )
       this.modalChangelimitxruta.hide();
-
   }
 
 
