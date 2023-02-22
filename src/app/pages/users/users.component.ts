@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { BusinessService } from 'src/app/@core/services/business.service';
+import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 
@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
   public businessSelected: any = null;
 
   constructor(
-    private businessService: BusinessService,
+    private usersSvc: UsersService,
     private alertSvc: AlertService,
     private exportSvc: ExporterDataService
   ) { 
@@ -54,11 +54,11 @@ export class UsersComponent implements OnInit {
 
   async loadData() {
     this.data = [];
-    let resp = await this.businessService.getBusiness();
+    let resp = await this.usersSvc.getUsers();
     let { status, data } = resp;
     if ( status && status == 200) {
-      this.data = data;
-      // console.log(this.data)
+      this.data = data.content;
+      console.log(this.data)
     } else {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
@@ -89,7 +89,7 @@ export class UsersComponent implements OnInit {
   async onDelete(item: any) {
     let resp = await this.alertSvc.showConfirm('Eliminar', '¿Está seguro de eliminar el registro?');
     if (resp) {
-      let resp = await this.businessService.delete(item.id);
+      let resp = await this.usersSvc.delete(item.id);
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
