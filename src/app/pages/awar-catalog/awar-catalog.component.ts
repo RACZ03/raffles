@@ -3,6 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-awar-catalog',
@@ -27,26 +28,7 @@ export class AwarCatalogComponent implements OnInit, OnDestroy {
     private awardServ: awarCatalogService,
     private alertSvc: AlertService,
   ) { 
-    this.dtOptions = {
-      pagingType: "simple_numbers",
-      pageLength: 5,
-      scrollX: true,
-      autoWidth: false,
-      destroy: true,
-      responsive: true,
-      dom: 't',
-      searching: true,
-      search: false,
-      info: false,
-      language: {
-        paginate: {
-          first: "Primero",
-          last: "Último",
-          previous: "<",
-          next: ">",
-        }
-      }
-    };
+    this.dtOptions = environment.dtOptions;
     this.loadData();
 
   }

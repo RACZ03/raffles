@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { BusinessService } from 'src/app/@core/services/business.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-business',
@@ -25,25 +26,7 @@ export class BusinessComponent implements OnInit, OnDestroy {
     private alertSvc: AlertService,
     private exportSvc: ExporterDataService
   ) { 
-    this.dtOptions = {
-      pagingType: "simple_numbers",
-      pageLength: 5,
-      scrollX: true,
-      autoWidth: false,
-      destroy: true,
-      responsive: true,
-      dom: 't',
-      searching: true,
-      info: false,
-      language: {
-        paginate: {
-          first: "Primero",
-          last: "Último",
-          previous: "<",
-          next: ">",
-        }
-      }
-    };
+    this.dtOptions = environment.dtOptions;
     this.loadData();
   }
 

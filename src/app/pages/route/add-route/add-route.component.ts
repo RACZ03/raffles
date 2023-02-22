@@ -15,14 +15,12 @@ export class AddRouteComponent implements OnInit {
   
   public businessSelected: any = null;
   @Input() set route(value: any) {
-    console.log(value);
+    // console.log(value);
     if (value != null) {
       this.routeForm = this.initForm();
       this.loadForm(value);
     }
   }
-
- // public emailRegex: string ='^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
   constructor(
     private fb: FormBuilder,

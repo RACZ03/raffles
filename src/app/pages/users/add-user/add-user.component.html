@@ -1,0 +1,92 @@
+<div class="row ml-2 mr-2">
+    <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
+    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="mt-4">
+            <h4>{{ 'MODULES.ROUTE.ADD' | translate }}</h4>
+        </div>
+        <form [formGroup]="userForm" (submit)="onSubmit()">
+            <!-- Name -->
+            <div class="form-group">
+                <label for="" class="form-label">{{ 'MODULES.USER.NAME' | translate }} <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="nombre"/>
+                <span *ngIf="validInput('nombre')" class="text-danger mt-1">
+                    {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                </span>
+            </div>
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="" class="form-label">{{ 'MODULES.USER.PHONE' | translate }} <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="telefono"/>
+                <span *ngIf="validInput('telefono')" class="text-danger mt-1">
+                    {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                </span>
+            </div>
+            <!-- Password -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                     <!-- password -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.PASSWORD' | translate }} <span class="text-danger">*</span></label>
+                        <input [type]="inputType" class="form-control" formControlName="password"/>
+                        <span *ngIf="validInput('password')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                        <button class="btn btn-sm btn-eye" type="button" (click)="onShowPassword(true)">
+                            <i [ngClass]="(showPassword) ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- confirm password -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.PASSWORD-CONFIRM' | translate }} <span class="text-danger">*</span></label>
+                        <input [type]="inputType2" class="form-control" formControlName="confirm_password"/>
+                        <span *ngIf="validInput('confirm_password')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                        <button class="btn btn-sm btn-eye" type="button" (click)="onShowPassword()">
+                            <i [ngClass]="(showPassword2) ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Business & Routes -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- ID Business -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.BUSINESS' | translate }} <span class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;">
+                            <option value="0">Seleccione</option>
+                            <option *ngFor="let business of businesses" [value]="business.id">{{ business.nombre }}</option>
+                        </select>
+                        <span *ngIf="validInput('idNegocio')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <!-- ID Route -->
+                    <div class="form-group">
+                        <label for="" class="form-label">{{ 'MODULES.USER.ROUTE' | translate }} <span class="text-danger">*</span></label>
+                        <!-- <input type="text" class="form-control" formControlName="idRuta"/> -->
+                        <select class="form-control" formControlName="idRuta" style="padding: 6px 12px !important;">
+                            <option value="0">Seleccione</option>
+                            <option *ngFor="let route of routes" [value]="route.id">{{ route.nombre }}</option>
+                        </select>
+                        <span *ngIf="validInput('idRuta')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+            </div> 
+            <!--  -->
+            <div class="text-center mt-2 mb-5">
+                <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                <button class="btn btn-sm btn-primary" [disabled]="userForm.invalid">
+                    {{ 'BUTTONS.SAVE' | translate }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -61,8 +61,15 @@
             "ORDER-PLACEHOLDER": "Select an Limit",
             "LIMIT": "Limit",
             "LIMIT-PLACEHOLDER": "Select a limit"
+        },
+        "USER": {
+            "NAME": "Name",
+            "PHONE": "Phone Number",
+            "PASSWORD": "Password",
+            "PASSWORD-CONFIRM": "Confirm Password",
+            "BUSINESS": "Business",
+            "ROUTE": "Route"
         }
-        
     },
     "BUTTONS": {
         "ADD": "Add",
