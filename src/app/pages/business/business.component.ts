@@ -54,10 +54,14 @@ export class BusinessComponent implements OnInit, OnDestroy {
   async loadData() {
     this.data = [];
     let resp = await this.businessService.getBusiness();
-    let { status, data } = resp;
-    if ( status && status == 200) {
-      this.data = data;
-      // console.log(this.data)
+    if ( resp !== undefined ) {
+      let { status, data } = resp;
+      if ( status && status == 200) {
+        this.data = data;
+        // console.log(this.data)
+      } else {
+        this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
+      }
     } else {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }

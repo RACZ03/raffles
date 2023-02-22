@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+
+declare var window: any;
 
 @Component({
   selector: 'app-limit',
@@ -11,17 +11,7 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 })
 export class LimitComponent implements OnInit {
 
-  public scrollOptions: any[] = [
-    { title: 'Cambio limite de numeros por ruta', active: true },
-    { title: 'Cambio Limite de numeros por vendedor', active: false },
-    { title: 'Cambiar un limite', active: false },
-    { title: 'Cambiar limite a un vendedor', active: false },
-    { title: 'Cambiar limite sin afectar limitados ', active: false },
-    { title: 'Liberar numero a vendedores', active: false },
-    { title: 'Liberar numeros a rutas', active: false },
-    { title: 'Liberar numero al negocio', active: false },
-  ];
-  public optionSelected: number = 0;
+  public modalChangelimitxruta: any;
 
   constructor(
     private limitServ: LimitService,
@@ -31,19 +21,21 @@ export class LimitComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+    this.modalChangelimitxruta = new window.bootstrap.Modal(
+      document.getElementById('modalchangelimitxruta')
+    );
   }
 
-  changeOptions(e: any, index: number) {
-    for (let i = 0; i < this.scrollOptions.length; i++) {
-      this.scrollOptions[i].active = false;
-
-      if ( i == index )
-        this.scrollOptions[i].active = true;
-        
-    }
-    this.optionSelected = index;
+  openModalchangelimitxruta(){
+   this.modalChangelimitxruta.show();
+   console.log('aqui ando');
   }
   
+  closeModal(band: boolean) {
+    if ( band )
+      this.modalChangelimitxruta.hide();
+
+  }
+
 
 }

@@ -24,48 +24,194 @@
                         <div></div>
                     </div>
                 </div>
-                <!-- TABLE -->
-                <div class="row m-4" style="margin-left: 0px;"  >
-                    <div class="content-1" style="padding-left: 0px !important;">
-                        <ul class="scroll-menu" style="margin: 0px !important; padding: 0px !important">
-                            <li *ngFor="let item of scrollOptions; let i = index;" [ngClass]="{'active': item.active}"
-                                class="menu-item" (click)="changeOptions(item, i)">
-                                {{ item.title }}
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="content-2">
-                        <div [ngSwitch]="optionSelected">
-                            <div *ngSwitchCase="0">
-                              <app-changelimitxruta></app-changelimitxruta>
+                <!-- CARD -->
+                <div class="container mb-5">
+                     <div class="row">
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
+                        <div style="cursor: pointer;" (click)="openModalchangelimitxruta()">
+                          <div class="card card-stats mb-4 mb-lg-0" >
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar </h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                    <i class="bi bi-bar-chart-steps"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Numeros por Rutas</span>
+                              </p>
                             </div>
-                            <div *ngSwitchCase="1">
-                              <app-changelimitxseller></app-changelimitxseller>
-                            </div>
-                            <div *ngSwitchCase="2">
-                              <app-changeonelimits></app-changeonelimits>
-                            </div>
-                            <div *ngSwitchCase="3">
-                             <app-changelimitoneseller></app-changelimitoneseller>
-                            </div>
-                            <div *ngSwitchCase="4">
-                              <app-changelimitoutlimits></app-changelimitoutlimits>
-                            </div>
-                            <div *ngSwitchCase="5">
-                              <app-freenumbertoseller></app-freenumbertoseller>
-                            </div>
-                            <div *ngSwitchCase="6">
-                              <app-freenumbertoroute></app-freenumbertoroute>
-                            </div>
-                            <div *ngSwitchCase="7">
-                              <app-freenumbertobisness></app-freenumbertobisness>
-                            </div>
+                          </div>
                         </div>
-                    </div>
+                        <div style="cursor: pointer;" class="mt-4">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                    <i class="bi bi-person-circle"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Numeros por Vendedor</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12  mt-4">
+                        <div style="cursor: pointer;">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="fas fa-chart-bar"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">De un Limite</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                    <i class="bi bi-person-lines-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">De un Vendedor</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12  mt-4">
+                        <div style="cursor: pointer;">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <i class="bi bi-capslock-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Sin afectar Limitados</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                                    <i class="bi bi-123"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de vendedores</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
+                        <div style="cursor: pointer;">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="bi bi-bus-front"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de las Rutas</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de los Negocios</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                     </div>
                 </div>
             </div>
         </div>
     </div>
   </div>
   
+  <!-- Modal Cambiar limite de numeros por ruta [dataUpdate]="module" -->
+<div class="modal fade" id="modalchangelimitxruta" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <app-changelimitxruta (onClose)="closeModal($event)"></app-changelimitxruta>
+</div>
+

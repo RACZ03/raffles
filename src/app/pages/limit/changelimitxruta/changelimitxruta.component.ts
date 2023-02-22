@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-changelimitxruta',
@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./changelimitxruta.component.scss']
 })
 export class ChangelimitxrutaComponent implements OnInit {
-
+  @Output() onClose = new EventEmitter<boolean>();
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  
 }

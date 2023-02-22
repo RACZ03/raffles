@@ -55,10 +55,14 @@ export class UsersComponent implements OnInit {
   async loadData() {
     this.data = [];
     let resp = await this.usersSvc.getUsers();
-    let { status, data } = resp;
-    if ( status && status == 200) {
-      this.data = data.content;
-      console.log(this.data)
+    if ( resp !== undefined ) {
+      let { status, data } = resp;
+      if ( status && status == 200) {
+        this.data = data;
+        // console.log(this.data)
+      } else {
+        this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
+      }
     } else {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
