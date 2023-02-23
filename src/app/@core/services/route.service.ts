@@ -17,6 +17,10 @@ export class RouteService {
     return this.connectionSvc.send('get', `ruta`);
   }
 
+  getRoutesByIdBusiness(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `ruta/negocio/${ id }`);
+  }
+
   add(data: any, isEdit: boolean = false): Promise<any> {
     
   let obj: any = {

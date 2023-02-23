@@ -55,6 +55,17 @@
             "BUSINESS": "Negocio",
             "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
             "INVALID_EMAIL": "Correo inválido"
+        },
+        "USER": {
+            "NAME": "Nombre",
+            "PHONE": "Teléfono",
+            "EMAIL": "Correo",
+            "PASSWORD": "Contraseña",
+            "PASSWORD-CONFIRM": "Confirmar contraseña",
+            "BUSINESS": "Negocio",
+            "ROUTE": "Ruta",
+            "ROLE": "Rol",
+            "LIMIT": "Límite"
         }
     },
     "BUTTONS": {

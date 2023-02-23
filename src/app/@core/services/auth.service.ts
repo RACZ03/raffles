@@ -136,7 +136,8 @@ export class AuthService {
       }
     });
   }
-async logout(email: string)
+  
+  async logout(email: string)
   {
     // Revisar este metodo
     // let resp = await this.connectionSvc.send('put', `users/updateLastLogin?email=${email}`);

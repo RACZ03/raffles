@@ -44,7 +44,8 @@
                           <th scope="col">Nombre</th>
                           <th scope="col">Email</th>
                           <th scope="col">Teléfono</th>
-                          <th scope="col">Dirección</th>
+                          <th scope="col">Negocio</th>
+                          <th scope="col">Ruta</th>
                           <th scope="col">
                             Acciones
                           </th>
@@ -53,7 +54,8 @@
                           <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)"/></th>
                           <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por email" name="search-email" (keyup)="searchData($event)"/></th>
                           <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por teléfono" name="search-phone" (keyup)="searchData($event)"/></th>
-                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por dirección" name="search-address" (keyup)="searchData($event)"/></th>
+                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por negocio" name="search-bussines" (keyup)="searchData($event)"/></th>
+                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por ruta" name="search-route" (keyup)="searchData($event)"/></th>
                           <th>
                           </th>
                         </tr>
@@ -63,12 +65,13 @@
                             <td>{{ item?.nombre }}</td>
                             <td>{{ item?.email }}</td>
                             <td>{{ item?.telefono }}</td>
-                            <td>{{ item?.direccion }}</td>
+                            <td>{{ item?.negocioAndRuta?.negocio }}</td>
+                            <td>{{ item?.negocioAndRuta?.ruta }}</td>
                             <td class="text-right">
-                              <button class="btn btn-sm text-orange" title="Editar" (click)="onEdit(item)">
+                              <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEdit(item)">
                                 <i class="bi bi-pencil-square"></i>
                               </button>
-                              <button class="btn btn-sm text-danger" title="Editar" (click)="onDelete(item)">
+                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDelete(item)">
                                 <i class="bi bi-x-circle"></i>
                               </button>
                             </td>
@@ -79,7 +82,7 @@
               </div>
               <!-- FORM -->
               <div *ngIf="showForm">
-                
+                <app-add-user [user]="UserSelected" (goBack)="closeUser($event)"></app-add-user>
               </div>
           </div>
       </div>

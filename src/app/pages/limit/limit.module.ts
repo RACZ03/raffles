@@ -4,6 +4,7 @@ import { LimitComponent } from './limit.component';
 import { LimitRoutingModule } from './limit-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MaterialModule } from './../../material/material.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
@@ -41,7 +42,8 @@ import { FreenumbertobisnessComponent } from './freenumbertobisness/freenumberto
     DataTablesModule,
     ReactiveFormsModule,
     NgxMaskModule,
-    NgbModule
+    NgbModule,
+    MaterialModule
   ]
 })
 export class LimitModule { }

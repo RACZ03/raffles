@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { BusinessService } from 'src/app/@core/services/business.service';
+import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users',
@@ -21,31 +22,14 @@ export class UsersComponent implements OnInit {
   public showForm: boolean = false;
   public businessSelected: any = null;
 
+  public UserSelected: any = null;
+
   constructor(
-    private businessService: BusinessService,
+    private usersSvc: UsersService,
     private alertSvc: AlertService,
     private exportSvc: ExporterDataService
   ) { 
-    this.dtOptions = {
-      pagingType: "simple_numbers",
-      pageLength: 5,
-      scrollX: true,
-      autoWidth: false,
-      destroy: true,
-      responsive: true,
-      dom: 't',
-      searching: true,
-      search: false,
-      info: false,
-      language: {
-        paginate: {
-          first: "Primero",
-          last: "Último",
-          previous: "<",
-          next: ">",
-        }
-      }
-    };
+    this.dtOptions = environment.dtOptions;
     this.loadData();
   }
 
@@ -54,12 +38,13 @@ export class UsersComponent implements OnInit {
 
   async loadData() {
     this.data = [];
-    let resp = await this.businessService.getBusiness();
+    let resp = await this.usersSvc.getUsers();
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200) {
-        this.data = data;
-        // console.log(this.data)
+        let { content } = data;
+        this.data = content;
+        console.log(this.data)
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
@@ -79,21 +64,23 @@ export class UsersComponent implements OnInit {
     this.showForm = true;
   }
 
-  close(e: boolean) {
+  closeUser(e: boolean) {
     if ( !e ) {
       this.showForm = false;
       return;
     }
-
     this.showForm = false;
-    this.renderer();
+    if ( this.dtElement != undefined ) {
+      this.renderer();
+    }
+    
     this.loadData();
   }
 
   async onDelete(item: any) {
     let resp = await this.alertSvc.showConfirm('Eliminar', '¿Está seguro de eliminar el registro?');
     if (resp) {
-      let resp = await this.businessService.delete(item.id);
+      let resp = await this.usersSvc.delete(item.id);
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
