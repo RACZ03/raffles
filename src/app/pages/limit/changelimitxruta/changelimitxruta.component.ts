@@ -1,7 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { map, Observable, startWith } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { RouteService } from 'src/app/@core/services/route.service';
 
 @Component({
   selector: 'app-changelimitxruta',
@@ -10,59 +13,92 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 })
 export class ChangelimitxrutaComponent implements OnInit {
   @Output() onClose = new EventEmitter<boolean>();
+  @ViewChild('rutasInput') rutasInput!: ElementRef<HTMLInputElement>;
 
   addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  readonly separatorKeysCodesnumber = [ENTER, COMMA] as const;
+  readonly separatorKeysCodesRutas = [ENTER, COMMA] as const;
   formChangeLimiteXroute!: FormGroup;
-  fruits: any[] = [{name: 'Lemon'}, {name: 'Lime'}, {name: 'Apple'}];
+  Numeros: any[] = [];
+  rutasCtrl = new FormControl('');
+  filteredRutas: Observable<any[]>;
+  rutas: any[] = [];
+  allRutas: any[] = [];
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
 
-    // Add our fruit
-    if (value) {
-      this.fruits.push({name: value});
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-  }
-
-  remove(fruit: any): void {
-    const index = this.fruits.indexOf(fruit);
-
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-    }
-  }
-
-  edit(fruit: any, event: MatChipEditedEvent) {
-    const value = event.value.trim();
-
-    // Remove fruit if it no longer has a name
-    if (!value) {
-      this.remove(fruit);
-      return;
-    }
-
-    // Edit existing fruit
-    const index = this.fruits.indexOf(fruit);
-    if (index >= 0) {
-      this.fruits[index].name = value;
-    }
-  }
+    ///constructor
   constructor(
     private fb: FormBuilder,
-  ) { }
+    private routeSvc: RouteService,
 
-  ngOnInit(): void {
+  ) { 
+    this.filteredRutas = this.rutasCtrl.valueChanges.pipe(
+      startWith(null), 
+      map((ruta :any | null )=> ruta ? this._filter(ruta) : this.allRutas.slice()));
+    }
+
+ //OnInit
+   ngOnInit(): void {
     this.formChangeLimiteXroute = this.initForms();
+    this.loadRutas();
   }
 
+  async loadRutas() {
+    let resp = await this.routeSvc.getRoute();
+    //console.log(resp);
+    let {status, data} = resp;
+    if (status == 200) {
+      console.log(data);
+      this.allRutas = data;
+    }
+  }
 
+  addNumber(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+// Add our number
+    if (value) {this.Numeros.push({name: value});}
+ // Clear the input value
+    event.chipInput!.clear();}
 
+  //remover number
+  removeNumber(number: any): void {
+    const index = this.Numeros.indexOf(number);
+   if (index >= 0) {this.Numeros.splice(index, 1);}}
+
+  //editar number
+  editNumber(number: any, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+    // Remove number if it no longer has a name
+    if (!value) { this.removeNumber(number); return;}
+    // Edit existing number
+    const index = this.Numeros.indexOf(number);
+    if (index >= 0) {this.Numeros[index].name = value;}}
+
+    //addRutas
+  addRutas(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+// Add our number
+    if (value) {this.rutas.push(value);}
+  // Clear the input value
+    event.chipInput!.clear();}
+  //remover rutas
+  removeRutas(ruta: any): void {
+    const index = this.rutas.indexOf(ruta);
+    if (index >= 0) {this.rutas.splice(index, 1);}}
+
+    selectedRutas(event: MatAutocompleteSelectedEvent): void {
+      this.rutas.push(event.option.viewValue);
+      this.rutasInput.nativeElement.value = '';
+      this.rutasCtrl.setValue(null);
+    }
+
+    private _filter(value: any): any[] {
+      const filterValue = value?.toLowerCase();
+      return this.allRutas.filter(ruta => ruta.name.toLowerCase().indexOf(filterValue));
+    }
+   
   onSubmit(){
-    this.onClose.emit(true);
+    //this.onClose.emit(true);
   }
 
   closeModal(band: boolean) {

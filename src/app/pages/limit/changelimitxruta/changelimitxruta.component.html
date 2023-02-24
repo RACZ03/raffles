@@ -3,54 +3,68 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal(true)"></button>
         </div>
         <div class="modal-body">
             <form (ngSubmit)="onSubmit()" [formGroup]="formChangeLimiteXroute">
-               
-                <!-- <div class="col-12">
-                    <div class="mb-3">
-                        <label class="small mb-1" for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
-                        <ng-select #PerfilSelect [items]="perfilData" [selectOnTab]="true"
-                            bindValue="id" bindLabel="name" placeholder="Seleccione Perfil" formControlName="id_profile">
-                        </ng-select>
-                 <span *ngIf="validInput('id_profile')" class="text-danger mt-2">
-                            This field is required.
-                        </span> 
-                </div> -->
-                <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>Favorite Fruits</mat-label>
-                    <mat-chip-grid #chipGrid aria-label="Enter fruits">
-                      <mat-chip-row *ngFor="let fruit of fruits"
-                                    (removed)="remove(fruit)"
+                <!--numeros de la ruta-->
+                <mat-form-field class="example-chip-list" appearance="outline">
+                    <mat-label>Numeros</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Enter Number">
+                      <mat-chip-row *ngFor="let number of Numeros"
+                                    (removed)="removeNumber(number)"
                                     [editable]="true"
-                                    (edited)="edit(fruit, $event)"
-                                    [aria-description]="'press enter to edit ' + fruit.name">
-                        {{fruit.name}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
-                          <mat-icon>cancel</mat-icon>
+                                    (edited)="editNumber(number, $event)"
+                                    [aria-description]="'press enter to edit ' + number.name">
+                        {{number.name}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + number.name">
+                          <i class="bi bi-x-circle-fill"></i>
                         </button>
                       </mat-chip-row>
-                      <input placeholder="New fruit..."
+                      <input placeholder="Nuevo Numero..."
                              [matChipInputFor]="chipGrid"
-                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                             [matChipInputSeparatorKeyCodes]="separatorKeysCodesnumber"
                              [matChipInputAddOnBlur]="addOnBlur"
-                             (matChipInputTokenEnd)="add($event)"/>
+                             (matChipInputTokenEnd)="addNumber($event)"/>
                     </mat-chip-grid>
                 </mat-form-field>
 
-                <div class="col-12 mt-2">
-                    <label class="small mb-1" for="inputPassword">Last Name<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1Last" placeholder=""
-                           formControlName="lastName" autocomplete="off">
-                    <!-- <span *ngIf="validInput('lastName')" class="text-danger mt-2">
-                        Required field
-                    </span> -->
-                </div>
+                <!--A carga de rutas-->
+                <mat-form-field class="example-chip-list" appearance="outline">
+                  <mat-label>Selecion de Rutas</mat-label>
+                  <mat-chip-grid #chipGrid aria-label="Seleccion de ruta">
+                    <mat-chip-row *ngFor="let ruta of rutas" 
+                    (removed)="removeRutas(ruta)" >
+                      {{ruta.nombre}}
+                      <button matChipRemove [attr.aria-label]="'remove ' + ruta">
+                        <i class="bi bi-x-circle-fill"></i>
+                      </button>
+                    </mat-chip-row>
+                  </mat-chip-grid>
+                  <input placeholder="Ruta..." #rutasInput [formControl]="rutasCtrl"
+                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodesRutas"
+                    (matChipInputTokenEnd)="addRutas($event)"/>
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedRutas($event)">
+                    <mat-option *ngFor="let Ruta of filteredRutas | async" [value]="Ruta">
+                      {{Ruta.nombre}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                
+                <!--Limite-->
+                <mat-form-field appearance="outline">
+                  <mat-label>Limite</mat-label>
+                  <input matInput placeholder="Limite">
+                  <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                  <mat-hint>Hint</mat-hint>
+                </mat-form-field>
                 <div class="mt-4 mb-0 text-center">
-                    <button class="btn btn-primary"
-                        >
-                        Save
+                    <button class="btn btn-danger" (click)="closeModal(true)">
+                        Cerrar
+                    </button>
+                    <button class="btn btn-primary">
+                        Guardar
                     </button>
                 </div>
             </form>
