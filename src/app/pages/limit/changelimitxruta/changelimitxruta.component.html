@@ -8,57 +8,7 @@
         <div class="modal-body">
             <form (ngSubmit)="onSubmit()" [formGroup]="formChangeLimiteXroute">
                 <!--numeros de la ruta-->
-                <mat-form-field class="example-chip-list" appearance="outline">
-                    <mat-label>Numeros</mat-label>
-                    <mat-chip-grid #chipGrid aria-label="Enter Number">
-                      <mat-chip-row *ngFor="let number of Numeros"
-                                    (removed)="removeNumber(number)"
-                                    [editable]="true"
-                                    (edited)="editNumber(number, $event)"
-                                    [aria-description]="'press enter to edit ' + number.name">
-                        {{number.name}}
-                        <button matChipRemove [attr.aria-label]="'remove ' + number.name">
-                          <i class="bi bi-x-circle-fill"></i>
-                        </button>
-                      </mat-chip-row>
-                      <input placeholder="Nuevo Numero..."
-                             [matChipInputFor]="chipGrid"
-                             [matChipInputSeparatorKeyCodes]="separatorKeysCodesnumber"
-                             [matChipInputAddOnBlur]="addOnBlur"
-                             (matChipInputTokenEnd)="addNumber($event)"/>
-                    </mat-chip-grid>
-                </mat-form-field>
-
-                <!--A carga de rutas-->
-                <mat-form-field class="example-chip-list" appearance="outline">
-                  <mat-label>Selecion de Rutas</mat-label>
-                  <mat-chip-grid #chipGrid aria-label="Seleccion de ruta">
-                    <mat-chip-row *ngFor="let ruta of rutas" 
-                    (removed)="removeRutas(ruta)" >
-                      {{ruta.nombre}}
-                      <button matChipRemove [attr.aria-label]="'remove ' + ruta">
-                        <i class="bi bi-x-circle-fill"></i>
-                      </button>
-                    </mat-chip-row>
-                  </mat-chip-grid>
-                  <input placeholder="Ruta..." #rutasInput [formControl]="rutasCtrl"
-                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodesRutas"
-                    (matChipInputTokenEnd)="addRutas($event)"/>
-                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedRutas($event)">
-                    <mat-option *ngFor="let Ruta of filteredRutas | async" [value]="Ruta">
-                      {{Ruta.nombre}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-                
-                <!--Limite-->
-                <mat-form-field appearance="outline">
-                  <mat-label>Limite</mat-label>
-                  <input matInput placeholder="Limite">
-                  <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-                  <mat-hint>Hint</mat-hint>
-                </mat-form-field>
+      
                 <div class="mt-4 mb-0 text-center">
                     <button class="btn btn-danger" (click)="closeModal(true)">
                         Cerrar
@@ -71,29 +21,4 @@
         </div>
     </div>
 </div>
-<!-- materia-->
-<!-- <mat-form-field class="example-chip-list" appearance="fill">
-    <mat-label>Numeros</mat-label>
-    <mat-chip-grid #chipGrid aria-label="Enter numero">
-      <mat-chip-row
-        *ngFor="let numero of numero"
-        (removed)="remove(numero)"
-        [editable]="true"
-        (edited)="edit(numero, $event)"
-        [aria-description]="'press enter to edit ' + numero.name"
-      >
-        {{numero.name}}
-        <button matChipRemove [attr.aria-label]="'remove ' + numero.name">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-      <input
-        placeholder="Nuevo numero..."
-        [matChipInputFor]="chipGrid"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        [matChipInputAddOnBlur]="addOnBlur"
-        (matChipInputTokenEnd)="add($event)"
-      />
-    </mat-chip-grid>
-  </mat-form-field> -->
   
