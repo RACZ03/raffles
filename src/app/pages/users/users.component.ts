@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -27,9 +27,10 @@ export class UsersComponent implements OnInit {
   constructor(
     private usersSvc: UsersService,
     private alertSvc: AlertService,
-    private exportSvc: ExporterDataService
-  ) { 
-    this.dtOptions = environment.dtOptions;
+    private exportSvc: ExporterDataService,
+    private dataTableSvc: DataTableServiceService
+  ) {
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
   }
 
@@ -56,25 +57,20 @@ export class UsersComponent implements OnInit {
 
   // Actions
   add() {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.showForm = true;
   }
 
   onEdit(item: any) {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.businessSelected = item;
     this.showForm = true;
   }
 
   closeUser(e: boolean) {
-    if ( !e ) {
-      this.showForm = false;
-      return;
-    }
     this.showForm = false;
-    if ( this.dtElement != undefined ) {
-      this.renderer();
-    }
-    
-    this.loadData();
+    // refresh data
+    this.renderer();
   }
 
   async onDelete(item: any) {
@@ -84,17 +80,19 @@ export class UsersComponent implements OnInit {
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        this.renderer();
-        this.loadData();
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
     }
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.renderer();
   }
 
 
   /* Search */
   searchData(e: any) {
+    if ( !this.dtElement ) return;
+
     let value = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.search(value).draw();
@@ -103,12 +101,16 @@ export class UsersComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
-    if ( !this.dtElement ) return;
-
+    this.dtElement = this.dataTableSvc.dtElements;
+    // unsubscribe the event
+    this.dtTrigger.unsubscribe();
+    // destroy the table
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-  });
+      // new observable
+      this.dtTrigger = new Subject();
+      this.loadData();
+    });
   }
 
   /* Destroy components */

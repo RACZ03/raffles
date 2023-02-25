@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { rolesList } from '../data/roles';
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class UsersService {
   constructor(
     private connectionSvc: ConnectionService
   ) { }
-  
+
   getRolesByAuth(): any {
     return JSON.parse(localStorage.getItem('roles') || '') || [];
   }
@@ -18,7 +19,7 @@ export class UsersService {
     let roles = this.getRolesByAuth();
     let role = roles.find((item: any) => item.nombre === found);
 
-    if ( b ) 
+    if ( b )
       return role !== undefined;
     else
       return role;
@@ -47,12 +48,21 @@ export class UsersService {
       idRuta: data.idRuta,
     }
 
-    let role: string = data.rol;
-    let limite: number = data.limite;
+    let role: string = data.role;
+    let limite: number = data.limit;
+
+    // veriry if role id is ROLE_SUPER_ADMIN
+    if ( isSuperAdmin ) {
+      let roles = rolesList;
+      let roleSuperAdmin = roles.find((item: any) => item.ref === 'ROLE_SUPER_ADMIN');
+      if ( roleSuperAdmin?.ref !== role ) {
+        isSuperAdmin = false;
+      }
+    }
 
     let path = isSuperAdmin ? 'guardarSuperAdmin' : `guardarUsuario?rol=${ role }`;
-    if ( existsLimit) 
-      path = path + `&limite=${ limite }`; 
+    if ( existsLimit)
+      path = path + `&limite=${ limite }`;
 
     let params = JSON.stringify(obj);
 
@@ -67,7 +77,7 @@ export class UsersService {
   delete(id: number): Promise<any> {
     return this.connectionSvc.send('delete', `usuario/eliminar/${ id }`);
   }
-  
+
   changePassword( id: number, password: string ): Promise<any> {
     return this.connectionSvc.send('put', `usuario/actualizarPassword/${ id }?password=${ password }`);
   }

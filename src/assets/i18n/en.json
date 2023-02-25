@@ -1,5 +1,5 @@
 {
-    "MODULES": 
+    "MODULES":
      {
         "LOGIN": {
             "TITLE": "Welcome!",
@@ -63,6 +63,7 @@
             "LIMIT-PLACEHOLDER": "Select a limit"
         },
         "USER": {
+            "ADD": "Add User",
             "NAME": "Name",
             "PHONE": "Phone Number",
             "EMAIL": "Email",
@@ -84,6 +85,8 @@
     },
     "VALIDATIONS": {
         "INVALID_EMAIL": "Invalid email",
-        "REQUIRED_FIELD": "Required field"
+        "REQUIRED_FIELD": "Required field",
+        "MIN_LENGHT": "Min lenght",
+        "MAX_LENGHT": "Max lenght"
     }
 }

@@ -1,16 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { RouteService } from 'src/app/@core/services/route.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
-import { environment } from 'src/environments/environment';
+import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 
 @Component({
   selector: 'app-route',
   templateUrl: './route.component.html',
   styleUrls: ['./route.component.scss']
 })
-export class RouteComponent implements OnInit {
+export class RouteComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -23,13 +23,14 @@ export class RouteComponent implements OnInit {
   constructor(
     private routeServ: RouteService,
     private alertSvc: AlertService,
-  ) { 
-    this.dtOptions = environment.dtOptions;
+    private dataTableSvc: DataTableServiceService
+  ) {
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
   }
 
   ngOnInit(): void {
-   
+
   }
 
   async loadData() {
@@ -52,25 +53,20 @@ export class RouteComponent implements OnInit {
 
   // Actions
   addRoute() {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.showFormRoute = true;
   }
 
   onEditRoute(item: any) {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.RouteSelected = item;
     this.showFormRoute = true;
   }
 
   closeRoute(e: boolean) {
-    if ( !e ) {
-      this.showFormRoute = false;
-      return;
-    }
+
     this.showFormRoute = false;
-    if ( this.dtElement != undefined ) {
-      this.renderer();
-    }
-    
-    this.loadData();
+    this.renderer();
   }
 
   async onDeleteRoute(item: any) {
@@ -80,14 +76,12 @@ export class RouteComponent implements OnInit {
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        if ( this.dtElement != undefined ) {
-          this.renderer();
-        }
-        this.loadData();
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
     }
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.renderer();
   }
 
    /* Search */
@@ -98,10 +92,17 @@ export class RouteComponent implements OnInit {
     });
   }
 
-  /* Section Render & Destoy */
-  renderer() {
+ /* Section Render & Destoy */
+ renderer() {
+  this.dtElement = this.dataTableSvc.dtElements;
+  // unsubscribe the event
+  this.dtTrigger.unsubscribe();
+  // destroy the table
   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-   dtInstance.destroy();
+    dtInstance.destroy();
+    // new observable
+    this.dtTrigger = new Subject();
+    this.loadData();
   });
 }
 

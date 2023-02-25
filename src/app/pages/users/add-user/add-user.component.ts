@@ -28,7 +28,7 @@ export class AddUserComponent implements OnInit {
   public showPassword: boolean = false;
   public showPassword2: boolean = false;
   public regexEmail = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-  
+
   public businessSelected: any = null;
   @Input() set user(value: any) {
     console.log(value);
@@ -44,14 +44,23 @@ export class AddUserComponent implements OnInit {
     private alertSvc: AlertService,
     private businessSvc: BusinessService,
     private routeSvc: RouteService
-  ) { }
+  ) {
+     this.isAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
+    // verify if isAdmin is false
+    if ( !this.isAdmin ) {
+      // remove (ROLE_SUPER_ADMIN)
+      this.roles = this.roles.filter((item: any) => item.ref !== 'ROLE_SUPER_ADMIN');
+    }
+  }
 
   ngOnInit(): void {
     if ( this.userForm ===  undefined ) {
       this.userForm = this.initForm();
     }
     this.getBusiness();
-    this.isAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
+
+    // load test form
+    this.loadFormTest();
   }
 
   async getBusiness() {
@@ -68,19 +77,23 @@ export class AddUserComponent implements OnInit {
 
   onSelectBusiness() {
     let { idNegocio } = this.userForm.value;
+    // reset idRuta
+    this.userForm.get('idRuta')?.reset();
+    // disabled idRuta
+    this.userForm.get('idRuta')?.disable();
     this.getRoutesByIdBusiness(idNegocio);
   };
 
   async getRoutesByIdBusiness(id: number = 0) {
+    this.routes = [];
     let resp = await this.routeSvc.getRoutesByIdBusiness(id);
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200 ) {
         this.routes = data;
-        // enabled idRuta
+        this.userForm.get('idRuta')?.enable();
       }
     }
-    this.userForm.get('idRuta')?.enable();
   }
 
   async onSubmit() {
@@ -157,12 +170,20 @@ export class AddUserComponent implements OnInit {
     return this.userForm.get(name)?.touched && this.userForm.get(name)?.errors?.['pattern'];
   }
 
+  validMinLength(name: string) {
+    return this.userForm.get(name)?.touched && this.userForm.get(name)?.errors?.['minlength'];
+  }
+
+  validMaxLength(name: string) {
+    return this.userForm.get(name)?.touched && this.userForm.get(name)?.errors?.['maxlength'];
+  }
+
   // Form
   initForm(): FormGroup {
     return this.fb.group({
       id: [null],
       nombre: ['', Validators.required],
-      telefono: ['', Validators.required],
+      telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
       email: ['', [Validators.pattern(this.regexEmail)]],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
@@ -177,4 +198,15 @@ export class AddUserComponent implements OnInit {
     this.goBack.emit(true);
   }
 
+  /* Load form test */
+  loadFormTest() {
+    this.userForm.patchValue({
+      nombre: 'Jorge Morales',
+      telefono: '12345678',
+      email: 'joge@gmail.com',
+      password: '123456',
+      confirm_password: '123456',
+      limit: 1000,
+    });
+  }
 }

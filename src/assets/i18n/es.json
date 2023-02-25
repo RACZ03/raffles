@@ -1,6 +1,6 @@
 
 {
-    "MODULES": 
+    "MODULES":
      {
         "LOGIN": {
             "TITLE": "¡Bienvenido!",
@@ -57,6 +57,7 @@
             "INVALID_EMAIL": "Correo inválido"
         },
         "USER": {
+            "ADD": "Agregar Usuario",
             "NAME": "Nombre",
             "PHONE": "Teléfono",
             "EMAIL": "Correo",
@@ -78,6 +79,8 @@
     },
     "VALIDATIONS": {
         "INVALID_EMAIL": "Correo inválido",
-        "REQUIRED_FIELD": "Campo requerido"
+        "REQUIRED_FIELD": "Campo requerido",
+        "MIN_LENGHT": "Mínimo de caracteres es ",
+        "MAX_LENGHT": "Máximo de caracteres es "
     }
 }

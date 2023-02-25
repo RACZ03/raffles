@@ -18,7 +18,7 @@ export const rolesList: RoleI[] = [
     },
     {
         id: 4,
-        ref: 'SUPER_USUARIO_ADMIN',
+        ref: 'ROLE_SUPER_ADMIN',
         nombre: 'Super Usuario Administrador'
     },
 ]
