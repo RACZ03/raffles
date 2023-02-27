@@ -85,6 +85,8 @@ export class ChangeonelimitsComponent implements OnInit {
     }else{
       this.alertSvc.showAlert(4, message,'error');
     }
+    this.formChangeoneLimit.reset();
+
   }
 
   closeModal(band: boolean) {
