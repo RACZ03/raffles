@@ -50,9 +50,12 @@ export class ChangelimitxrutaComponent implements OnInit {
   }
 
  async loadDataRutaa() {
-    //let resp = await this.routeSvc.getRoute();
-    //console.log(resp);
-    //this.rutasData = resp.data;
+  
+  let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
+  //console.log(dataIdentity, "aqui");
+     let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
+     //console.log(resp);
+     this.rutasData = resp.data;
   }
 
  async onSubmit(){

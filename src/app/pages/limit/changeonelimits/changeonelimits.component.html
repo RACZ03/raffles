@@ -12,7 +12,7 @@
                     <label class="small mb-1"  for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
                         <div class="border" style="font-size: small;">
                           <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros"
-                                    formControlName="numeros" theme='bootstrap'
+                                    formControlName="numeros" theme='bootstrap' style="margin-left: 5px !important"
                                      [maxItems]="1"></tag-input>
                            <span *ngIf="validInput('numeros')" class="text-danger mt-2">
                             este campo es requerido

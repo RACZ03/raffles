@@ -18,6 +18,7 @@ export class RouteService {
   }
 
   getRoutesByIdBusiness(id: number): Promise<any> {
+    //console.log(id);
     return this.connectionSvc.send('get', `ruta/negocio/${ id }`);
   }
 
@@ -42,4 +43,6 @@ export class RouteService {
   delete(id: number): Promise<any> {
     return this.connectionSvc.send('delete', `ruta/eliminar/${ id }`);
   }
+
+
 }
