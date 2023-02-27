@@ -40,45 +40,26 @@ export class LimitService {
     return this.connectionSvc.send('delete', `ruta/eliminar/${ id }`);
   }
 
-  // addOnBlur = true;
-  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  // numero: numero[] = [];
+  changeLimiteNumberRoute(data: any): Promise<any> {
+    return this.connectionSvc.send('put', `limite/cambiarLimitesDeNumerosDeRutas`, data);
+  }
 
-  // add(event: MatChipInputEvent): void {
-  //   const value = (event.value || '').trim();
+  changeLimiteNumberxSeller(data: any): Promise<any> {
+    return this.connectionSvc.send('put', `limite/cambiarLimiteDeNumerosDeVendedores`, data);
+  }
 
-  //   // Add our fruit
-  //   if (value) {
-  //     this.numero.push({ name: value });
-  //   }
+  changeoneLimit(data: any): Promise<any> {
+    let { vendedor, numero, limite } = data;
+    //console.log(numero);
+    return this.connectionSvc.send('put', `limite/cambiarUnLimite?vendedor=${vendedor}&numero=${numero}&limite=${limite}`);
+  }
 
-  //   // Clear the input value
-  //   event.chipInput!.clear();
-  // }
+  changelimitoneseller(data: any): Promise<any> {
+    let { vendedor, limite } = data;
+    return this.connectionSvc.send('put', `limite/cambiarTodosLosLimitesDeUnVendedor?vendedor=${vendedor}&limite=${limite}`);
+  }
 
-  // remove(numero: numero): void {
-  //   const index = this.numero.indexOf(numero);
 
-  //   if (index >= 0) {
-  //     this.numero.splice(index, 1);
-  //   }
-  // }
-
-  // edit(numero: numero, event: MatChipEditedEvent) {
-  //   const value = event.value.trim();
-
-  //   // Remove fruit if it no longer has a name
-  //   if (!value) {
-  //     this.remove(numero);
-  //     return;
-  //   }
-
-  //   // Edit existing fruit
-  //   const index = this.numero.indexOf(numero);
-  //   if (index >= 0) {
-  //     this.numero[index].name = value;
-  //   }
-  // }
  
 }
 

@@ -14,6 +14,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DataTablesModule } from 'angular-datatables';
 import { AddUserComponent } from './@pages/users/add-user/add-user.component';
+import { TagInputModule } from 'ngx-chips';
 
 export function createTranslateLoader( http: HttpClient) {
   return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
@@ -29,6 +30,7 @@ export function createTranslateLoader( http: HttpClient) {
     NgbModule,
     RouterModule,
     AppRoutingModule,
+    TagInputModule, 
     HttpClientModule,
     BrowserAnimationsModule, // required animations module
     TranslateModule.forRoot({ // Translate integrations

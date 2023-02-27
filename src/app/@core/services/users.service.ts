@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { data } from 'jquery';
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
@@ -71,5 +72,12 @@ export class UsersService {
   changePassword( id: number, password: string ): Promise<any> {
     return this.connectionSvc.send('put', `usuario/actualizarPassword/${ id }?password=${ password }`);
   }
+  
+
+     getSellerxNegocio(): Promise<any> { 
+        let idNegocio =JSON.parse(localStorage.getItem('business') || '{}').idNegocio;
+        let rol='vendedor';
+       return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ idNegocio }/${ rol }`);
+     }
 
 }

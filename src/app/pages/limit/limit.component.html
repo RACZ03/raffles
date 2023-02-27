@@ -49,7 +49,7 @@
                             </div>
                           </div>
                         </div>
-                        <div style="cursor: pointer;" class="mt-4">
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalChangeLimitexVendedor()">
                           <div class="card card-stats mb-4 mb-lg-0">
                             <div class="card-body">
                               <div class="row">
@@ -72,7 +72,7 @@
                         </div>
                       </div>
                       <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12  mt-4">
-                        <div style="cursor: pointer;">
+                        <div style="cursor: pointer;" (click)="openModalChangeOneLimit()">
                           <div class="card card-stats mb-4 mb-lg-0">
                             <div class="card-body">
                               <div class="row">
@@ -93,7 +93,7 @@
                             </div>
                           </div>
                         </div>
-                        <div style="cursor: pointer;" class="mt-4">
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalChangeLimitoneVendedor()">
                           <div class="card card-stats mb-4 mb-lg-0">
                             <div class="card-body">
                               <div class="row">
@@ -212,7 +212,27 @@
     
   
   <!-- Modal Cambiar limite de numeros por ruta [dataUpdate]="module" -->
-<div class="modal fade" id="modalchangelimitxruta" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <app-changelimitxruta (onClose)="closeModal($event)"></app-changelimitxruta>
+<div class="modal fade" id="modalchangelimitxruta" data-backdrop="static" tabindex="-1" role="dialog" 
+aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+  <app-changelimitxruta (onClose)="closemodalchangelimitxruta($event)"></app-changelimitxruta>
 </div>
+
+  <!-- Modal Cambiar limite de numeros por ruta [dataUpdate]="module" -->
+  <div class="modal fade" id="modalchangelimitxvendedor" data-backdrop="static" tabindex="-1" role="dialog" 
+  aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+    <app-changelimitxseller (onClose)="closeModalChangeLimitexVendedor($event)"></app-changelimitxseller>
+  </div>
+
+    <!-- Modal Cambiar limite de un limite-->
+    <div class="modal fade" id="modalChangeOneLimit" data-backdrop="static" tabindex="-1" role="dialog" 
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+      <app-changeonelimits (onClose)="closeModalChangeOneLimit($event)"></app-changeonelimits>
+    </div>
+  
+      <!-- Modal Cambiar limite de un vendedor-->
+      <div class="modal fade" id="modalChangeLimitoneVendedor" data-backdrop="static" tabindex="-1" role="dialog" 
+      aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+        <app-changelimitoneseller (onClose)="closeModalChangeLimitoneVendedor($event)"></app-changelimitoneseller>
+      </div>
+    
 

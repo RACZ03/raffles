@@ -2,20 +2,45 @@
 <div class="modal-dialog modal-m" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite de Rutas</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal(true)"></button>
         </div>
         <div class="modal-body">
-            <form (ngSubmit)="onSubmit()" [formGroup]="formChangeLimiteXroute">
+            <form  [formGroup]="formChangeLimiteXroute">
                 <!--numeros de la ruta-->
-      
+                    <div class="mb-3">
+                    <label class="small mb-1"  for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
+                        <div class="border" style="font-size: small;">
+                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros"
+                                    formControlName="numeros" theme='bootstrap'></tag-input>
+                           <span *ngIf="validInput('numeros')" class="text-danger mt-2">
+                            este campo es requerido
+                           </span>        
+                        </div>
+                    </div>
+                    <div class="mb-3" tyle="font-size: small;">
+                        <label class="small mb-1"  for="inputBusiness">Rutas: <span class="text-danger">*</span></label>
+                        <ng-select #rutasSelect [items]="rutasData" [selectOnTab]="true" [multiple] ="true" name="rutas"
+                            bindValue="id" bindLabel="nombre" placeholder="Seleccione rutas" formControlName="rutas"
+                            [selectableGroup]="true">
+                        </ng-select>
+                        <span *ngIf="validInput('rutas')" class="text-danger mt-2">
+                           este campo es requerido
+                        </span>
+                    </div>
+                    <div class="mb-3" tyle="font-size: small;">
+                        <label class="small mb-1" for="inputlimite">Limite: <span class="text-danger">*</span></label>
+                        <input class="form-control mb-2" id="inputlimite" type="text" placeholder="Ingrese el limte"
+                            formControlName="limite" [class.is-invalid]="validInput('limite')"/>
+                        <span *ngIf="validInput('limite')" class="text-danger mt-2">
+                            este campo es requerido
+                        </span>
+                    </div>
+
+                
                 <div class="mt-4 mb-0 text-center">
-                    <button class="btn btn-danger" (click)="closeModal(true)">
-                        Cerrar
-                    </button>
-                    <button class="btn btn-primary">
-                        Guardar
-                    </button>
+                    <button class="btn btn-danger" (click)="closeModal(true)">Cerrar</button>
+                    <button class="btn btn-primary" (click)="onSubmit()" [disabled]="formChangeLimiteXroute.invalid">Guardar</button>
                 </div>
             </form>
         </div>

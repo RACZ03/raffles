@@ -2,3 +2,20 @@
     width: 100%;
   }
   
+  body{
+    margin: 10px;
+  }
+  
+  .loader-container {
+      position: relative;
+  }
+  
+  .loader-container .loader {
+      position: absolute;
+      right: 50%;
+      bottom: 3px
+  }
+  
+  .printvalue{
+    margin: 10px;
+  }

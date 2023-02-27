@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { LimitComponent } from './limit.component';
 import { LimitRoutingModule } from './limit-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MaterialModule } from './../../material/material.module';
 import { NgxMaskModule } from 'ngx-mask';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { ThemeModule } from 'src/app/@theme/theme.module';
 import { ChangelimitxrutaComponent } from './changelimitxruta/changelimitxruta.component';
@@ -17,6 +15,11 @@ import { ChangelimitoutlimitsComponent } from './changelimitoutlimits/changelimi
 import { FreenumbertosellerComponent } from './freenumbertoseller/freenumbertoseller.component';
 import { FreenumbertorouteComponent } from './freenumbertoroute/freenumbertoroute.component';
 import { FreenumbertobisnessComponent } from './freenumbertobisness/freenumbertobisness.component';
+import { TagInputModule } from 'ngx-chips';
+import { NgxTagsInputBoxModule } from 'ngx-tags-input-box';
+import { NgSelectModule } from '@ng-select/ng-select';
+
+
 
 
 
@@ -42,8 +45,10 @@ import { FreenumbertobisnessComponent } from './freenumbertobisness/freenumberto
     DataTablesModule,
     ReactiveFormsModule,
     NgxMaskModule,
-    NgbModule,
-    MaterialModule
+    TagInputModule,
+    NgxTagsInputBoxModule,
+    FormsModule,
+    NgSelectModule
   ]
 })
 export class LimitModule { }

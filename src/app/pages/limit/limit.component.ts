@@ -18,6 +18,9 @@ declare var window: any;
 export class LimitComponent implements OnInit {
 
   public modalChangelimitxruta: any;
+  public modalChangelimitxvendedor: any;
+  public modalChangeOneLimit: any;
+  public modalChangeLimitoneVendedor: any;
  
 
   constructor(
@@ -33,16 +36,56 @@ export class LimitComponent implements OnInit {
     this.modalChangelimitxruta = new window.bootstrap.Modal(
       document.getElementById('modalchangelimitxruta')
     );
+    this.modalChangelimitxvendedor = new window.bootstrap.Modal(
+      document.getElementById('modalchangelimitxvendedor')
+    );
+    this.modalChangeOneLimit = new window.bootstrap.Modal(
+      document.getElementById('modalChangeOneLimit')
+    );
+    this.modalChangeLimitoneVendedor = new window.bootstrap.Modal(
+      document.getElementById('modalChangeLimitoneVendedor')
+    );
+
   }
 
   /// Modal Change Limit x Ruta
   openModalchangelimitxruta(){
    this.modalChangelimitxruta.show();
-   //console.log('aqui ando');
+
   }
-  closeModal(band: boolean) {
+  closemodalchangelimitxruta(band: boolean) {
     if ( band )
       this.modalChangelimitxruta.hide();
+  }
+
+   /// Modal Change Limit x Vendedor
+    openModalChangeLimitexVendedor(){
+    this.modalChangelimitxvendedor.show();
+  }
+
+  closeModalChangeLimitexVendedor(band: boolean) {
+    if ( band )
+    this.modalChangelimitxvendedor.hide();
+  }
+
+  //modal change one limite
+  openModalChangeOneLimit(){
+    this.modalChangeOneLimit.show();
+  }
+
+  closeModalChangeOneLimit(band: boolean) {
+    if ( band )
+    this.modalChangeOneLimit.hide();
+  }
+
+  //model change limit de un vendedor
+  openModalChangeLimitoneVendedor(){
+    this.modalChangeLimitoneVendedor.show();
+  }
+
+  closeModalChangeLimitoneVendedor(band: boolean) {
+    if ( band )
+    this.modalChangeLimitoneVendedor.hide();
   }
 
 }
