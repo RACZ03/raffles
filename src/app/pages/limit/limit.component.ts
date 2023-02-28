@@ -21,7 +21,10 @@ export class LimitComponent implements OnInit {
   public modalChangelimitxvendedor: any;
   public modalChangeOneLimit: any;
   public modalChangeLimitoneVendedor: any;
- 
+  public modalFreeNumberToSeller: any;
+  public modalFreeNumberToRoute: any;
+  public modalFreeNumberToBisness: any;
+  public modalFreeLimitWitOutLimit: any;
 
   constructor(
     private limitServ: LimitService,
@@ -44,6 +47,20 @@ export class LimitComponent implements OnInit {
     );
     this.modalChangeLimitoneVendedor = new window.bootstrap.Modal(
       document.getElementById('modalChangeLimitoneVendedor')
+    );
+    this.modalFreeNumberToSeller = new window.bootstrap.Modal(
+      document.getElementById('modalFreeNumberToSeller')
+    );
+    this.modalFreeNumberToRoute = new window.bootstrap.Modal(
+      document.getElementById('modalFreeNumberToRoute')
+    );
+
+    this.modalFreeNumberToBisness = new window.bootstrap.Modal(
+      document.getElementById('modalFreeNumberToBisness')
+    );
+
+    this.modalFreeLimitWitOutLimit = new window.bootstrap.Modal(
+      document.getElementById('modalFreeLimitWitOutLimit')
     );
 
   }
@@ -87,5 +104,46 @@ export class LimitComponent implements OnInit {
     if ( band )
     this.modalChangeLimitoneVendedor.hide();
   }
+
+  //free number to seller
+  openModalFreeNumberToSeller(){
+    this.modalFreeNumberToSeller.show();
+  }
+
+  closefreeNumberToSeller(band: boolean) {
+    if ( band )
+    this.modalFreeNumberToSeller.hide();
+  }
+
+  //free number to route
+  openModalFreeNumberToRoute(){
+    this.modalFreeNumberToRoute.show();
+  }
+
+  closefreeNumberToRoute(band: boolean) {
+    if ( band )
+    this.modalFreeNumberToRoute.hide();
+  }
+
+  //free number to bisness
+  openModalFreeNumberToBisness(){
+    this.modalFreeNumberToBisness.show();
+  }
+
+  closefreeNumberToBisness(band: boolean) {
+    if ( band )
+    this.modalFreeNumberToBisness.hide();
+  }
+
+  //modal cambiar limites sin afectar limitados
+  openModalChangeLimitWithoutAffectLimited(){
+    this.modalFreeLimitWitOutLimit.show();
+  }
+
+  closeModalChangeLimitWithoutAffectLimited(band: boolean) {
+    if ( band )
+    this.modalFreeLimitWitOutLimit.hide();
+  }
+
 
 }
