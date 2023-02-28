@@ -11,8 +11,8 @@
                     <div class="mb-3">
                     <label class="small mb-1"  for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
                         <div class="border" style="font-size: small;">
-                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros"
-                                     style="margin-left: 5px !important"
+                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros" type="number"
+                                     style="margin-left: 5px !important; "
                                     formControlName="numeros" theme='bootstrap'></tag-input>
                            <span *ngIf="validInput('numeros')" class="text-danger mt-2">
                             este campo es requerido

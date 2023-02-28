@@ -20,7 +20,7 @@
                     </div>
                     <div class="mb-3" tyle="font-size: small;">
                         <label class="small mb-1" for="inputlimite">Limite: <span class="text-danger">*</span></label>
-                        <input class="form-control mb-2" id="inputlimite" type="text" placeholder="Ingrese el limte"
+                        <input class="form-control mb-2" id="inputlimite" type="number" placeholder="Ingrese el limte"
                             formControlName="limite" [class.is-invalid]="validInput('limite')"/>
                         <span *ngIf="validInput('limite')" class="text-danger mt-2">
                             este campo es requerido

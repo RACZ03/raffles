@@ -59,6 +59,23 @@ export class LimitService {
     return this.connectionSvc.send('put', `limite/cambiarTodosLosLimitesDeUnVendedor?vendedor=${vendedor}&limite=${limite}`);
   }
 
+  freeNumberToSeller(data: any): Promise<any> {
+   return this.connectionSvc.send('put', `limite/liberarNumerosParaVendedores`, data);
+  } 
+
+  freeNumberToRoute(data: any): Promise<any> {
+    //console.log(data);
+    return this.connectionSvc.send('put', `limite/liberarNumerosParaRutas`, data);
+  }
+ 
+  freeNumberToBusiness(data: any): Promise<any> {
+    //console.log(data);
+    return this.connectionSvc.send('put', `limite/liberarNumerosParaNegocios`, data);
+  }
+
+  changelimitsinafectarLimit(): Promise<any> {
+    return this.connectionSvc.send('put', `limite/cambiarLimiteDeVendedoresSinAfectarLimitados`, data);
+  }
 
  
 }
