@@ -5,59 +5,119 @@
       </div>
     </div>
 </div>
-
 <br class="mt-5">
-<div class="row m-2">
 
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm6 col-xs-12">
-        <!-- CARD -->
-        <div class="card p-2">
-            <div class="card-header text-center">
-                <h5>Formulario de Ventas</h5>
-            </div>
-            <form action="">
-
-                <!-- Time -->
-                <div class="row">
-                    <div class="col-6">
-
-                        <select name="" id="" class="form-control">
-                        </select>
-                    </div>
-                    <div class="col-6">
-                        <button type="button" class="btn btn-secondary">Limite</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <button type="button" class="btn btn-secondary">Actual</button>
-                    </div>
-                    <div class="col-6">
-                        <button type="button" class="btn btn-secondary">Premio</button>
-                    </div>
-                </div>
-
-                <!-- Numbers -->
-                <div class="row">
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="" id="" placeholder="Número">
-                    </div>
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="" id="" placeholder="Monto">
-                    </div>
-                </div>
-                <!-- Actions -->
-                <div class="row">
-                    <div class="col-6">
-                        <button type="button" class="btn btn-secondary">Cancelar</button>
-                    </div>
-                    <div class="col-6">
-                        <button type="button" class="btn btn-secondary">Guardar</button>
-                    </div>
-                </div>
-            </form>
+<div class="container-fluid">
+  <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div [ngClass]=" itemActive ? 'carousel-item p-4 active' : 'carousel-item p-4'">
+        <div class="text-right">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Números
+          </button>
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Recibos
+          </button>
         </div>
+        <div class="card mt-4">
+          <div class="card-header">
+            <h3 class="mb-0">Formulario de Ventas</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <select class="form-control" name="" id="" style="height: 45px !important;">
+                  <option value="">Seleccione</option>
+                  <option value="">Mañana</option>
+                  <option value="">Tarde</option>
+                  <option value="">Noche</option>
+                  <option value="">Loteria</option>
+                  <option value="">Super Sabado</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-primary" style="width: 100%;">
+                  Limite
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6">
+                <button class="btn btn-primary" style="width: 100%;">
+                  Actual
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-primary" style="width: 100%;">
+                  Premio
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6">
+                <!-- Form control numero -->
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Número</label>
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Número">
+                </div>
+              </div>
+              <div class="col-6">
+                <!-- Form control monto -->
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Monto</label>
+                  <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Monto">
+                </div>
+              </div>
+            </div>
+            <!-- Btn Agregar -->
+            <div class="text-right">
+              <button class="btn btn-primary">
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [ngClass]=" itemActive ? 'carousel-item p-4' : 'carousel-item active p-4'">
+        <div class="card mt-6">
+          <div class="card-body">
+            <h3 class="text-center">Rifas Dias</h3>
+            <h5 class="text-center">Vendedor: <span>User</span></h5>
+            <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5>
+            <!-- Integrate table -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Número</th>
+                  <th scope="col">Monto</th>
+                  <th scope="col">Premio</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of [1,1,1]">
+                  <th class="align-middle">10</th>
+                  <td class="align-middle">10</td>
+                  <td class="align-middle">800</td>
+                  <td class="align-middle">
+                    <button class="btn btn-sm text-danger">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm6 col-xs-12">
-    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+            data-bs-slide="prev" (click)="onChange()" *ngIf="showActions">
+      <i class="bi bi-caret-left-fill"></i>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+            data-bs-slide="next" (click)="onChange()" *ngIf="showActions">
+      <i class="bi bi-caret-right-fill"></i>
+    </button>
+  </div>
 </div>

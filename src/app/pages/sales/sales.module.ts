@@ -6,8 +6,9 @@ import { ThemeModule } from 'src/app/@theme/theme.module';
 import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SalesRoutingModule } from './sales-routing.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 
@@ -23,7 +24,9 @@ import { SalesRoutingModule } from './sales-routing.module';
     DataTablesModule,
     ReactiveFormsModule,
     NgxMaskModule,
-    NgbModule
-  ]
+    NgbModule,
+    NgbCarouselModule
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class SalesModule { }
