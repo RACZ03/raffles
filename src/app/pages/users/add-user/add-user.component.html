@@ -43,7 +43,7 @@
                 </div>
             </div>
             <!-- Password -->
-            <div class="row">
+            <div class="row" *ngIf="!isEdit">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                      <!-- password -->
                     <div class="form-group">
@@ -51,6 +51,9 @@
                         <input [type]="inputType" class="form-control" formControlName="password" autocomplete="auto-password"/>
                         <span *ngIf="validInput('password')" class="text-danger mt-1">
                             {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                        <span *ngIf="validMinLength('password')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.MIN_LENGHT' | translate }} 6
                         </span>
                         <button class="btn btn-sm btn-eye" type="button" (click)="onShowPassword(true)">
                             <i [ngClass]="(showPassword) ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
@@ -64,6 +67,9 @@
                         <input [type]="inputType2" class="form-control" formControlName="confirm_password" autocomplete="auto-confirm_passwrod"/>
                         <span *ngIf="validInput('confirm_password')" class="text-danger mt-1">
                             {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                        <span *ngIf="validMinLength('confirm_password')" class="text-danger mt-1">
+                          {{ 'VALIDATIONS.MIN_LENGHT' | translate }} 6
                         </span>
                         <button class="btn btn-sm btn-eye" type="button" (click)="onShowPassword()">
                             <i [ngClass]="(showPassword2) ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>

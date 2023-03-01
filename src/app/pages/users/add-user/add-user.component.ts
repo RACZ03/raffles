@@ -60,7 +60,7 @@ export class AddUserComponent implements OnInit {
     this.getBusiness();
 
     // load test form
-    this.loadFormTest();
+    // this.loadFormTest();
   }
 
   async getBusiness() {
@@ -103,13 +103,19 @@ export class AddUserComponent implements OnInit {
       });
     }
 
+    // Validate passwords are the same
+    if ( this.userForm.value.password !== this.userForm.value.confirm_password ) {
+      this.alertSvc.showAlert(3, 'Error', 'Las contraseñas no son similares');
+      return;
+    }
+
     let resp = await this.userSvc.add(this.userForm.value, this.isAdmin, this.isEdit, this.existsLimit);
-    let { status, data } = resp;
+    let { status, comment } = resp;
     if ( status && status == 200) {
-      this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
+      this.alertSvc.showAlert(1, 'Exito', comment);
       this.goBack.emit(true);
     } else {
-      this.alertSvc.showAlert(4, 'Error', 'No se pudo guardar el registro');
+      this.alertSvc.showAlert(4, 'Error', comment);
     }
 
   }
@@ -148,17 +154,24 @@ export class AddUserComponent implements OnInit {
       return;
     }
 
+    this.isEdit = true;
     this.userForm.patchValue({
       id: data?.id,
       nombre: data?.nombre,
       telefono: data?.telefono,
       email: data?.email,
-      password: data?.password,
-      confirm_password: data?.password,
-      idNegocio: data?.idNegocio,
-      idRuta: data?.idRuta,
+      password: '123456',
+      confirm_password: '123456',
+      idNegocio: data?.negocioAndRuta?.idNegocio,
+      // idRuta: data?.negocioAndRuta?.idRuta,
     });
-    this.isEdit = true;
+    this.getRoutesByIdBusiness(data?.negocioAndRuta?.idNegocio);
+
+    setTimeout(() => {
+      // enable idRuta
+      this.userForm.get('idRuta')?.enable();
+      this.userForm.get('idRuta')?.patchValue(data?.negocioAndRuta?.idRuta);
+    }, 300);
   }
 
   /* SECTION VALIDATIONS */
@@ -185,8 +198,8 @@ export class AddUserComponent implements OnInit {
       nombre: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
       email: ['', [Validators.pattern(this.regexEmail)]],
-      password: ['', Validators.required],
-      confirm_password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirm_password: ['', [Validators.required, Validators.minLength(6)]],
       idNegocio: ['', Validators.required],
       idRuta: ['', Validators.required],
       role: ['', Validators.required],

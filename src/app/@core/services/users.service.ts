@@ -25,8 +25,20 @@ export class UsersService {
       return role;
   }
 
+  getBusinessIdAndRoleCodeByAuth(): any {
+    let roles = this.getRolesByAuth();
+    let id = roles[0]?.idNegocio || 0;
+    let code = roles[0]?.codigo || '';
+
+    return { id, code };
+  }
+
   getUsers(): Promise<any> {
     return this.connectionSvc.send('get', `usuario?page=1&size=10000`);
+  }
+
+  getUsersByBusinessAndRole(id: number, role: string): Promise<any> {
+    return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol`, { idNegocio: id, rol: role });
   }
 
   findById(id: number): Promise<any> {
@@ -50,24 +62,37 @@ export class UsersService {
 
     let role: string = data.role;
     let limite: number = data.limit;
+    let path: string = '';
 
-    // veriry if role id is ROLE_SUPER_ADMIN
-    if ( isSuperAdmin ) {
+    if ( !isEdit ) {
+      // veriry if role id is ROLE_SUPER_ADMIN
       let roles = rolesList;
-      let roleSuperAdmin = roles.find((item: any) => item.ref === 'ROLE_SUPER_ADMIN');
-      if ( roleSuperAdmin?.ref !== role ) {
-        isSuperAdmin = false;
+      if ( isSuperAdmin ) {
+        let roleSuperAdmin = roles.find((item: any) => item.ref === 'ROLE_SUPER_ADMIN');
+        if ( roleSuperAdmin?.ref !== role ) {
+          isSuperAdmin = false;
+          let _role = roles.find((item: any) => item.ref === role);
+          role = _role?.code || '';
+        }
+      } else {
+        let _role = roles.find((item: any) => item.ref === role);
+        role = _role?.code || '';
       }
+
+      path = isSuperAdmin ? 'guardarSuperAdmin' : `guardarUsuario?rol=${ role }`;
+
+    } else {
+      obj.password = '';
     }
 
-    let path = isSuperAdmin ? 'guardarSuperAdmin' : `guardarUsuario?rol=${ role }`;
-    if ( existsLimit)
-      path = path + `&limite=${ limite }`;
+    if ( existsLimit) path = path + `&limite=${ limite }`;
 
     let params = JSON.stringify(obj);
 
     if (isEdit) {
       let { id } = data;
+
+
       return this.connectionSvc.send('put', `usuario/actualizar/${ id }`, params);
     } else {
       return this.connectionSvc.send('post', `usuario/${ path }`, params);
@@ -78,8 +103,13 @@ export class UsersService {
     return this.connectionSvc.send('delete', `usuario/eliminar/${ id }`);
   }
 
-  changePassword( id: number, password: string ): Promise<any> {
+  changePassword( id: number, data: any ): Promise<any> {
+    let { password } = data;
     return this.connectionSvc.send('put', `usuario/actualizarPassword/${ id }?password=${ password }`);
+  }
+
+  getLimitsBySeller(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `limite/obtener/${ id }`);
   }
 
 }

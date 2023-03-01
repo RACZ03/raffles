@@ -6,6 +6,8 @@ import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 
+declare var window: any;
+
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -20,9 +22,12 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public data: any[] = [];
   public showForm: boolean = false;
-  public businessSelected: any = null;
 
   public UserSelected: any = null;
+  public isAdmin: boolean|string = false;
+
+  public modalChangePassword: any;
+  public modalHistory: any;
 
   constructor(
     private usersSvc: UsersService,
@@ -31,15 +36,28 @@ export class UsersComponent implements OnInit, OnDestroy {
     private dataTableSvc: DataTableServiceService
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
     this.loadData();
   }
 
   ngOnInit(): void {
+    this.modalChangePassword = new window.bootstrap.Modal(
+      document.getElementById('changePasswordUser')
+    );
+    this.modalHistory = new window.bootstrap.Modal(
+      document.getElementById('historyLimitUser')
+    );
   }
 
   async loadData() {
     this.data = [];
-    let resp = await this.usersSvc.getUsers();
+    let resp: any;
+    if ( this.isAdmin ) {
+      resp = await this.usersSvc.getUsers();
+    } else {
+      let { id, code } = this.usersSvc.getBusinessIdAndRoleCodeByAuth();
+      resp = await this.usersSvc.getUsersByBusinessAndRole(id, code);
+    }
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200) {
@@ -63,14 +81,41 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   onEdit(item: any) {
     this.dataTableSvc.dtElements = this.dtElement;
-    this.businessSelected = item;
+    this.UserSelected = item;
     this.showForm = true;
+  }
+
+  onChangePassword(item: any) {
+    this.UserSelected = item;
+    this.modalChangePassword.show();
+  }
+
+  onViewLimits(item: any) {
+    this.UserSelected = item;
+    this.modalHistory.show();
   }
 
   closeUser(e: boolean) {
     this.showForm = false;
     // refresh data
+    this.UserSelected = null;
     this.renderer();
+  }
+
+  closeModal(e: any) {
+    this.UserSelected = null;
+    if (!e) {
+      this.modalChangePassword.hide();
+      return;
+    } else {
+      this.modalChangePassword.hide();
+      this.renderer();
+    }
+  }
+
+  closeModalHistory(e: any) {
+    this.UserSelected = null;
+    this.modalHistory.hide();
   }
 
   async onDelete(item: any) {
@@ -83,9 +128,9 @@ export class UsersComponent implements OnInit, OnDestroy {
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
+      // this.dataTableSvc.dtElements = this.dtElement;
+      this.renderer();
     }
-    this.dataTableSvc.dtElements = this.dtElement;
-    this.renderer();
   }
 
 
@@ -101,7 +146,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   /* Section Render & Destoy */
   renderer() {
-    this.dtElement = this.dataTableSvc.dtElements;
+    this.dtElement = ( this.dtElement == undefined ) ? this.dataTableSvc.dtElements : this.dtElement;
     // unsubscribe the event
     this.dtTrigger.unsubscribe();
     // destroy the table
