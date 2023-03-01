@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
@@ -15,6 +15,7 @@ export class ChangelimitoutlimitsComponent implements OnInit {
 
   formChangeLimitOutLimit!: FormGroup;
   itemsAsObjects : any[] = [];
+  limitList:any[] = [];
   SellerData: any[] = [];
   items: any[]= [];
   inputText = 'text';
@@ -65,15 +66,40 @@ export class ChangelimitoutlimitsComponent implements OnInit {
     this.onClose.emit(band);
   }
 
+  get limits(): FormArray {
+    return this.formChangeLimitOutLimit.get('limits') as FormArray;
+  }
+
+  addLimitOutLimit() {
+    
+
+    if(this.limits.controls[0].invalid){
+      this.limits.controls[0].markAllAsTouched();
+      this.alertSvc.showAlert(3, 'Error', 'Debe ingresar un valor');
+      return;
+    }
+
+    console.log(this.limits.controls[0].value);
+    this.limitList.push(this.limits.controls[0].value);
+  }
+
   validInput(name: string) {
     return this.formChangeLimitOutLimit.get(name)?.touched && this.formChangeLimitOutLimit.get(name)?.errors?.['required'];
   }
 
+  initLimitForm(): FormGroup {
+    return this.fb.group({
+      premioMaximmo: ['', []],
+      vendedor: ['', []],
+    })
+  }
 
   initForms(): FormGroup {
     return this.fb.group({
-      limit: ['', [Validators.required]],
-      vendedor: ['', [Validators.required]],
+      limits: this.fb.array([
+        this.initLimitForm()
+      ]),
+
     })
   }
 
