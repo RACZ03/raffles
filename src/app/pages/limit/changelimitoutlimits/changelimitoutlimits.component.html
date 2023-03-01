@@ -9,42 +9,44 @@
             <form  [formGroup]="formChangeLimitOutLimit">
                 <!--Container of fomrgroup-->
               <div>
-                <ng-container>
-                    <form >
-                        <div class="row">
-                            <div class="col-12 col-lg-12 col-md-12 col-sm-12">
-                                <div class="mb-3" tyle="font-size: small;">
-                                    <label class="small mb-1"  for="inputBusiness">Vendedor: <span class="text-danger">*</span></label>
-                                    <ng-select #rutasSelect [items]="SellerData" [selectOnTab]="true" name="vendedor"
-                                        bindValue="id" bindLabel="nombre" placeholder="Seleccione vendedor" formControlName="vendedor"
-                                        [selectableGroup]="true">
-                                    </ng-select>
-                                </div>              
-                                </div>
-                           <div class="col-12 col-lg-12 col-md-12 col-sm-12" style="display: flex;">
-                              <div class="row">
-                                <div class="col-8 col-lg-10 col-sm-8">
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="inputLastName">Premio Maximo: <span class="text-danger">*</span></label>
-                                        <input class="form-control mb-2" id="inputLastName" type="text" placeholder="Ingrese el Numero" type="number"
-                                              formControlName="premioMaximmo" [class.is-invalid]="validInput('premioMaximmo')"/>
-                                        <span *ngIf="validInput('premioMaximmo')" class="text-danger mt-2">
-                                            Campo requerido.
-                                        </span>
+                <div formArrayName="limits">
+                    <ng-container *ngFor="let limit of limits?.controls; let i = index">
+                        <form [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="mb-3" tyle="font-size: small;">
+                                        <label class="small mb-1"  for="inputBusiness">Vendedor: <span class="text-danger">*</span></label>
+                                        <ng-select #rutasSelect [items]="SellerData" [selectOnTab]="true" name="vendedor"
+                                            bindValue="id" bindLabel="nombre" placeholder="Seleccione vendedor" formControlName="vendedor"
+                                            [selectableGroup]="true">
+                                        </ng-select>
+                                    </div>              
                                     </div>
-                                </div>
-                                <div class="col-4 col-lg-2 col-sm-4 float-start">
-                                    <button class="btn btn-primary mt-4" type="button" 
-                                    style="background-color: #6C55A4; border-color: #6C55A4;"
-                                     (click)="addLimitOutLimit()">
-                                        Agregar
-                                    </button>
+                               <div class="col-12 col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+                                  <div class="row">
+                                    <div class="col-8 col-lg-10 col-sm-8">
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputLastName">Premio Maximo: <span class="text-danger">*</span></label>
+                                            <input class="form-control mb-2" id="inputLastName" type="text" placeholder="Ingrese el Numero" type="number"
+                                                  formControlName="premioMaximmo" [class.is-invalid]="validInput('premioMaximmo')"/>
+                                            <span *ngIf="validInput('premioMaximmo')" class="text-danger mt-2">
+                                                Campo requerido.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-lg-2 col-sm-4 float-start">
+                                        <button class="btn btn-primary mt-4" type="button" 
+                                        style="background-color: #6C55A4; border-color: #6C55A4;"
+                                         (click)="addLimitOutLimit()">
+                                            Agregar
+                                        </button>
+                                   </div>
+                                   </div> 
                                </div>
-                               </div> 
-                           </div>
-                        </div> 
-                    </form>    
-                </ng-container>
+                            </div> 
+                        </form>    
+                    </ng-container>
+                </div>
               </div>
                 <!--Tabla-->
                 <div class="mt-4">
