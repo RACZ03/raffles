@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { type } from 'os';
 import { LimitService } from 'src/app/@core/services/limit.service';
@@ -19,13 +19,14 @@ export class ChangelimitxrutaComponent implements OnInit {
   rutasData: any[] = [];
   items: any[]= [];
   inputText = 'text';
-  
+
     ///constructor
   constructor(
     private fb: FormBuilder,
+    private el: ElementRef,
     private routeSvc: RouteService,
     private limitSvc: LimitService,
-    private alertSvc: AlertService) { 
+    private alertSvc: AlertService) {
     }
 
     public insertInputTag(): void {
@@ -37,7 +38,7 @@ export class ChangelimitxrutaComponent implements OnInit {
   }
 
     //whitdefault
-    displayTags(event : any) { 
+    displayTags(event : any) {
       console.log(event);
       this.itemsAsObjects = event;
     }
@@ -45,13 +46,13 @@ export class ChangelimitxrutaComponent implements OnInit {
 
  //OnInit
    ngOnInit(): void {
-    this.formChangeLimiteXroute = this.initForms(); 
+    this.formChangeLimiteXroute = this.initForms();
     this.loadDataRutaa();
-    
+    console.log('Hi')
   }
 
  async loadDataRutaa() {
-  
+
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
   //console.log(dataIdentity, "aqui");
      let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
@@ -83,7 +84,7 @@ export class ChangelimitxrutaComponent implements OnInit {
       numeros: numeros,
       limite: this.formChangeLimiteXroute.value.limite
     }
- 
+
     let resp = await this.limitSvc.changeLimiteNumberRoute(obj);
     //console.log(resp);
     let { status, message,comment } = resp;
@@ -114,7 +115,32 @@ export class ChangelimitxrutaComponent implements OnInit {
 
   loadDataform(){
     this.formChangeLimiteXroute.reset();
-  } 
+  }
+
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const input = event.key;
+    const inputValue = this.el.nativeElement.value;
+    // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+    if (event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 37 || event.keyCode === 39 || /^\d+$/.test(input)) {
+      // Permitir que el evento se propague y actualizar el valor del control
+      setTimeout(() => {
+        let numeros: any[] = this.formChangeLimiteXroute?.get('numeros')?.value;
+
+        if ( inputValue === '' || inputValue === null || inputValue == undefined ) {
+          return;
+        }
+        numeros.push({
+          display: inputValue,
+          value: inputValue
+        });
+        this.formChangeLimiteXroute?.get('numeros')?.setValue(numeros);
+      });
+      return;
+    } else {
+      // Cancelar el evento
+      event.preventDefault();
+    }
+  }
 }
 
 
