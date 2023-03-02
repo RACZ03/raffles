@@ -9,6 +9,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SalesRoutingModule } from './sales-routing.module';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 
 
@@ -24,8 +25,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
     DataTablesModule,
     ReactiveFormsModule,
     NgxMaskModule,
-    NgbModule,
-    NgbCarouselModule
+    // NgbModule,
+    // NgbCarouselModule,
+    SlickCarouselModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

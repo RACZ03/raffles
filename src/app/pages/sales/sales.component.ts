@@ -1,4 +1,6 @@
-import { AfterViewInit, Component,HostListener,OnInit } from '@angular/core';
+import { AfterViewInit, Component,HostListener,OnInit, ViewChild } from '@angular/core';
+import { SlickCarouselComponent } from 'ngx-slick-carousel';
+// import {  } from 'ngx-slick-carousel';
 
 @Component({
   selector: 'app-sales',
@@ -7,16 +9,26 @@ import { AfterViewInit, Component,HostListener,OnInit } from '@angular/core';
 })
 export class SalesComponent implements OnInit, AfterViewInit {
 
-  public itemActive: boolean = true;
-  public showActions: boolean = false;
+  @ViewChild('slickModal', { static: true }) slickModal!: SlickCarouselComponent;
+
+  public slideConfig: any = {
+    autoplay: false,
+    autoplaySpeed: 3000,
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 2,
+    slidesToScroll: 1
+  };
+
   constructor() {
   }
 
   ngOnInit(): void {
     if (window.innerWidth < 992) {
-      this.showActions = true;
+      this.slideConfig.slidesToShow = 1;
     } else {
-      this.showActions = false;
+      this.slideConfig.slidesToShow = 2;
     }
 
   }
@@ -25,16 +37,14 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   }
 
-  onChange() {
-    this.itemActive = !this.itemActive;
-  }
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if (event.target.innerWidth < 992) {
-      this.showActions = true;
+      this.slideConfig.slidesToShow = 1;
     } else {
-      this.showActions = false;
+      this.slideConfig.slidesToShow = 2;
     }
+    this.slickModal.unslick();
+    this.slickModal.initSlick();
   }
 }
