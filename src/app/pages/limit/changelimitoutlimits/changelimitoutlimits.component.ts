@@ -18,6 +18,7 @@ export class ChangelimitoutlimitsComponent implements OnInit {
   limitList:any[] = [];
   SellerData: any[] = [];
   items: any[]= [];
+  listSinAfectar: any[] = [];
   inputText = 'text';
   
   
@@ -30,20 +31,6 @@ export class ChangelimitoutlimitsComponent implements OnInit {
      { 
     }
 
-    public insertInputTag(): void {
-      if (this.inputText) {
-          this.items.push(this.inputText);
-          this.inputText = '';
-      }
-  }
-
-    //whitdefault
-    displayTags(event : any) { 
-      console.log(event);
-      this.itemsAsObjects = event;
-    }
-
-
  //OnInit
    ngOnInit(): void {
     this.formChangeLimitOutLimit = this.initForms(); 
@@ -52,14 +39,35 @@ export class ChangelimitoutlimitsComponent implements OnInit {
   }
 
  async loadDataSeller() {
-
      let resp = await this.sellerSvc.getSellerxNegocio();
-    //console.log(resp);
+    console.log(resp);
      this.SellerData = resp.data;
   }
 
  async onSubmit(){
-   
+    if(this.limitList.length == 0){
+      this.alertSvc.showAlert(4,'Error','Debe agregar al menos un limite');
+      return;
+    }
+    
+    for(let i = 0; i < this.limitList.length; i++){
+      let obj = {
+        vendedor: this.limitList[i].seller.id,
+        premioMaximmo : this.limitList[i].premioMaximmo
+      }
+     this.listSinAfectar.push(obj);
+    }
+   // console.log(this.listSinAfectar);
+    let resp = await this.limitSvc.changelimitsinafectarLimit(this.listSinAfectar);
+    console.log(resp);
+    let { status, message,comment } = resp;
+    if(status == 200){
+      this.alertSvc.showAlert(1,message,comment);
+      this.closeModal(true);
+    }else{
+      this.alertSvc.showAlert(4,message,comment);
+    } 
+    this.loadDataform()
   }
 
   closeModal(band: boolean) {
@@ -67,40 +75,63 @@ export class ChangelimitoutlimitsComponent implements OnInit {
     this.onClose.emit(band);
   }
 
-  get limits(): FormArray {
-    return this.formChangeLimitOutLimit.get('limits') as FormArray;
-  }
+
 
   addLimitOutLimit() {
-    
-
-    if(this.limits.controls[0].invalid){
-      this.limits.controls[0].markAllAsTouched();
-      this.alertSvc.showAlert(3, 'Error', 'Debe ingresar un valor');
+    if(this.formChangeLimitOutLimit.get('vendedor')?.value == '' || this.formChangeLimitOutLimit.get('premioMaximmo')?.value == ''){
+      this.alertSvc.showAlert(4,'Error','Debe llenar los campos para agregar a la lista');
       return;
     }
+    if(this.limitList.length > 0){
+      for(let i = 0; i < this.limitList.length; i++){
+        if(this.limitList[i].seller.id == this.formChangeLimitOutLimit.get('vendedor')?.value){
+          this.alertSvc.showAlert(4,'Error','El vendedor ya se encuentra en la lista');
+          this.formChangeLimitOutLimit.get('vendedor')?.setValue('');
+          this.formChangeLimitOutLimit.get('premioMaximmo')?.setValue('');
+          return;
+        }
+      }
+    }
 
-    console.log(this.limits.controls[0].value);
-    this.limitList.push(this.limits.controls[0].value);
+    for(let i = 0; i < this.SellerData.length; i++){
+     if(this.SellerData[i].id == this.formChangeLimitOutLimit.get('vendedor')?.value){
+       //this.limitList.push(this.SellerData[i].nombre,this.formChangeLimitOutLimit.get('premioMaximmo')?.value);
+       const limites = {
+          seller: this.SellerData[i],
+          premioMaximmo: this.formChangeLimitOutLimit.get('premioMaximmo')?.value
+       }
+       this.limitList.push(limites);
+     }
+   
+
+  }
+  this.formChangeLimitOutLimit.get('vendedor')?.setValue('');
+  this.formChangeLimitOutLimit.get('premioMaximmo')?.setValue('');
+
+    console.log(this.limitList);
+  }
+
+
+  eliminarRegistro(items:any){
+    console.log(items);
+    for(let i = 0; i < this.limitList.length; i++){
+      if(this.limitList[i].seller.id == items.seller.id){
+        this.limitList.splice(i,1);
+      }
+    }
+
   }
 
   validInput(name: string) {
     return this.formChangeLimitOutLimit.get(name)?.touched && this.formChangeLimitOutLimit.get(name)?.errors?.['required'];
   }
 
-  initLimitForm(): FormGroup {
-    return this.fb.group({
-      premioMaximmo: ['', []],
-      vendedor: ['', []],
-    })
-  }
 
   initForms(): FormGroup {
     return this.fb.group({
-      limits: this.fb.array([
-        this.initLimitForm()
-      ]),
-
+      premioMaximmo: ['', []],
+      vendedor: ['', []],
+      limits:[[], [Validators.required]],
     })
   }
 

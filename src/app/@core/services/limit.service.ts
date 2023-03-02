@@ -73,7 +73,7 @@ export class LimitService {
     return this.connectionSvc.send('put', `limite/liberarNumerosParaNegocios`, data);
   }
 
-  changelimitsinafectarLimit(): Promise<any> {
+  changelimitsinafectarLimit(data:any ): Promise<any> {
     return this.connectionSvc.send('put', `limite/cambiarLimiteDeVendedoresSinAfectarLimitados`, data);
   }
 
