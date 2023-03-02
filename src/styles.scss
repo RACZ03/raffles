@@ -3,6 +3,10 @@
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/* You can add global styles to this file, and also import other style files */
+@import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap);
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 .text-dark {
     color: #172b4d !important

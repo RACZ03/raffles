@@ -1,7 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { type } from 'os';
+import { LimitService } from 'src/app/@core/services/limit.service';
+import { RouteService } from 'src/app/@core/services/route.service';
+import { AlertService } from 'src/app/@core/utils/alert.service';
+
 
 @Component({
   selector: 'app-changelimitxruta',
@@ -11,70 +14,107 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 export class ChangelimitxrutaComponent implements OnInit {
   @Output() onClose = new EventEmitter<boolean>();
 
-  addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
   formChangeLimiteXroute!: FormGroup;
-  fruits: any[] = [{name: 'Lemon'}, {name: 'Lime'}, {name: 'Apple'}];
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.fruits.push({name: value});
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-  }
-
-  remove(fruit: any): void {
-    const index = this.fruits.indexOf(fruit);
-
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-    }
-  }
-
-  edit(fruit: any, event: MatChipEditedEvent) {
-    const value = event.value.trim();
-
-    // Remove fruit if it no longer has a name
-    if (!value) {
-      this.remove(fruit);
-      return;
-    }
-
-    // Edit existing fruit
-    const index = this.fruits.indexOf(fruit);
-    if (index >= 0) {
-      this.fruits[index].name = value;
-    }
-  }
+  itemsAsObjects : any[] = [];
+  rutasData: any[] = [];
+  items: any[]= [];
+  inputText = 'text';
+  
+    ///constructor
   constructor(
     private fb: FormBuilder,
-  ) { }
+    private routeSvc: RouteService,
+    private limitSvc: LimitService,
+    private alertSvc: AlertService) { 
+    }
 
-  ngOnInit(): void {
-    this.formChangeLimiteXroute = this.initForms();
+    public insertInputTag(): void {
+      if (this.inputText) {
+          this.items.push(this.inputText);
+
+          this.inputText = '';
+      }
   }
 
+    //whitdefault
+    displayTags(event : any) { 
+      console.log(event);
+      this.itemsAsObjects = event;
+    }
 
 
-  onSubmit(){
-    this.onClose.emit(true);
+ //OnInit
+   ngOnInit(): void {
+    this.formChangeLimiteXroute = this.initForms(); 
+    this.loadDataRutaa();
+    
+  }
+
+ async loadDataRutaa() {
+  
+  let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
+  //console.log(dataIdentity, "aqui");
+     let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
+     //console.log(resp);
+     this.rutasData = resp.data;
+  }
+
+ async onSubmit(){
+    if(this.formChangeLimiteXroute.invalid){
+      return;
+    }
+    let listRutasSelected = this.formChangeLimiteXroute.value.rutas;
+    let listNumeros = this.formChangeLimiteXroute.value.numeros;
+    //console.log(listNumeros);
+    let rutas: any[] = [];
+    let numeros: any[] = [];
+    if(listRutasSelected!==null){
+      for(let i=0; i<listRutasSelected.length; i++){
+        rutas.push(listRutasSelected[i]);
+      }
+    }
+    if(listNumeros!==null){
+      for(let i=0; i<listNumeros.length; i++){
+        numeros.push(listNumeros[i].value);
+      }
+    }
+    let obj ={
+      rutas: rutas,
+      numeros: numeros,
+      limite: this.formChangeLimiteXroute.value.limite
+    }
+ 
+    let resp = await this.limitSvc.changeLimiteNumberRoute(obj);
+    //console.log(resp);
+    let { status, message,comment } = resp;
+    if(status==200){
+      this.alertSvc.showAlert(1, message,comment);
+    }else{
+      this.alertSvc.showAlert(4, message,'error');
+    }
   }
 
   closeModal(band: boolean) {
-    this.onClose.emit(true);
+    this.loadDataform();
+    this.onClose.emit(band);
   }
+
+  validInput(name: string) {
+    return this.formChangeLimiteXroute.get(name)?.touched && this.formChangeLimiteXroute.get(name)?.errors?.['required'];
+  }
+
 
   initForms(): FormGroup {
     return this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      // email: ['', [Validators.required]],
-      phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)] ],
+      numeros: ['', [Validators.required]],
+      rutas: ['', [Validators.required]],
+      limite: ['', [Validators.required]],
     })
   }
+
+  loadDataform(){
+    this.formChangeLimiteXroute.reset();
+  } 
 }
+
+
