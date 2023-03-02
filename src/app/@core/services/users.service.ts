@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
-import { data } from 'jquery';
-=======
 import { rolesList } from '../data/roles';
->>>>>>> main
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
@@ -111,9 +107,9 @@ export class UsersService {
     let { password } = data;
     return this.connectionSvc.send('put', `usuario/actualizarPassword/${ id }?password=${ password }`);
   }
-  
 
-     getSellerxNegocio(): Promise<any> { 
+
+     getSellerxNegocio(): Promise<any> {
         let idNegocio =JSON.parse(localStorage.getItem('business') || '{}').idNegocio;
         let rol='vendedor';
        return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ idNegocio }/${ rol }`);

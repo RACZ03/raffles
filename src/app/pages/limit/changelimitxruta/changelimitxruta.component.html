@@ -11,12 +11,12 @@
                     <div class="mb-3">
                     <label class="small mb-1"  for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
                         <div class="border" style="font-size: small;">
-                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros" type="number"
+                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros" type="number" onlyNumbers
                                      style="margin-left: 5px !important; "
                                     formControlName="numeros" theme='bootstrap'></tag-input>
                            <span *ngIf="validInput('numeros')" class="text-danger mt-2">
                             este campo es requerido
-                           </span>        
+                           </span>
                         </div>
                     </div>
                     <div class="mb-3" tyle="font-size: small;">
@@ -38,7 +38,7 @@
                         </span>
                     </div>
 
-                
+
                 <div class="mt-4 mb-0 text-center">
                     <button class="btn btn-danger" (click)="closeModal(true)">Cerrar</button>
                     <button class="btn btn-primary" (click)="onSubmit()" [disabled]="formChangeLimiteXroute.invalid">Guardar</button>
@@ -47,4 +47,3 @@
         </div>
     </div>
 </div>
-  
