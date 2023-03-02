@@ -40,7 +40,7 @@ export class ChangelimitoutlimitsComponent implements OnInit {
 
  async loadDataSeller() {
      let resp = await this.sellerSvc.getSellerxNegocio();
-    console.log(resp);
+   // console.log(resp);
      this.SellerData = resp.data;
   }
 
@@ -59,7 +59,7 @@ export class ChangelimitoutlimitsComponent implements OnInit {
     }
    // console.log(this.listSinAfectar);
     let resp = await this.limitSvc.changelimitsinafectarLimit(this.listSinAfectar);
-    console.log(resp);
+    //console.log(resp);
     let { status, message,comment } = resp;
     if(status == 200){
       this.alertSvc.showAlert(1,message,comment);
@@ -108,12 +108,12 @@ export class ChangelimitoutlimitsComponent implements OnInit {
   this.formChangeLimitOutLimit.get('vendedor')?.setValue('');
   this.formChangeLimitOutLimit.get('premioMaximmo')?.setValue('');
 
-    console.log(this.limitList);
+    //console.log(this.limitList);
   }
 
 
   eliminarRegistro(items:any){
-    console.log(items);
+    ///console.log(items);
     for(let i = 0; i < this.limitList.length; i++){
       if(this.limitList[i].seller.id == items.seller.id){
         this.limitList.splice(i,1);
