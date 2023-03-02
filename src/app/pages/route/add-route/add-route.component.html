@@ -2,7 +2,7 @@
     <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
         <div class="mt-4">
-            <h4>{{ 'MODULES.ROUTE.ADD' | translate }}</h4>
+            <h4>{{ isEdit ? ('MODULES.ROUTE.EDIT' | translate) : ('MODULES.ROUTE.ADD' | translate) }}</h4>
         </div>
         <form [formGroup]="routeForm" (submit)="onSubmit()">
             <!-- Name -->
@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label for="" class="form-label">{{ 'MODULES.ROUTE.DESCRIPTION' | translate }}</label>
                 <input class="form-control" name="descripcion" id="descripcion" rows="5" formControlName="descripcion"/>
-            </div>            
+            </div>
             <div class="text-center mb-5">
                 <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
                 <button class="btn btn-sm btn-primary" [disabled]="routeForm.invalid">

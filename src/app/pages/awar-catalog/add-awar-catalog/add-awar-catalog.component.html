@@ -2,12 +2,12 @@
     <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
         <div class="mt-4">
-            <h4>{{ 'MODULES.ROUTE.ADD' | translate }}</h4>
+            <h4>{{ 'MODULES.AWARD.ADD' | translate }}</h4>
         </div>
         <form [formGroup]="awardForm" (submit)="onSubmit()">
             <!-- Name -->
             <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.ROUTE.NAME' | translate }} <span class="text-danger">*</span></label>
+                <label for="" class="form-label">{{ 'MODULES.AWARD.NAME' | translate }} <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" formControlName="nombre"/>
                 <span *ngIf="validInput('nombre')" class="text-danger mt-1">
                     {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
@@ -15,9 +15,9 @@
             </div>
             <!-- Descriptions -->
             <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.ROUTE.DESCRIPTION' | translate }}</label>
+                <label for="" class="form-label">{{ 'MODULES.AWARD.DESCRIPTION' | translate }}</label>
                 <input class="form-control" name="descripcion" id="descripcion" rows="5" formControlName="descripcion"/>
-            </div>            
+            </div>
             <div class="text-center mb-5">
                 <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
                 <button class="btn btn-sm btn-primary" [disabled]="awardForm.invalid">

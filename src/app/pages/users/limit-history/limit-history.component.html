@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title mt-2" id="exampleModalLabel">{{ "MODULES.USER.LIMIT-HISTORY" | translate }}</h3>
+      <button type="button" class="btn btn-secondary" (click)="close()">{{ "BUTTONS.CLOSE" | translate }}</button>
+    </div>
+    <div class="modal-body">
+
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let item of list">
+          <span>
+            <strong>{{ "MODULES.LIMITS.NUMBER" | translate }}:</strong> {{ item?.numero }}
+          </span>
+          <span style="float: right !important;">
+            <strong>{{ "MODULES.LIMITS.TOP-PRIZE" | translate }}:</strong> {{ item?.premioMaximo }}
+          </span>
+        </li>
+      </ul>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="close()">{{ "BUTTONS.CLOSE" | translate }}</button>
+    </div>
+  </div>
+</div>

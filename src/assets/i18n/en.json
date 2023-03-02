@@ -1,5 +1,5 @@
 {
-    "MODULES": 
+    "MODULES":
      {
         "LOGIN": {
             "TITLE": "Welcome!",
@@ -60,9 +60,15 @@
             "ORDER": "Order",
             "ORDER-PLACEHOLDER": "Select an Limit",
             "LIMIT": "Limit",
-            "LIMIT-PLACEHOLDER": "Select a limit"
+            "LIMIT-PLACEHOLDER": "Select a limit",
+            "TOP-PRIZE": "Top Prize",
+            "NUMBER": "Number"
         },
         "USER": {
+            "ADD": "Add User",
+            "EDIT": "Edit User",
+            "CHANGE-PASS": "Change Password",
+            "LIMIT-HISTORY": "Limit History",
             "NAME": "Name",
             "PHONE": "Phone Number",
             "EMAIL": "Email",
@@ -80,10 +86,13 @@
         "EDIT": "Edit",
         "DELETE": "Delete",
         "CANCEL": "Cancel",
-        "SAVE": "Save"
+        "SAVE": "Save",
+        "CLOSE": "Close"
     },
     "VALIDATIONS": {
         "INVALID_EMAIL": "Invalid email",
-        "REQUIRED_FIELD": "Required field"
+        "REQUIRED_FIELD": "Required field",
+        "MIN_LENGHT": "Min lenght",
+        "MAX_LENGHT": "Max lenght"
     }
 }

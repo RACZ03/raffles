@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { BusinessService } from 'src/app/@core/services/business.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-business',
@@ -24,14 +24,15 @@ export class BusinessComponent implements OnInit, OnDestroy {
   constructor(
     private businessService: BusinessService,
     private alertSvc: AlertService,
-    private exportSvc: ExporterDataService
-  ) { 
-    this.dtOptions = environment.dtOptions;
+    private exportSvc: ExporterDataService,
+    private dataTableSvc: DataTableServiceService
+  ) {
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
   }
 
   ngOnInit(): void {
-  
+
   }
 
   async loadData() {
@@ -53,23 +54,19 @@ export class BusinessComponent implements OnInit, OnDestroy {
 
   // Actions
   add() {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.showForm = true;
   }
 
   onEdit(item: any) {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.businessSelected = item;
     this.showForm = true;
   }
 
   close(e: boolean) {
-    if ( !e ) {
-      this.showForm = false;
-      return;
-    }
-
     this.showForm = false;
     this.renderer();
-    this.loadData();
   }
 
   async onDelete(item: any) {
@@ -79,12 +76,12 @@ export class BusinessComponent implements OnInit, OnDestroy {
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        this.renderer();
-        this.loadData();
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
     }
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.renderer();
   }
 
 
@@ -98,12 +95,16 @@ export class BusinessComponent implements OnInit, OnDestroy {
 
   /* Section Render & Destoy */
   renderer() {
-    if ( !this.dtElement ) return;
-
+    this.dtElement = this.dataTableSvc.dtElements;
+    // unsubscribe the event
+    this.dtTrigger.unsubscribe();
+    // destroy the table
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-  });
+      // new observable
+      this.dtTrigger = new Subject();
+      this.loadData();
+    });
   }
 
   /* Destroy components */
@@ -136,5 +137,5 @@ export class BusinessComponent implements OnInit, OnDestroy {
     });
     this.exportSvc.exportPdf(json, 'negocios');
   }
- 
+
 }

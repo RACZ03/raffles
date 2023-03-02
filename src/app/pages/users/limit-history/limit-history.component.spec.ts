@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddUserComponent } from './add-user.component';
+import { LimitHistoryComponent } from './limit-history.component';
 
-describe('AddUserComponent', () => {
-  let component: AddUserComponent;
-  let fixture: ComponentFixture<AddUserComponent>;
+describe('LimitHistoryComponent', () => {
+  let component: LimitHistoryComponent;
+  let fixture: ComponentFixture<LimitHistoryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddUserComponent ]
+      declarations: [ LimitHistoryComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddUserComponent);
+    fixture = TestBed.createComponent(LimitHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

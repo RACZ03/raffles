@@ -34,6 +34,10 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

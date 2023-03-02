@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PrintService } from 'src/app/@core/utils/print.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +13,10 @@ export class DashboardComponent implements OnInit {
   public salesChart!: any;
   public clicked: boolean = true;
   public clicked1: boolean = false;
+
+  constructor(
+    private printSvc: PrintService,
+  ) { }
 
   ngOnInit() {
 
@@ -39,6 +44,9 @@ export class DashboardComponent implements OnInit {
 	// 	});
   }
 
+  print() {
+    this.printSvc.printTicket('QJ4ERM36');
+  }
 
   // public updateOptions() {
   //   this.salesChart.data.datasets[0].data = this.data;

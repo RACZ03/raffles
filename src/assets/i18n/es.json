@@ -1,6 +1,6 @@
 
 {
-    "MODULES": 
+    "MODULES":
      {
         "LOGIN": {
             "TITLE": "¡Bienvenido!",
@@ -54,9 +54,15 @@
             "DESCRIPTION": "Descripción",
             "BUSINESS": "Negocio",
             "BUSINESS-PLACEHOLDER": "Seleccione un negocio",
-            "INVALID_EMAIL": "Correo inválido"
+            "INVALID_EMAIL": "Correo inválido",
+            "TOP-PRIZE": "Premio máximo",
+            "NUMBER": "Número"
         },
         "USER": {
+            "ADD": "Agregar Usuario",
+            "EDIT": "Editar Usuario",
+            "CHANGE-PASS": "Cambiar Contraseña",
+            "LIMIT-HISTORY": "Historial de Límites",
             "NAME": "Nombre",
             "PHONE": "Teléfono",
             "EMAIL": "Correo",
@@ -74,10 +80,13 @@
         "EDIT": "Editar",
         "DELETE": "Eliminar",
         "SAVE": "Guardar",
-        "CANCEL": "Cancelar"
+        "CANCEL": "Cancelar",
+        "CLOSE": "Cerrar"
     },
     "VALIDATIONS": {
         "INVALID_EMAIL": "Correo inválido",
-        "REQUIRED_FIELD": "Campo requerido"
+        "REQUIRED_FIELD": "Campo requerido",
+        "MIN_LENGHT": "Mínimo de caracteres es ",
+        "MAX_LENGHT": "Máximo de caracteres es "
     }
 }

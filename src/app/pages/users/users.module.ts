@@ -9,13 +9,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AddUserComponent } from './add-user/add-user.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { LimitHistoryComponent } from './limit-history/limit-history.component';
 
 
 
 @NgModule({
   declarations: [
     UsersComponent,
-    AddUserComponent
+    AddUserComponent,
+    ChangePasswordComponent,
+    LimitHistoryComponent
   ],
   imports: [
     CommonModule,

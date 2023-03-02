@@ -1,17 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
-import { environment } from 'src/environments/environment';
+
+declare var window: any;
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -20,25 +22,42 @@ export class UsersComponent implements OnInit {
 
   public data: any[] = [];
   public showForm: boolean = false;
-  public businessSelected: any = null;
 
   public UserSelected: any = null;
+  public isAdmin: boolean|string = false;
+
+  public modalChangePassword: any;
+  public modalHistory: any;
 
   constructor(
     private usersSvc: UsersService,
     private alertSvc: AlertService,
-    private exportSvc: ExporterDataService
-  ) { 
-    this.dtOptions = environment.dtOptions;
+    private exportSvc: ExporterDataService,
+    private dataTableSvc: DataTableServiceService
+  ) {
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
     this.loadData();
   }
 
   ngOnInit(): void {
+    this.modalChangePassword = new window.bootstrap.Modal(
+      document.getElementById('changePasswordUser')
+    );
+    this.modalHistory = new window.bootstrap.Modal(
+      document.getElementById('historyLimitUser')
+    );
   }
 
   async loadData() {
     this.data = [];
-    let resp = await this.usersSvc.getUsers();
+    let resp: any;
+    if ( this.isAdmin ) {
+      resp = await this.usersSvc.getUsers();
+    } else {
+      let { id, code } = this.usersSvc.getBusinessIdAndRoleCodeByAuth();
+      resp = await this.usersSvc.getUsersByBusinessAndRole(id, code);
+    }
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200) {
@@ -56,25 +75,47 @@ export class UsersComponent implements OnInit {
 
   // Actions
   add() {
+    this.dataTableSvc.dtElements = this.dtElement;
     this.showForm = true;
   }
 
   onEdit(item: any) {
-    this.businessSelected = item;
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.UserSelected = item;
     this.showForm = true;
   }
 
+  onChangePassword(item: any) {
+    this.UserSelected = item;
+    this.modalChangePassword.show();
+  }
+
+  onViewLimits(item: any) {
+    this.UserSelected = item;
+    this.modalHistory.show();
+  }
+
   closeUser(e: boolean) {
-    if ( !e ) {
-      this.showForm = false;
-      return;
-    }
     this.showForm = false;
-    if ( this.dtElement != undefined ) {
+    // refresh data
+    this.UserSelected = null;
+    this.renderer();
+  }
+
+  closeModal(e: any) {
+    this.UserSelected = null;
+    if (!e) {
+      this.modalChangePassword.hide();
+      return;
+    } else {
+      this.modalChangePassword.hide();
       this.renderer();
     }
-    
-    this.loadData();
+  }
+
+  closeModalHistory(e: any) {
+    this.UserSelected = null;
+    this.modalHistory.hide();
   }
 
   async onDelete(item: any) {
@@ -84,17 +125,19 @@ export class UsersComponent implements OnInit {
       let { status } = resp;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Registro eliminado');
-        this.renderer();
-        this.loadData();
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
+      // this.dataTableSvc.dtElements = this.dtElement;
+      this.renderer();
     }
   }
 
 
   /* Search */
   searchData(e: any) {
+    if ( !this.dtElement ) return;
+
     let value = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.search(value).draw();
@@ -103,12 +146,16 @@ export class UsersComponent implements OnInit {
 
   /* Section Render & Destoy */
   renderer() {
-    if ( !this.dtElement ) return;
-
+    this.dtElement = ( this.dtElement == undefined ) ? this.dataTableSvc.dtElements : this.dtElement;
+    // unsubscribe the event
+    this.dtTrigger.unsubscribe();
+    // destroy the table
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-  });
+      // new observable
+      this.dtTrigger = new Subject();
+      this.loadData();
+    });
   }
 
   /* Destroy components */
