@@ -19,14 +19,14 @@ export class ChangelimitxsellerComponent implements OnInit {
   VendedorData: any[] = [];
   items: any[]= [];
   inputText = 'text';
-  
+
     ///constructor
   constructor(
     private fb: FormBuilder,
     private routeSvc: RouteService,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
-    private userSvc: UsersService) { 
+    private userSvc: UsersService) {
     }
 
     public insertInputTag(): void {
@@ -38,7 +38,7 @@ export class ChangelimitxsellerComponent implements OnInit {
   }
 
     //whitdefault
-    displayTags(event : any) { 
+    displayTags(event : any) {
       console.log(event);
       this.itemsAsObjects = event;
     }
@@ -46,14 +46,14 @@ export class ChangelimitxsellerComponent implements OnInit {
 
  //OnInit
    ngOnInit(): void {
-    this.formChangeLimitexSeller = this.initForms(); 
+    this.formChangeLimitexSeller = this.initForms();
     this.loadDataSeller();
-    
+
   }
 
  async loadDataSeller() {
     let resp = await this.userSvc.getSellerxNegocio();
-    //console.log(resp);
+
     this.VendedorData = resp.data;
   }
 
@@ -63,17 +63,17 @@ export class ChangelimitxsellerComponent implements OnInit {
     }
     let listVendedorSelected = this.formChangeLimitexSeller.value.vendedor;
     let listNumeros = this.formChangeLimitexSeller.value.numeros;
-    //console.log(this.formChangeLimitexSeller.value);
+
     let vendedor: any[] = [];
     let numeros: any[] = [];
-    if(listVendedorSelected!==null){
-      for(let i=0; i<listVendedorSelected.length; i++){
-        vendedor.push(listVendedorSelected[i]);
+    if(listVendedorSelected!==null) {
+      for (const item of listVendedorSelected) {
+        vendedor.push(item);
       }
     }
-    if(listNumeros!==null){
-      for(let i=0; i<listNumeros.length; i++){
-        numeros.push(listNumeros[i].value);
+    if(listNumeros!==null) {
+      for (const item of listNumeros) {
+        numeros.push(item.val);
       }
     }
     console.log(vendedor);
@@ -82,7 +82,7 @@ export class ChangelimitxsellerComponent implements OnInit {
       numeros: numeros,
       limite: this.formChangeLimitexSeller.value.limite
     }
- 
+
     let resp = await this.limitSvc.changeLimiteNumberxSeller(obj);
     console.log(resp);
     let { status, message,comment } = resp;
@@ -113,5 +113,5 @@ export class ChangelimitxsellerComponent implements OnInit {
 
   loadDataform(){
     this.formChangeLimitexSeller.reset();
-  } 
+  }
 }

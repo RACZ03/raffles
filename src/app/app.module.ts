@@ -46,6 +46,7 @@ export function createTranslateLoader( http: HttpClient) {
       }
     ), // ToastrModule added
     DataTablesModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

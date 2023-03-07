@@ -10,6 +10,7 @@ import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SalesRoutingModule } from './sales-routing.module';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -27,7 +28,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     NgxMaskModule,
     // NgbModule,
     // NgbCarouselModule,
-    SlickCarouselModule
+    SlickCarouselModule,
+    NgSelectModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

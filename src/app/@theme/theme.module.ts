@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 
@@ -11,12 +11,15 @@ import { RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToggleTableDirective } from './directives/toggle-table.directive';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const COMPONENTS = [
   NavbarComponent,
   FooterComponent,
   SidebarComponent,
-  AdminLayoutComponent
+  AdminLayoutComponent,
+  SpinnerComponent,
 ];
 
 const DIRECTIVES = [
@@ -31,11 +34,13 @@ const DIRECTIVES = [
   imports: [
     CommonModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    NgxSpinnerModule,
   ],
   exports: [
     ...COMPONENTS,
     ...DIRECTIVES,
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ThemeModule { }
