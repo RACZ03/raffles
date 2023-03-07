@@ -3,7 +3,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite de Rutas</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal(true)"></button>
+             <i class="bi bi-x-circle" (click)="closeModal(true)" style="cursor: pointer;"></i>
         </div>
         <div class="modal-body">
             <form  [formGroup]="formChangeLimiteXroute">
@@ -31,8 +31,8 @@
                     </div>
                     <div class="mb-3" tyle="font-size: small;">
                         <label class="small mb-1" for="inputlimite">Limite: <span class="text-danger">*</span></label>
-                        <input class="form-control mb-2" id="inputlimite" type="text" placeholder="Ingrese el limte"
-                            formControlName="limite" [class.is-invalid]="validInput('limite')"/>
+                        <input class="form-control mb-2" id="inputlimite" type="number" placeholder="Ingrese el limte"
+                            formControlName="limite" [class.is-invalid]="validInput('limite')" autocomplete="off" step="1"/>
                         <span *ngIf="validInput('limite')" class="text-danger mt-2">
                             este campo es requerido
                         </span>

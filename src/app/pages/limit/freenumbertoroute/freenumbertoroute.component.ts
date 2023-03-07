@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { RouteService } from 'src/app/@core/services/route.service';
@@ -26,6 +26,7 @@ export class FreenumbertorouteComponent implements OnInit {
     private routeSvc: RouteService,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
+    private el: ElementRef,
     private userSvc: UsersService) { 
     }
 
@@ -54,7 +55,6 @@ export class FreenumbertorouteComponent implements OnInit {
  async loadDataSeller() {
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
     let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
-    //console.log(resp);
     this.RutasData = resp.data;
   }
 
@@ -69,14 +69,14 @@ export class FreenumbertorouteComponent implements OnInit {
     let numeros: any[] = [];
     let Route: any[] = [];
     if(listRouteSelected!==null){
-      for(let i=0; i<listRouteSelected.length; i++){
-        Route.push(listRouteSelected[i]);
+      for (const item of listRouteSelected) {
+        Route.push(item);
       }
     }
 
     if(listNumeros!==null){
-      for(let i=0; i<listNumeros.length; i++){
-        numeros.push(listNumeros[i].value);
+      for (const item of listNumeros) {
+        numeros.push(item.value);
       }
     }
   
@@ -84,17 +84,25 @@ export class FreenumbertorouteComponent implements OnInit {
       vendedoresOrRutaOrNegocio: Route,
       numeros: numeros,
     }
-     //console.log(obj);
-    let resp = await this.limitSvc.freeNumberToRoute(obj);
-    //console.log(resp);
-    let { status, message,comment } = resp;
-    if(status==200){
-      this.alertSvc.showAlert(1, message,comment);
-      this.formfreeNumberToRoute.reset();
-      this.closeModal(true);
-    }else{
-      this.alertSvc.showAlert(4, message,'error');
+
+    let Confirmar = this.alertSvc.showConfirmLimit('Liberar Numeros', '¿Está seguro de cliberar los números seleccionados?', 'Confirmar');
+    if(await Confirmar){
+      let resp = await this.limitSvc.freeNumberToRoute(obj);
+      let { status, message,comment } = resp;
+      if(status==200){
+        this.alertSvc.showAlert(1, message,comment);
+        this.formfreeNumberToRoute.reset();
+        this.closeModal(true);
+      }else{
+        this.alertSvc.showAlert(4, message,'error');
+      }
     }
+    else{
+      this.alertSvc.showAlert(2, 'Cambio de Limite','La liberacion de numeros fue cancelado por el usuario');
+      this.loadDataform();
+      this.onClose.emit(true);
+    }
+
     
   }
 
@@ -117,6 +125,33 @@ export class FreenumbertorouteComponent implements OnInit {
 
   loadDataform(){
     this.formfreeNumberToRoute.reset();
+  }
+
+  
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const input = event.key;
+    const inputValue = this.el.nativeElement.value;
+    // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
+      // Permitir que el evento se propague y actualizar el valor del control
+      setTimeout(() => {
+        let numeros: any[] = this.formfreeNumberToRoute?.get('numeros')?.value;
+
+        if ( inputValue === '' || inputValue === null || inputValue == undefined ) {
+          return;
+        }
+        numeros.push({
+          display: inputValue,
+          value: inputValue
+        });
+        this.formfreeNumberToRoute?.get('numeros')?.setValue(numeros);
+      });
+    } else {
+      // Cancelar el evento
+      event.preventDefault();
+    }
   }
 
 }

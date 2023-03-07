@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BusinessService } from 'src/app/@core/services/business.service';
 import { LimitService } from 'src/app/@core/services/limit.service';
@@ -25,7 +25,8 @@ export class FreenumbertobisnessComponent implements OnInit {
     private fb: FormBuilder,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
-    private businessSvc: BusinessService,)
+    private businessSvc: BusinessService,
+    private el: ElementRef)
      { 
     }
 
@@ -53,7 +54,6 @@ export class FreenumbertobisnessComponent implements OnInit {
  async loadDataBusiness() {
 
      let resp = await this.businessSvc.getBusiness();
-    //console.log(resp);
       this.BusinessData = resp.data;
   }
 
@@ -64,18 +64,17 @@ export class FreenumbertobisnessComponent implements OnInit {
     let listbusinessSelected = this.formfreeNumberToBusiness.value.negocios;
     let listNumeros = this.formfreeNumberToBusiness.value.numeros;
 
-    console.log(this.formfreeNumberToBusiness.value);
     let numeros: any[] = [];
     let business: any[] = [];
     if(listbusinessSelected!==null){
-      for(let i=0; i<listbusinessSelected.length; i++){
-        business.push(listbusinessSelected[i]);
+      for (const item of listbusinessSelected) {
+        business.push(item);
       }
     }
 
     if(listNumeros!==null){
-      for(let i=0; i<listNumeros.length; i++){
-        numeros.push(listNumeros[i].value);
+      for (const item of listNumeros) {
+        numeros.push(item.value);
       }
     }
   
@@ -83,9 +82,10 @@ export class FreenumbertobisnessComponent implements OnInit {
       vendedoresOrRutaOrNegocio: business,
       numeros: numeros,
     }
-     //console.log(obj);
-    let resp = await this.limitSvc.freeNumberToBusiness(obj);
-    //console.log(resp);
+
+    let Confirmar = this.alertSvc.showConfirmLimit('Liberar Numeros', '¿Está seguro de liberar los números seleccionados?', 'Confirmar');
+    if(await Confirmar){
+      let resp = await this.limitSvc.freeNumberToBusiness(obj);
     let { status, message,comment } = resp;
     if(status==200){
       this.alertSvc.showAlert(1, message,comment);
@@ -94,6 +94,13 @@ export class FreenumbertobisnessComponent implements OnInit {
     }else{
       this.alertSvc.showAlert(4, message,'error');
     }
+    }
+  else{
+    this.alertSvc.showAlert(2, 'Liberacion de numeros','ELa liberacion de numeros fue cancelado por el usuario');
+      this.loadDataform();
+      this.onClose.emit(true);
+  }
+    
     
   }
 
@@ -116,6 +123,32 @@ export class FreenumbertobisnessComponent implements OnInit {
 
   loadDataform(){
     this.formfreeNumberToBusiness.reset();
+  }
+
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const input = event.key;
+    const inputValue = this.el.nativeElement.value;
+    // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
+      // Permitir que el evento se propague y actualizar el valor del control
+      setTimeout(() => {
+        let numeros: any[] = this.formfreeNumberToBusiness?.get('numeros')?.value;
+
+        if ( inputValue === '' || inputValue === null || inputValue == undefined ) {
+          return;
+        }
+        numeros.push({
+          display: inputValue,
+          value: inputValue
+        });
+        this.formfreeNumberToBusiness?.get('numeros')?.setValue(numeros);
+      });
+    } else {
+      // Cancelar el evento
+      event.preventDefault();
+    }
   }
 
 }

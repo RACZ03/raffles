@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { data } from 'jquery';
-import { identity } from 'rxjs';
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
@@ -50,7 +48,7 @@ export class LimitService {
 
   changeoneLimit(data: any): Promise<any> {
     let { vendedor, numero, limite } = data;
-    //console.log(numero);
+
     return this.connectionSvc.send('put', `limite/cambiarUnLimite?vendedor=${vendedor}&numero=${numero}&limite=${limite}`);
   }
 
@@ -64,12 +62,10 @@ export class LimitService {
   } 
 
   freeNumberToRoute(data: any): Promise<any> {
-    //console.log(data);
     return this.connectionSvc.send('put', `limite/liberarNumerosParaRutas`, data);
   }
  
   freeNumberToBusiness(data: any): Promise<any> {
-    //console.log(data);
     return this.connectionSvc.send('put', `limite/liberarNumerosParaNegocios`, data);
   }
 
@@ -78,9 +74,4 @@ export class LimitService {
   }
 
  
-}
-
-
-export interface numero {
-  name: string;
 }

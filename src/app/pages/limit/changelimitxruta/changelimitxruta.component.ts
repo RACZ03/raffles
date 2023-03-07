@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { type } from 'os';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { RouteService } from 'src/app/@core/services/route.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
@@ -19,6 +18,7 @@ export class ChangelimitxrutaComponent implements OnInit {
   rutasData: any[] = [];
   items: any[]= [];
   inputText = 'text';
+  isConfirmed = false;
 
     ///constructor
   constructor(
@@ -48,15 +48,11 @@ export class ChangelimitxrutaComponent implements OnInit {
    ngOnInit(): void {
     this.formChangeLimiteXroute = this.initForms();
     this.loadDataRutaa();
-    console.log('Hi')
   }
 
  async loadDataRutaa() {
-
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
-  //console.log(dataIdentity, "aqui");
      let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
-     //console.log(resp);
      this.rutasData = resp.data;
   }
 
@@ -64,19 +60,21 @@ export class ChangelimitxrutaComponent implements OnInit {
     if(this.formChangeLimiteXroute.invalid){
       return;
     }
+   
+
     let listRutasSelected = this.formChangeLimiteXroute.value.rutas;
     let listNumeros = this.formChangeLimiteXroute.value.numeros;
-    //console.log(listNumeros);
-    let rutas: any[] = [];
+    let rutas: any[]= [];
     let numeros: any[] = [];
     if(listRutasSelected!==null){
-      for(let i=0; i<listRutasSelected.length; i++){
-        rutas.push(listRutasSelected[i]);
+      for (const item of listRutasSelected) {
+        rutas.push(item.value);
       }
     }
+
     if(listNumeros!==null){
-      for(let i=0; i<listNumeros.length; i++){
-        numeros.push(listNumeros[i].value);
+      for (const item  of listNumeros) {
+        numeros.push(item.value);
       }
     }
     let obj ={
@@ -85,14 +83,22 @@ export class ChangelimitxrutaComponent implements OnInit {
       limite: this.formChangeLimiteXroute.value.limite
     }
 
+    let resp = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
+   
+    if(await resp){
     let resp = await this.limitSvc.changeLimiteNumberRoute(obj);
-    //console.log(resp);
     let { status, message,comment } = resp;
     if(status==200){
       this.alertSvc.showAlert(1, message,comment);
     }else{
       this.alertSvc.showAlert(4, message,'error');
     }
+   }else{
+    this.alertSvc.showAlert(2, 'Cambio de Limite','El cambio de limite fue cancelado por el usuario');
+    this.loadDataform();
+    this.onClose.emit(true);
+  }    
+
   }
 
   closeModal(band: boolean) {
@@ -121,7 +127,9 @@ export class ChangelimitxrutaComponent implements OnInit {
     const input = event.key;
     const inputValue = this.el.nativeElement.value;
     // Solo permitir dígitos numéricos, retroceso, borrar y flechas
-    if (event.keyCode === 8 || event.keyCode === 46 || event.keyCode === 37 || event.keyCode === 39 || /^\d+$/.test(input)) {
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
       // Permitir que el evento se propague y actualizar el valor del control
       setTimeout(() => {
         let numeros: any[] = this.formChangeLimiteXroute?.get('numeros')?.value;
@@ -135,7 +143,6 @@ export class ChangelimitxrutaComponent implements OnInit {
         });
         this.formChangeLimiteXroute?.get('numeros')?.setValue(numeros);
       });
-      return;
     } else {
       // Cancelar el evento
       event.preventDefault();

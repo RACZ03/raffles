@@ -48,4 +48,25 @@ export class AlertService {
       });
     });
   }
+
+  showConfirmLimit(title: string, message: string, butonconfirm: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      Swal.fire({
+        title: title,
+        text: message,
+        // icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: butonconfirm,
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
 }
