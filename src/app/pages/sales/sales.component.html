@@ -9,7 +9,13 @@
 
 <div class="container-fluid">
 
-  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+  <div *ngIf="disabledActions">
+    <div class="alert alert-danger" role="alert">
+      <strong>¡Atención!</strong> El sorteo se encuentra cerrado.
+    </div>
+  </div>
+
+  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" *ngIf="!disabledActions">
     <!-- Sales -->
     <div ngxSlickItem style="padding-right: 5px;">
       <div class="text-right">
@@ -20,7 +26,7 @@
           Recibos
         </button>
       </div>
-      <div class="card">
+      <div class="card mt-3">
         <div class="card-header text-center">
           <h3 class="mb-0">Formulario de Ventas</h3>
           <h2 class="mt-2">{{ currentRaffle?.nombre }}</h2>
@@ -77,8 +83,8 @@
       <div class="card mt-4">
         <div class="card-body" style="padding-top: 0px;">
           <h3 class="text-center">Rifas Dias</h3>
-          <h5 class="text-center">Vendedor: <span>User</span></h5>
-          <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5>
+          <h5 class="text-center">Vendedor: <span>{{ identity?.nombre }}</span></h5>
+          <!-- <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5> -->
           <!-- Integrate table -->
           <table class="table">
             <caption></caption>
@@ -91,18 +97,24 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of listSales">
-                <td class="align-middle">10</td>
-                <td class="align-middle">10</td>
-                <td class="align-middle">800</td>
+              <tr *ngFor="let item of listSales; let i = index">
+                <td class="align-middle">{{ item?.number }}</td>
+                <td class="align-middle">{{ item?.amount }}</td>
+                <td class="align-middle">{{ item?.prize }}</td>
                 <td class="align-middle">
-                  <button class="btn btn-sm text-danger">
+                  <button class="btn btn-sm text-danger" (click)="onRemove(i)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <!-- End integrate table -->
+          <div class="text-right mt-2">
+            <button type="button" class="btn btn-sm btn-success" (click)="onSaveAll()">
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </div>

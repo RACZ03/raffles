@@ -38,10 +38,11 @@ export class SalesService {
       } else {
         this.currentRaffle().then((res: any) => {
           if (res) {
-            localStorage.setItem('currentRaffle', JSON.stringify(res));
-            resolve(res);
+            localStorage.setItem('currentRaffle', JSON.stringify((res != null) ? res : true));
+            resolve(res != null ? res : true );
           } else {
-            reject(false);
+            localStorage.setItem('currentRaffle', JSON.stringify(false));
+            resolve(false);
           }
         }).catch((err: any) => {
           reject(err);

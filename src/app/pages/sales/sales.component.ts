@@ -2,8 +2,10 @@ import { AfterViewInit, Component, HostListener, OnInit, ViewChild, ElementRef }
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DataNumbers } from 'src/app/@core/data/numbers';
+import { AuthService } from 'src/app/@core/services/auth.service';
 import { SalesService } from 'src/app/@core/services/sales.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
 // import {  } from 'ngx-slick-carousel';
 
@@ -34,33 +36,51 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public formSale!: FormGroup;
 
+  public identity: any = null;
   public listSales: any[] = [];
   public numberList: any[] = DataNumbers;
   public tablaEspecial: boolean = false;
+  public disabledActions: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private alertSvc: AlertService,
     private spinnerSvc: SpinnerService,
     private salesSvc: SalesService,
+    private authSvc: AuthService,
+    private printSvc: PrintService,
   ) {
     this.getCurrentRaflle();
   }
-
-  ngOnInit(): void {
+  
+  async ngOnInit() {
     this.formSale = this.initForm();
     if (window.innerWidth < 992) {
       this.slideConfig.slidesToShow = 1;
     } else {
       this.slideConfig.slidesToShow = 2;
     }
+    let user = await this.authSvc.getIdentity();
+    this.identity = JSON.parse(user);
 
+    // set 5 elements to list whith values aleatory
+    for (let i = 0; i < 5; i++) {
+      let number = Math.floor(Math.random() * 100);
+      let amount = Math.floor(Math.random() * 100);
+      let prize = Math.floor(Math.random() * 100);
+      this.listSales.push({ number, amount, prize });
+    };
   }
 
   async getCurrentRaflle() {
     let currentRaffle = await this.salesSvc.getCurrentRaffle();
     if (currentRaffle) {
+      this.disabledActions = false;
       this.currentRaffle = currentRaffle;
+    } else {
+      this.alertSvc.showAlert(3,'', 'No hay sorteo activo');
+      // disabled form
+      this.disabledActions = false;
     }
   }
 
@@ -101,7 +121,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   getLimit(number: number): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      let respLimit = await this.salesSvc.getLimit(number, this.currentRaffle.id);
+      let respLimit = await this.salesSvc.getLimit(number, this.currentRaffle?.id);
       if (respLimit) {
         let { status, data } = respLimit;
         if (status && status == 200) {
@@ -166,9 +186,51 @@ export class SalesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async onSend() {
+  onRemove(i: number) {
+    this.listSales.splice(i, 1);
+  }
 
+  async onSaveAll() {
 
+    // test 
+    this.getTickets('6INBUSZ8');
+    return;
+
+    // validate if listSales is empty
+    if (this.listSales.length == 0) {
+      this.alertSvc.showAlert(3, '', 'No hay ventas para registrar');
+      return;
+    }
+
+    // spinner
+    this.spinnerSvc.show();
+
+    // send data
+    let resp = await this.salesSvc.save(this.listSales);
+    if (resp) {
+      let { status, comment } = resp;
+      if (status && status == 200) {
+        this.alertSvc.showAlert(1, '', comment);
+        this.listSales = [];
+      } else {
+        this.alertSvc.showAlert(3, '', comment);
+      }
+    }
+    // hide spinner
+    setTimeout(() => {
+      this.spinnerSvc.hide();
+    }, 500);
+
+  }
+
+  async getTickets(code: string) {
+    let resp = await this.salesSvc.getSaleByCode(code);
+    if (resp) {
+      let { status, data } = resp;
+      if (status && status == 200) {
+        this.printSvc.printTicket(data);
+      }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -182,7 +244,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     } else {
       this.slideConfig.slidesToShow = 2;
     }
-    this.slickModal.unslick();
-    this.slickModal.initSlick();
+    this.slickModal?.unslick();
+    this.slickModal?.initSlick();
   }
 }
