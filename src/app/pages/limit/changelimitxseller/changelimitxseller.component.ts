@@ -19,8 +19,7 @@ export class ChangelimitxsellerComponent implements OnInit {
   VendedorData: any[] = [];
   items: any[]= [];
   inputText = 'text';
-  
-  
+
     ///constructor
   constructor(
     private fb: FormBuilder,
@@ -40,7 +39,7 @@ export class ChangelimitxsellerComponent implements OnInit {
   }
 
     //whitdefault
-    displayTags(event : any) { 
+    displayTags(event : any) {
       console.log(event);
       this.itemsAsObjects = event;
     }
@@ -48,13 +47,14 @@ export class ChangelimitxsellerComponent implements OnInit {
 
  //OnInit
    ngOnInit(): void {
-    this.formChangeLimitexSeller = this.initForms(); 
+    this.formChangeLimitexSeller = this.initForms();
     this.loadDataSeller();
-    
+
   }
 
  async loadDataSeller() {
     let resp = await this.userSvc.getSellerxNegocio();
+
     this.VendedorData = resp.data;
   }
 
@@ -64,6 +64,7 @@ export class ChangelimitxsellerComponent implements OnInit {
     }
     let listVendedorSelected = this.formChangeLimitexSeller.value.vendedor;
     let listNumeros = this.formChangeLimitexSeller.value.numeros;
+
     let vendedor: any[] = [];
     let numeros: any[] = [];
     if(listVendedorSelected!==null){
@@ -74,6 +75,7 @@ export class ChangelimitxsellerComponent implements OnInit {
     if(listNumeros!==null){
       for (const item of listNumeros) {
         numeros.push(item.value); 
+
       }
     }
     let obj ={
@@ -81,10 +83,11 @@ export class ChangelimitxsellerComponent implements OnInit {
       numeros: numeros,
       limite: this.formChangeLimitexSeller.value.limite
     }
- 
+    
     let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
     if(await Confirmar){
       let resp = await this.limitSvc.changeLimiteNumberxSeller(obj);
+      
     let { status, message,comment } = resp;
     if(status==200){
       this.alertSvc.showAlert(1, message,comment);

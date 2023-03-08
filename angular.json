@@ -33,7 +33,8 @@
               "node_modules/ngx-toastr/toastr.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/slick-carousel/slick/slick.scss",
-              "node_modules/slick-carousel/slick/slick-theme.scss"
+              "node_modules/slick-carousel/slick/slick-theme.scss",
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -42,7 +43,9 @@
               "node_modules/clipboard/dist/clipboard.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js",
-              "node_modules/slick-carousel/slick/slick.min.js"
+              "node_modules/slick-carousel/slick/slick.min.js",
+              "node_modules/pdfmake/build/pdfmake.min.js",
+              "node_modules/pdfmake/build/vfs_fonts.js"
             ]
           },
           "configurations": {

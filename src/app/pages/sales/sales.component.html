@@ -9,138 +9,115 @@
 
 <div class="container-fluid">
 
-  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
-    <div ngxSlickItem>
+  <div *ngIf="disabledActions">
+    <div class="alert alert-danger" role="alert">
+      <strong>¡Atención!</strong> El sorteo se encuentra cerrado.
+    </div>
+  </div>
+
+  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" *ngIf="!disabledActions">
+    <!-- Sales -->
+    <div ngxSlickItem style="padding-right: 5px;">
       <div class="text-right">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Números
         </button>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Recibos
         </button>
       </div>
-      <div class="card mt-4">
-        <div class="card-header">
+      <div class="card mt-3">
+        <div class="card-header text-center">
           <h3 class="mb-0">Formulario de Ventas</h3>
+          <h2 class="mt-2">{{ currentRaffle?.nombre }}</h2>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-6">
-              <select class="form-control" name="" id="" style="height: 45px !important;">
-                <option value="">Seleccione</option>
-                <option value="">Mañana</option>
-                <option value="">Tarde</option>
-                <option value="">Noche</option>
-                <option value="">Loteria</option>
-                <option value="">Super Sabado</option>
-              </select>
-            </div>
-            <div class="col-6">
-              <button class="btn btn-primary" style="width: 100%;">
-                Limite
-              </button>
-            </div>
-          </div>
+        <div class="card-body" style="padding-top: 0px;">
           <div class="row mt-2">
             <div class="col-6">
-              <button class="btn btn-primary" style="width: 100%;">
-                Actual
-              </button>
+              Limite: <strong class="text-bold">{{ limit }}</strong>
             </div>
             <div class="col-6">
-              <button class="btn btn-primary" style="width: 100%;">
-                Premio
-              </button>
+              Vendidos: <strong class="text-bold"> {{ amount_sold }}</strong>
             </div>
           </div>
-          <div class="row mt-2">
-            <div class="col-6">
-              Form control numero
-              <div class="form-group">
-                <label for="exampleFormControlInput1">Número</label>
-                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Número">
+          <!-- FORMULARIO -->
+          <form [formGroup]="formSale" (ngSubmit)="onSave()">
+            <div class="row mt-4">
+              <div class="col-6">
+                <!-- Form control numero -->
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Número</label>
+                  <ng-select formControlName="number" #InputNumber (change)="onChange()">
+                    <ng-option *ngFor="let num of numberList" [value]="num">{{num}}</ng-option>
+                  </ng-select>
+                </div>
+                <span class="text-danger" *ngIf="validateInput('number')">
+                  El número es obligatorio
+                </span>
+              </div>
+              <div class="col-6">
+                <!-- Form control monto -->
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Monto</label>
+                  <input type="number" class="form-control" #InputAmount style="height: 38px !important;"
+                  placeholder="Monto" formControlName="amount">
+                  <span class="text-danger" *ngIf="validateInput('amount')">
+                    El monto es obligatorio
+                  </span>
+                </div>
               </div>
             </div>
-            <div class="col-6">
-              Form control monto
-              <div class="form-group">
-                <label for="exampleFormControlInput1">Monto</label>
-                <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Monto">
-              </div>
+            <!-- Btn Agregar -->
+            <div class="text-right mt-2">
+              <button type="submit" class="btn btn-sm btn-primary">
+                Agregar
+              </button>
             </div>
-          </div>
-          Btn Agregar
-          <div class="text-right">
-            <button class="btn btn-primary">
-              Agregar
-            </button>
-          </div>
+          </form>
+          <!-- END FORMS -->
         </div>
       </div>
     </div>
-    <div ngxSlickItem>
-      <div class="card mt-6">
-        <div class="card-body">
+    <!-- Table -->
+    <div ngxSlickItem style="margin-top: 18px;">
+      <div class="card mt-4">
+        <div class="card-body" style="padding-top: 0px;">
           <h3 class="text-center">Rifas Dias</h3>
-          <h5 class="text-center">Vendedor: <span>User</span></h5>
-          <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5>
-          Integrate table
+          <h5 class="text-center">Vendedor: <span>{{ identity?.nombre }}</span></h5>
+          <!-- <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5> -->
+          <!-- Integrate table -->
           <table class="table">
+            <caption></caption>
             <thead>
               <tr>
                 <th scope="col">Número</th>
                 <th scope="col">Monto</th>
                 <th scope="col">Premio</th>
-                <th></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of [1,1,1]">
-                <th class="align-middle">10</th>
-                <td class="align-middle">10</td>
-                <td class="align-middle">800</td>
+              <tr *ngFor="let item of listSales; let i = index">
+                <td class="align-middle">{{ item?.number }}</td>
+                <td class="align-middle">{{ item?.amount }}</td>
+                <td class="align-middle">{{ item?.prize }}</td>
                 <td class="align-middle">
-                  <button class="btn btn-sm text-danger">
+                  <button class="btn btn-sm text-danger" (click)="onRemove(i)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
+          <!-- End integrate table -->
+          <div class="text-right mt-2">
+            <button type="button" class="btn btn-sm btn-success" (click)="onSaveAll()">
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </ngx-slick-carousel>
-  <!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">First slide</text></svg>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">Second slide</text></svg>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">Third slide</text></svg>
-      </div>
-    </div>
-  </div> -
 
-  <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div [ngClass]=" itemActive ? 'carousel-item p-4 active' : 'carousel-item p-4'">
-
-      </div>
-      <div [ngClass]=" itemActive ? 'carousel-item p-4' : 'carousel-item active p-4'">
-
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="prev" (click)="onChange()" *ngIf="showActions">
-      <i class="bi bi-caret-left-fill"></i>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="next" (click)="onChange()" *ngIf="showActions">
-      <i class="bi bi-caret-right-fill"></i>
-    </button>
-  </div> -->
 </div>

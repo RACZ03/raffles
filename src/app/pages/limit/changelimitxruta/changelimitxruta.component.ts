@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { RouteService } from 'src/app/@core/services/route.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
@@ -53,6 +54,7 @@ export class ChangelimitxrutaComponent implements OnInit {
  async loadDataRutaa() {
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
      let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
+
      this.rutasData = resp.data;
   }
 
@@ -64,6 +66,7 @@ export class ChangelimitxrutaComponent implements OnInit {
 
     let listRutasSelected = this.formChangeLimiteXroute.value.rutas;
     let listNumeros = this.formChangeLimiteXroute.value.numeros;
+
     let rutas: any[]= [];
     let numeros: any[] = [];
     if(listRutasSelected!==null){
@@ -87,6 +90,7 @@ export class ChangelimitxrutaComponent implements OnInit {
    
     if(await resp){
     let resp = await this.limitSvc.changeLimiteNumberRoute(obj);
+
     let { status, message,comment } = resp;
     if(status==200){
       this.alertSvc.showAlert(1, message,comment);
@@ -127,9 +131,11 @@ export class ChangelimitxrutaComponent implements OnInit {
     const input = event.key;
     const inputValue = this.el.nativeElement.value;
     // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+
     if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
     event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
     ||/^\d+$/.test(input)) {
+
       // Permitir que el evento se propague y actualizar el valor del control
       setTimeout(() => {
         let numeros: any[] = this.formChangeLimiteXroute?.get('numeros')?.value;

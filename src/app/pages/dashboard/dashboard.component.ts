@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   }
 
   print() {
-    this.printSvc.printTicket('QJ4ERM36');
+    // this.printSvc.printTicket('QJ4ERM36');
   }
 
   // public updateOptions() {
