@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { RouteService } from 'src/app/@core/services/route.service';
@@ -26,6 +26,7 @@ export class FreenumbertosellerComponent implements OnInit {
     private routeSvc: RouteService,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
+    private el: ElementRef,
     private userSvc: UsersService) { 
     }
 
@@ -53,7 +54,6 @@ export class FreenumbertosellerComponent implements OnInit {
 
  async loadDataSeller() {
     let resp = await this.userSvc.getSellerxNegocio();
-    //console.log(resp);
     this.VendedorData = resp.data;
   }
 
@@ -63,36 +63,42 @@ export class FreenumbertosellerComponent implements OnInit {
     }
     let listVendedorSelected = this.formfreeNumberToSeller.value.vendedor;
     let listNumeros = this.formfreeNumberToSeller.value.numeros;
-    //console.log(this.formChangeLimitexSeller.value);
     let numeros: any[] = [];
     let vendedor: any[] = [];
     if(listVendedorSelected!==null){
-      for(let i=0; i<listVendedorSelected.length; i++){
-        vendedor.push(listVendedorSelected[i].value);
+      for (const item of listVendedorSelected) {
+        vendedor.push(item.value);
       }
     }
 
     if(listNumeros!==null){
-      for(let i=0; i<listNumeros.length; i++){
-        numeros.push(listNumeros[i].value);
-      }
+      for (const item of listNumeros) {
+        numeros.push(item.value);
+      } 
     }
   
     let obj ={
       vendedoresOrRutaOrNegocio: vendedor,
       numeros: numeros,
     }
-     //console.log(obj);
-    let resp = await this.limitSvc.freeNumberToSeller(obj);
-    //console.log(resp);
-    let { status, message,comment } = resp;
-    if(status==200){
-      this.alertSvc.showAlert(1, message,comment);
-      this.formfreeNumberToSeller.reset();
-      this.closeModal(true);
+    
+    let Confirmar = this.alertSvc.showConfirmLimit('Liberar Numeros', '¿Está seguro de liberar los números seleccionados?', 'Confirmar');
+    if(await Confirmar){
+      let resp = await this.limitSvc.freeNumberToSeller(obj);
+      let { status, message,comment } = resp;
+      if(status==200){
+        this.alertSvc.showAlert(1, message,comment);
+        this.formfreeNumberToSeller.reset();
+        this.closeModal(true);
+      }else{
+        this.alertSvc.showAlert(4, message,'error');
+      }
     }else{
-      this.alertSvc.showAlert(4, message,'error');
+      this.alertSvc.showAlert(2, 'Liberar Numero','La liberacion de numeros fue cancelado por el usuario');
+      this.loadDataform();
+      this.onClose.emit(true);
     }
+   
  
 
   }
@@ -117,5 +123,32 @@ export class FreenumbertosellerComponent implements OnInit {
   loadDataform(){
     this.formfreeNumberToSeller.reset();
   } 
+
+  
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const input = event.key;
+    const inputValue = this.el.nativeElement.value;
+    // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
+      // Permitir que el evento se propague y actualizar el valor del control
+      setTimeout(() => {
+        let numeros: any[] = this.formfreeNumberToSeller?.get('numeros')?.value;
+
+        if ( inputValue === '' || inputValue === null || inputValue == undefined ) {
+          return;
+        }
+        numeros.push({
+          display: inputValue,
+          value: inputValue
+        });
+        this.formfreeNumberToSeller?.get('numeros')?.setValue(numeros);
+      });
+    } else {
+      // Cancelar el evento
+      event.preventDefault();
+    }
+  }
 
 }

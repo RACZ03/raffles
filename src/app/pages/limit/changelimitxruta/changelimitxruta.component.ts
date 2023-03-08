@@ -19,6 +19,7 @@ export class ChangelimitxrutaComponent implements OnInit {
   rutasData: any[] = [];
   items: any[]= [];
   inputText = 'text';
+  isConfirmed = false;
 
     ///constructor
   constructor(
@@ -48,11 +49,9 @@ export class ChangelimitxrutaComponent implements OnInit {
    ngOnInit(): void {
     this.formChangeLimiteXroute = this.initForms();
     this.loadDataRutaa();
-    console.log('Hi')
   }
 
  async loadDataRutaa() {
-
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
      let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
 
@@ -63,18 +62,21 @@ export class ChangelimitxrutaComponent implements OnInit {
     if(this.formChangeLimiteXroute.invalid){
       return;
     }
+   
+
     let listRutasSelected = this.formChangeLimiteXroute.value.rutas;
     let listNumeros = this.formChangeLimiteXroute.value.numeros;
 
-    let rutas: any[] = [];
+    let rutas: any[]= [];
     let numeros: any[] = [];
-    if(listRutasSelected!==null) {
+    if(listRutasSelected!==null){
       for (const item of listRutasSelected) {
-        rutas.push(item);
+        rutas.push(item.value);
       }
     }
-    if(listNumeros!==null) {
-      for (const item of listNumeros) {
+
+    if(listNumeros!==null){
+      for (const item  of listNumeros) {
         numeros.push(item.value);
       }
     }
@@ -84,6 +86,9 @@ export class ChangelimitxrutaComponent implements OnInit {
       limite: this.formChangeLimiteXroute.value.limite
     }
 
+    let resp = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
+   
+    if(await resp){
     let resp = await this.limitSvc.changeLimiteNumberRoute(obj);
 
     let { status, message,comment } = resp;
@@ -92,6 +97,12 @@ export class ChangelimitxrutaComponent implements OnInit {
     }else{
       this.alertSvc.showAlert(4, message,'error');
     }
+   }else{
+    this.alertSvc.showAlert(2, 'Cambio de Limite','El cambio de limite fue cancelado por el usuario');
+    this.loadDataform();
+    this.onClose.emit(true);
+  }    
+
   }
 
   closeModal(band: boolean) {
@@ -120,7 +131,11 @@ export class ChangelimitxrutaComponent implements OnInit {
     const input = event.key;
     const inputValue = this.el.nativeElement.value;
     // Solo permitir dígitos numéricos, retroceso, borrar y flechas
-    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || /^\d+$/.test(input)) {
+
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
+
       // Permitir que el evento se propague y actualizar el valor del control
       setTimeout(() => {
         let numeros: any[] = this.formChangeLimiteXroute?.get('numeros')?.value;

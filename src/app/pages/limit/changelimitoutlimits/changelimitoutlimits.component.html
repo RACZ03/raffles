@@ -3,7 +3,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite sin Afectar Limitados</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal(true)"></button>
+                <i class="bi bi-x-circle" (click)="closeModal(true)" style="cursor: pointer;"></i>
         </div>
         <div class="modal-body">
             <form  [formGroup]="formChangeLimitOutLimit">
@@ -45,7 +45,7 @@
               </div>
                 <!--Tabla-->
                 <div class="mt-4">
-                    <table class="table table-responsive" style="max-width: 95%; margin: auto;">
+                    <table class="table"><!--table de limites sin afectar -->
                         <thead>
                             <tr>
                                 <th>Vendedor</th>

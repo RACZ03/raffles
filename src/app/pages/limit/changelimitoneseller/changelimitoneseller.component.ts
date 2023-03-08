@@ -53,7 +53,6 @@ export class ChangelimitonesellerComponent implements OnInit {
 
  async loadDataSeller() {
     let resp = await this.userSvc.getSellerxNegocio();
-    //console.log(resp);
     this.VendedorData = resp.data;
   }
 
@@ -67,15 +66,25 @@ export class ChangelimitonesellerComponent implements OnInit {
       vendedor: listVendedorSelected,
       limite: this.formChangeLimitoneSeller.value.limite
     }
-     //console.log(obj);
-    let resp = await this.limitSvc.changelimitoneseller(obj);
-    //console.log(resp);
-    let { status, message,comment } = resp;
-    if(status==200){
-      this.alertSvc.showAlert(1, message,comment);
+
+    
+    let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite al vendedor seleccionado?', 'Confirmar');
+    
+    if(await Confirmar){
+      let resp = await this.limitSvc.changelimitoneseller(obj);
+      let { status, message,comment } = resp;
+      if(status==200){
+        this.alertSvc.showAlert(1, message,comment);
+      }else{
+        this.alertSvc.showAlert(4, message,'error');
+      }
     }else{
-      this.alertSvc.showAlert(4, message,'error');
+      this.alertSvc.showAlert(2, 'Cambio de Limite','El cambio de limite fue cancelado por el usuario');
+      this.loadDataform();
+      this.onClose.emit(true);
     }
+
+ 
   }
 
   closeModal(band: boolean) {

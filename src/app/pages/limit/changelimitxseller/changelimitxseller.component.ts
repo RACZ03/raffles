@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LimitService } from 'src/app/@core/services/limit.service';
 import { RouteService } from 'src/app/@core/services/route.service';
@@ -26,7 +26,8 @@ export class ChangelimitxsellerComponent implements OnInit {
     private routeSvc: RouteService,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
-    private userSvc: UsersService) {
+    private el: ElementRef,
+    private userSvc: UsersService) { 
     }
 
     public insertInputTag(): void {
@@ -66,31 +67,41 @@ export class ChangelimitxsellerComponent implements OnInit {
 
     let vendedor: any[] = [];
     let numeros: any[] = [];
-    if(listVendedorSelected!==null) {
+    if(listVendedorSelected!==null){
       for (const item of listVendedorSelected) {
-        vendedor.push(item);
+        vendedor.push(item.value); 
       }
     }
-    if(listNumeros!==null) {
+    if(listNumeros!==null){
       for (const item of listNumeros) {
-        numeros.push(item.val);
+        numeros.push(item.value); 
+
       }
     }
-    console.log(vendedor);
     let obj ={
       vendedores: vendedor,
       numeros: numeros,
       limite: this.formChangeLimitexSeller.value.limite
     }
-
-    let resp = await this.limitSvc.changeLimiteNumberxSeller(obj);
-    console.log(resp);
+    
+    let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
+    if(await Confirmar){
+      let resp = await this.limitSvc.changeLimiteNumberxSeller(obj);
+      
     let { status, message,comment } = resp;
     if(status==200){
       this.alertSvc.showAlert(1, message,comment);
     }else{
       this.alertSvc.showAlert(4, message,'error');
     }
+    }else{
+      this.alertSvc.showAlert(2, 'Cambio de Limite','El cambio de limite fue cancelado por el usuario');
+      this.loadDataform();
+      this.onClose.emit(true);
+    }
+
+
+    
   }
 
   closeModal(band: boolean) {
@@ -113,5 +124,32 @@ export class ChangelimitxsellerComponent implements OnInit {
 
   loadDataform(){
     this.formChangeLimitexSeller.reset();
+  } 
+
+
+  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    const input = event.key;
+    const inputValue = this.el.nativeElement.value;
+    // Solo permitir dígitos numéricos, retroceso, borrar y flechas
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    ||/^\d+$/.test(input)) {
+      // Permitir que el evento se propague y actualizar el valor del control
+      setTimeout(() => {
+        let numeros: any[] = this.formChangeLimitexSeller?.get('numeros')?.value;
+
+        if ( inputValue === '' || inputValue === null || inputValue == undefined ) {
+          return;
+        }
+        numeros.push({
+          display: inputValue,
+          value: inputValue
+        });
+        this.formChangeLimitexSeller?.get('numeros')?.setValue(numeros);
+      });
+    } else {
+      // Cancelar el evento
+      event.preventDefault();
+    }
   }
 }
