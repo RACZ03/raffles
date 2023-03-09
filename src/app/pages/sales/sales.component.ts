@@ -52,7 +52,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   ) {
     this.getCurrentRaflle();
   }
-  
+
   async ngOnInit() {
     this.formSale = this.initForm();
     if (window.innerWidth < 992) {
@@ -64,12 +64,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
     this.identity = JSON.parse(user);
 
     // set 5 elements to list whith values aleatory
-    for (let i = 0; i < 5; i++) {
-      let number = Math.floor(Math.random() * 100);
-      let amount = Math.floor(Math.random() * 100);
-      let prize = Math.floor(Math.random() * 100);
-      this.listSales.push({ number, amount, prize });
-    };
+    // for (let i = 0; i < 5; i++) {
+    //   let number = Math.floor(Math.random() * 100);
+    //   let amount = Math.floor(Math.random() * 100);
+    //   let prize = Math.floor(Math.random() * 100);
+    //   this.listSales.push({ number, amount, prize });
+    // };
   }
 
   async getCurrentRaflle() {
@@ -80,7 +80,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     } else {
       this.alertSvc.showAlert(3,'', 'No hay sorteo activo');
       // disabled form
-      this.disabledActions = false;
+      this.disabledActions = true;
     }
   }
 
@@ -96,25 +96,44 @@ export class SalesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async onChangeFocus(e: any) {
+    // console.log(e);
+    let value = e?.target?.value;
+
+    if (value.length == 2) {
+      this.inputAmount.nativeElement.focus();
+    }
+
+  }
+
   async onChange() {
 
+    this.limit = 0;
+    this.amount_sold = 0;
     // get value number
     let number = this.formSale.get('number')?.value;
+
+    // validate if number is not exists in list
+    if (this.listSales.find((item: any) => item.number == number)) {
+      this.alertSvc.showAlert(3, '', 'El número ya se encuentra en la lista');
+      this.formSale.get('number')?.setValue('');
+      return;
+    }
 
     // validate if number is empty
     if (!number) {
       return;
     }
     // spinner
-    this.spinnerSvc.show();
+    // this.spinnerSvc.show();
 
     // get limit
     await this.getLimit(number);
     await this.getSales(number);
     // hide spinner
-    setTimeout(() => {
-      this.spinnerSvc.hide();
-    }, 500);
+    // setTimeout(() => {
+    //   this.spinnerSvc.hide();
+    // }, 500);
     // change focus to amount
     this.inputAmount.nativeElement.focus();
   }
@@ -153,6 +172,11 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   async onSave() {
 
+    // validate form
+    if (this.formSale.invalid) {
+      return;
+    }
+
     let amount = this.formSale.get('amount')?.value;
     // validate amount is more than 0
     if (amount <= 0) {
@@ -162,7 +186,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
     let resp = await this.salesSvc.getAward(amount);
     if (resp) {
-      let { status, data } = resp;
+      let { status, data, comment } = resp;
       if (status && status == 200) {
         // sum amount sold + data
         let amount_sold = this.amount_sold + data;
@@ -180,8 +204,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
           // change focus to number
           this.inputNumber.nativeElement.focus();
           // change carousel
-          this.slickModal.slickNext();
+          this.slickModal?.slickNext();
         }
+      } else {
+        this.alertSvc.showAlert(3, '', comment);
+        // clear amount
+        this.formSale.get('amount')?.setValue('');
       }
     }
   }
@@ -192,10 +220,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   async onSaveAll() {
 
-    // test 
-    this.getTickets('6INBUSZ8');
-    return;
-
     // validate if listSales is empty
     if (this.listSales.length == 0) {
       this.alertSvc.showAlert(3, '', 'No hay ventas para registrar');
@@ -203,23 +227,24 @@ export class SalesComponent implements OnInit, AfterViewInit {
     }
 
     // spinner
-    this.spinnerSvc.show();
+    // this.spinnerSvc.show();
 
     // send data
     let resp = await this.salesSvc.save(this.listSales);
     if (resp) {
-      let { status, comment } = resp;
+      let { status, comment, data } = resp;
       if (status && status == 200) {
         this.alertSvc.showAlert(1, '', comment);
         this.listSales = [];
+        this.getTickets(data);
       } else {
         this.alertSvc.showAlert(3, '', comment);
       }
     }
     // hide spinner
-    setTimeout(() => {
-      this.spinnerSvc.hide();
-    }, 500);
+    // setTimeout(() => {
+    //   this.spinnerSvc.hide();
+    // }, 500);
 
   }
 

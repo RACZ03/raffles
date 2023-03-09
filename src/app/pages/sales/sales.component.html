@@ -41,15 +41,14 @@
             </div>
           </div>
           <!-- FORMULARIO -->
-          <form [formGroup]="formSale" (ngSubmit)="onSave()">
+          <form [formGroup]="formSale" (submit)="onSave()">
             <div class="row mt-4">
               <div class="col-6">
                 <!-- Form control numero -->
                 <div class="form-group">
                   <label for="exampleFormControlInput1">Número</label>
-                  <ng-select formControlName="number" #InputNumber (change)="onChange()">
-                    <ng-option *ngFor="let num of numberList" [value]="num">{{num}}</ng-option>
-                  </ng-select>
+                  <input type="number" class="form-control" style="height: 38px !important;"
+                      formControlName="number" #InputNumber (change)="onChange()" (keyup)="onChangeFocus($event)">
                 </div>
                 <span class="text-danger" *ngIf="validateInput('number')">
                   El número es obligatorio
@@ -84,7 +83,6 @@
         <div class="card-body" style="padding-top: 0px;">
           <h3 class="text-center">Rifas Dias</h3>
           <h5 class="text-center">Vendedor: <span>{{ identity?.nombre }}</span></h5>
-          <!-- <h5 class="text-center">Boleto #: <span>JNASDASD</span></h5> -->
           <!-- Integrate table -->
           <table class="table">
             <caption></caption>
@@ -113,6 +111,9 @@
           <div class="text-right mt-2">
             <button type="button" class="btn btn-sm btn-success" (click)="onSaveAll()">
               Guardar
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="getTickets('6INBUSZ8')">
+              PRINT
             </button>
           </div>
         </div>

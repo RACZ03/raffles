@@ -24,7 +24,8 @@ export const environment = {
           next: ">",
         }
       }
-  }
+  },
+  imageUrl: 'https://firebasestorage.googleapis.com/v0/b/lucky-pro-10285.appspot.com/o/lucky%2FLogoRifa.png?alt=media&token=0985e37c-790c-4332-a18c-89eec2b40e28'
 };
 
 /*
