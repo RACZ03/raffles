@@ -32,10 +32,10 @@ export class SalesService {
   getCurrentRaffle(): Promise<any> {
     return new Promise((resolve, reject) => {
       // get local storage if exist else get from server
-      let currentRaffle = localStorage.getItem('currentRaffle');
-      if (currentRaffle) {
-        resolve(JSON.parse(currentRaffle));
-      } else {
+      // let currentRaffle = localStorage.getItem('currentRaffle');
+      // if (currentRaffle) {
+      //   resolve(JSON.parse(currentRaffle));
+      // } else {
         this.currentRaffle().then((res: any) => {
           if (res) {
             localStorage.setItem('currentRaffle', JSON.stringify((res != null) ? res : true));
@@ -47,7 +47,7 @@ export class SalesService {
         }).catch((err: any) => {
           reject(err);
         });
-      }
+      // }
     });
   }
 

@@ -41,6 +41,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public numberList: any[] = DataNumbers;
   public tablaEspecial: boolean = false;
   public disabledActions: boolean = false;
+  public business: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +51,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private authSvc: AuthService,
     private printSvc: PrintService,
   ) {
+    // get business from localstorage
+    this.business = JSON.parse(localStorage.getItem('business') || '{}');
     this.getCurrentRaflle();
   }
 
@@ -113,10 +116,19 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // get value number
     let number = this.formSale.get('number')?.value;
 
+    // validate if number is minor than 0 and major than 99
+    if (number < 0 || number > 99) {
+      this.alertSvc.showAlert(3, '', 'Número no valido');
+      this.formSale.get('number')?.setValue('');
+      this.inputNumber.nativeElement.focus();
+      return;
+    }
+
     // validate if number is not exists in list
     if (this.listSales.find((item: any) => item.number == number)) {
       this.alertSvc.showAlert(3, '', 'El número ya se encuentra en la lista');
       this.formSale.get('number')?.setValue('');
+      this.inputNumber.nativeElement.focus();
       return;
     }
 
@@ -214,8 +226,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onRemove(i: number) {
-    this.listSales.splice(i, 1);
+  onRemove(item: any,i: number) {
+    // show alert confirm
+    this.alertSvc.showConfirmLimit('', `¿Está seguro de eliminar el número ${ item.number }?`, 'Eliminar').then((resp) => {
+      if (resp) {
+        this.listSales.splice(i, 1);
+      }
+    });
   }
 
   async onSaveAll() {
@@ -237,6 +254,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
         this.alertSvc.showAlert(1, '', comment);
         this.listSales = [];
         this.getTickets(data);
+        this.getCurrentRaflle();
       } else {
         this.alertSvc.showAlert(3, '', comment);
       }

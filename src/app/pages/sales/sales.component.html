@@ -17,16 +17,8 @@
 
   <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" *ngIf="!disabledActions">
     <!-- Sales -->
-    <div ngxSlickItem style="padding-right: 5px;">
-      <div class="text-right">
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Números
-        </button>
-        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Recibos
-        </button>
-      </div>
-      <div class="card mt-3">
+    <div ngxSlickItem>
+      <div class="card">
         <div class="card-header text-center">
           <h3 class="mb-0">Formulario de Ventas</h3>
           <h2 class="mt-2">{{ currentRaffle?.nombre }}</h2>
@@ -50,19 +42,13 @@
                   <input type="number" class="form-control" style="height: 38px !important;"
                       formControlName="number" #InputNumber (change)="onChange()" (keyup)="onChangeFocus($event)">
                 </div>
-                <span class="text-danger" *ngIf="validateInput('number')">
-                  El número es obligatorio
-                </span>
               </div>
               <div class="col-6">
                 <!-- Form control monto -->
                 <div class="form-group">
                   <label for="exampleFormControlInput1">Monto</label>
                   <input type="number" class="form-control" #InputAmount style="height: 38px !important;"
-                  placeholder="Monto" formControlName="amount">
-                  <span class="text-danger" *ngIf="validateInput('amount')">
-                    El monto es obligatorio
-                  </span>
+                        formControlName="amount">
                 </div>
               </div>
             </div>
@@ -78,29 +64,29 @@
       </div>
     </div>
     <!-- Table -->
-    <div ngxSlickItem style="margin-top: 18px;">
-      <div class="card mt-4">
-        <div class="card-body" style="padding-top: 0px;">
-          <h3 class="text-center">Rifas Dias</h3>
-          <h5 class="text-center">Vendedor: <span>{{ identity?.nombre }}</span></h5>
+    <div ngxSlickItem >
+      <div class="card">
+        <div class="card-body" style="padding-top: 20px;">
+          <h3 class="text-center">{{ business?.negocio }}</h3>
+          <h5 class="text-center">{{ identity?.nombre }}</h5>
           <!-- Integrate table -->
           <table class="table">
             <caption></caption>
             <thead>
               <tr>
-                <th scope="col">Número</th>
-                <th scope="col">Monto</th>
-                <th scope="col">Premio</th>
-                <th scope="col"></th>
+                <th scope="col" class="text-center">Número</th>
+                <th scope="col" class="text-center">Monto</th>
+                <th scope="col" class="text-center">Premio</th>
+                <th scope="col" class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of listSales; let i = index">
-                <td class="align-middle">{{ item?.number }}</td>
-                <td class="align-middle">{{ item?.amount }}</td>
-                <td class="align-middle">{{ item?.prize }}</td>
-                <td class="align-middle">
-                  <button class="btn btn-sm text-danger" (click)="onRemove(i)">
+                <td class="align-middle text-center">{{ item?.number }}</td>
+                <td class="align-middle text-center">{{ item?.amount }}</td>
+                <td class="align-middle text-center">{{ item?.prize }}</td>
+                <td class="align-middle text-center">
+                  <button class="btn btn-sm text-danger" (click)="onRemove(item, i)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>

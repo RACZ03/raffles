@@ -15,6 +15,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DataTablesModule } from 'angular-datatables';
 import { TagInputModule } from 'ngx-chips';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { environment } from 'src/environments/environment';
+
 export function createTranslateLoader( http: HttpClient) {
   return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
 }
@@ -41,12 +45,13 @@ export function createTranslateLoader( http: HttpClient) {
     ToastrModule.forRoot(
       {
         timeOut: 2500,
-        positionClass: 'toast-bottom-right',
+        positionClass: 'toast-top-right',
         preventDuplicates: true,
       }
     ), // ToastrModule added
     DataTablesModule,
-
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]

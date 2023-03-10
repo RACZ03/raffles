@@ -6,6 +6,12 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ConnectionService } from './connection.service';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+
+import './bluetooth';
+
+declare var window: any;
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 @Injectable({
@@ -14,7 +20,13 @@ import * as moment from 'moment';
 export class PrintService {
 
   public imageBackup: string = environment.imageUrl;
-  constructor(private connectionSvc: ConnectionService, private http: HttpClient) {}
+  public imageUrl$!: Observable<string>;
+
+  constructor(
+    private connectionSvc: ConnectionService,
+    private http: HttpClient,
+    private storage: AngularFireStorage
+  ) {}
 
   ticketData = {
     // logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB6q5FTeQY-de_wXL7jZB6p6hJYX_wG1AR3CxV0tjM17ymuuHCgj42C5FsdPIFNxDCVjs&usqp=CAU',
@@ -49,12 +61,10 @@ export class PrintService {
 
     let imageLogo = '';
     // validate if logoNegocio is null get image from assets
-    imageLogo = (logoNegocio != null || logoNegocio != undefined || logoNegocio != '') ? logoNegocio : await this.getImageAsBase64(this.imageBackup);
+    imageLogo = (logoNegocio != null || logoNegocio != undefined || logoNegocio != '') ? logoNegocio : this.imageBackup;
     // validate id logoNegocio contains http or https
-    imageLogo = (imageLogo.includes('http') || imageLogo.includes('https')) ? imageLogo : await this.getImageAsBase64(this.imageBackup);
-
-    // imageLogo = await this.convertImageToBase64(imageLogo);
-    // convert image base64 no service
+    imageLogo = (imageLogo.includes('http') || imageLogo.includes('https')) ? imageLogo : this.imageBackup;
+    let img = await this.getImageAsBase64(imageLogo);
 
     // convertir nombre ruta a mayusculas
     ruta.nombre = ruta?.nombre.toUpperCase();
@@ -72,8 +82,9 @@ export class PrintService {
       pageOrientation: 'portrait',
       content: [
         {
-          image: imageLogo,
+          image: img,
           fit: [100, 100],
+          alignment: 'center',
         },
         {
           text: `RECIBO ${ codigo }`,
@@ -147,31 +158,66 @@ export class PrintService {
 
     // pdfMake.createPdf(documentDefinition).open();
     let pdf = pdfMake.createPdf(documentDefinition)
-    pdf.print();
+
+    if ('bluetooth' in navigator === false) {
+      console.log('Bluetooth API no es compatible');
+      if ( this.isPrintingSupported()) {
+        pdf.print({
+          autoPrint: true,
+        });
+      } else {
+        pdf.open();
+      }
+    } else {
+      navigator?.bluetooth.requestDevice({
+        filters: [{services: ['printing']}]
+      })
+      .then((device: any) => {
+        console.log('Dispositivo Bluetooth encontrado:', device.name);
+        // Hacer algo con el dispositivo, como imprimir un archivo PDF
+        if ( this.isPrintingSupported()) {
+          pdf.print({
+            autoPrint: true,
+          });
+        } else {
+          pdf.open();
+        }
+      })
+      .catch((error: any) => {
+        console.log('Error al buscar dispositivos Bluetooth:', error);
+        if ( this.isPrintingSupported()) {
+          pdf.print({
+            autoPrint: true,
+          });
+        } else {
+          pdf.open();
+        }
+      });
+    }
   }
 
-  getImageAsBase64(url: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+  async getImageAsBase64(filePath: string): Promise<string> {
+    const ref = this.storage.refFromURL(filePath);
 
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Request-Headers': 'content-type',
-        'Access-Control-Request-Methods': 'POST'
-      });
-      this.http.get(url,
-        {  observe: 'response',
-            responseType: 'blob',
-        }).subscribe((response: any) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(response);
-        reader.onloadend = () => {
-          let base64data = reader.result;
-          resolve(base64data as string);
-        }
-      }, (error) => {
-        reject(error);
-      });
+    const url = await ref.getDownloadURL().toPromise();
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return await this.blobToBase64(blob);
+  }
+
+  private blobToBase64(blob: Blob): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
+  }
+
+  public isPrintingSupported(): boolean {
+    return !!window.printer;
   }
 
 }
