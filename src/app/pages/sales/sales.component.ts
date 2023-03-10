@@ -206,6 +206,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
         if (amount_sold > this.limit) {
           // show alert
           this.alertSvc.showAlert(2, 'Advertencia', 'El monto ingresado supera el limite permitido');
+          // change focus to number
+          this.inputNumber.nativeElement.focus();
         } else {
           // set prize
           this.formSale.get('prize')?.setValue(data);
@@ -222,7 +224,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
         this.alertSvc.showAlert(3, '', comment);
         // clear amount
         this.formSale.get('amount')?.setValue('');
+        // change focus to amount
+        this.inputAmount.nativeElement.focus();
       }
+    } else {
+      this.alertSvc.showAlert(3, '', 'Error al obtener premio');
+      // change focus to amount
+      this.inputAmount.nativeElement.focus();
     }
   }
 

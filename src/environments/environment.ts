@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  APIUrl: 'http://ndiazproduction-env.eba-vwdsag7x.us-east-2.elasticbeanstalk.com',
+  APIUrl: 'https://restbackend.luckypro.win',
   dtOptions: {
     pagingType: "simple_numbers",
       pageLength: 5,

@@ -9,7 +9,6 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
-import './bluetooth';
 
 declare var window: any;
 
