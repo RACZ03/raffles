@@ -6,16 +6,24 @@ import { AddAwarCatalogComponent } from './add-awar-catalog/add-awar-catalog.com
 import { TranslateModule } from '@ngx-translate/core';
 import { ThemeModule } from 'src/app/@theme/theme.module';
 import { DataTablesModule } from 'angular-datatables';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NormalComponent } from './normal/normal.component';
+import { EspecialComponent } from './especial/especial.component';
+import { AddAwwardEspecialComponent } from './add-awward-especial/add-awward-especial.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
 @NgModule({
   declarations: [
     AwarCatalogComponent,
-    AddAwarCatalogComponent
+    AddAwarCatalogComponent,
+    NormalComponent,
+    EspecialComponent,
+    AddAwwardEspecialComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +33,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DataTablesModule,
     ReactiveFormsModule,
     NgxMaskModule,
-    NgbModule
+    NgbModule,
+    MatTabsModule,
+    NgSelectModule,
+    FormsModule
   ]
 })
 export class AwarCatalogModule { }

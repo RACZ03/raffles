@@ -11,12 +11,13 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 export class AddAwarCatalogComponent implements OnInit {
 
   public isEdit: boolean = false;
+  public premiosList: any[] = [];
+  public premioListComplet: any[] = [];
   awardForm!: FormGroup;
-  @Output() goBack = new EventEmitter<boolean>();
+  @Output() onClose = new EventEmitter<boolean>();
   
   public businessSelected: any = null;
   @Input() set award(value: any) {
-    // console.log(value);
     if (value != null) {
       this.awardForm = this.initForm();
       this.loadForm(value);
@@ -49,7 +50,7 @@ export class AddAwarCatalogComponent implements OnInit {
     let { status, data } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
-      this.goBack.emit(true);
+      this.close(true);
     } else {
       this.alertSvc.showAlert(4, 'Error', 'No se pudo guardar el registro');
     }
@@ -68,6 +69,12 @@ export class AddAwarCatalogComponent implements OnInit {
     this.isEdit = true;
   }
 
+  close(band: boolean) {
+    this.awardForm.setValue(this.initForm().value);
+    this.onClose.emit(band);
+  }
+
+
   /* SECTION VALIDATIONS */
   validInput(name: string) {
     return this.awardForm.get(name)?.touched && this.awardForm.get(name)?.errors?.['required'];
@@ -77,15 +84,52 @@ export class AddAwarCatalogComponent implements OnInit {
   initForm(): FormGroup {
     return this.fb.group({
       id: [null],
-      nombre: ['', Validators.required],
-      descripcion: [],
+      monto: ['', Validators.required],
+      premio: ['', Validators.required],
     });
   }
 
-  close() {
-    this.goBack.emit(false);
+  eliminarRegistro(item:any){
+      
   }
 
+  addListPremio(){
+    if(this.awardForm.get('premio')?.value == '' || this.awardForm.get('monto')?.value == ''){
+      this.alertSvc.showAlert(4,'Error','Debe llenar los campos para agregar a la lista');
+      return;
+    }
+    if(this.premiosList.length > 0){
+        for (const item of this.premiosList) {
+          if(item.monto == this.awardForm.get('monto')?.value){
+            this.alertSvc.showAlert(4,'Error','El monto ya existe en la lista');
+            this.awardForm.get('monto')?.setValue('');
+            this.awardForm.get('premio')?.setValue('');
+            return;
+          }
+        }
+      }
+      if(this.awardForm.get('especial')?.value.cheked || this.awardForm.get('normal')?.value.cheked){
+        this.alertSvc.showAlert(4,'Error','Debe seleccionar el tipo de premio');
+        return;
+      }
+      // 
+       
+      console.log(this.awardForm.get('especial')?.value.cheked);
+
+      this.premioListComplet.push({
+        monto: this.awardForm.get('monto')?.value,
+        premio: this.awardForm.get('premio')?.value,
+        especial: (this.awardForm.get('especial')?.value.cheked) ? 'true' : 'false',
+
+      });
+
+      this.premiosList = this.premioListComplet;
+      console.log(this.premiosList);
+      this.awardForm.get('monto')?.setValue('');
+      this.awardForm.get('premio')?.setValue('');
+    }
+   
 
 
-}
+
+  }

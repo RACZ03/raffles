@@ -40,7 +40,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     LimitRoutingModule,
     TranslateModule,
-    TranslateModule,
     ThemeModule,
     DataTablesModule,
     ReactiveFormsModule,

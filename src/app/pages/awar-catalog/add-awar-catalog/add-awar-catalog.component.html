@@ -1,3 +1,9 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite sin Afectar Limitados</h5>
+            <i class="bi bi-x-circle" (click)="close(true)" style="cursor: pointer;"></i>
+    </div>
+    <div class="modal-body">
 <div class="row ml-2 mr-2">
     <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
@@ -5,25 +11,71 @@
             <h4>{{ 'MODULES.AWARD.ADD' | translate }}</h4>
         </div>
         <form [formGroup]="awardForm" (submit)="onSubmit()">
-            <!-- Name -->
-            <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.AWARD.NAME' | translate }} <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="nombre"/>
-                <span *ngIf="validInput('nombre')" class="text-danger mt-1">
-                    {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                </span>
-            </div>
-            <!-- Descriptions -->
-            <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.AWARD.DESCRIPTION' | translate }}</label>
-                <input class="form-control" name="descripcion" id="descripcion" rows="5" formControlName="descripcion"/>
-            </div>
-            <div class="text-center mb-5">
-                <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
-                <button class="btn btn-sm btn-primary" [disabled]="awardForm.invalid">
-                    {{ 'BUTTONS.SAVE' | translate }}
-                </button>
-            </div>
+            <div class="row">
+                      <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4">
+                         <!-- monto -->
+                         <div class="form-group">
+                             <label for="" class="form-label">Monto<span class="text-danger">*</span></label>
+                             <input type="number" class="form-control" formControlName="monto"/>
+                         </div>
+                     </div>
+                      <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4">
+                         <!-- premio -->
+                         <div class="form-group">
+                             <label for="" class="form-label">Premio</label>
+                             <input type="number" class="form-control" formControlName="premio"/>
+                         </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4 text-right">
+                        <button class="btn btn-sm btn-primary mt-4" type="button" 
+                        style="background-color: #6C55A4; border-color: #6C55A4;"
+                         (click)="addListPremio()">
+                            Agregar
+                        </button>
+                  </div>
+                </div>
+                       <!--Tabla-->
+                       <div class="table-responsive mt-2" style="width: 100%;">
+                        <table class="table lign-items-center table-flush" ><!--table de limites sin afectar -->
+                            <thead>
+                                <tr>
+                                    <th>Monto</th>
+                                    <th>Premio</th>
+                                    <th>Tipo</th>
+                                    <th class="text-center">Accion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let items of premiosList">
+                                    <td class="align-middle">
+                                        {{items.monto}}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{items.premio}}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{items.tipo}}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <!-- DELETE -->
+                                        <button class="btn" (click)="eliminarRegistro(items)">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center mt-3 mb-2">
+                        <button class="btn btn-sm btn-warning" type="button" (click)="close(true)">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                        <button class="btn btn-sm btn-primary" [disabled]="awardForm.invalid">
+                            {{ 'BUTTONS.SAVE' | translate }}
+                        </button>
+                    </div>
+                    
         </form>
+    </div>
+</div>
     </div>
 </div>
