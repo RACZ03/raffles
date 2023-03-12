@@ -21,7 +21,7 @@ export class NormalComponent implements OnInit, OnDestroy {
   public dataNormal: any[] = [];
   public dataA: any[] = [];
   public showFormAward: boolean = false;
- 
+
 
 
   constructor(
@@ -31,18 +31,18 @@ export class NormalComponent implements OnInit, OnDestroy {
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
-    
+
   }
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
     this.modalAddAwardNormal = new window.bootstrap.Modal(
       document.getElementById('modalAddAwardNormal')
-    );    
+    );
   }
 
 
   async loadData(_band: boolean = false) {
-    
+
       let resp = await this.awardServ.getAwardCatalog();
       this.dataNormal = [];
       this.dataA=[];
@@ -51,7 +51,7 @@ export class NormalComponent implements OnInit, OnDestroy {
         if ( status && status == 200) {
           for (const item of data) {
             if(!item.especial){
-              this.dataNormal.push(item);     
+              this.dataNormal.push(item);
             }
           }
           this.dataA = this.dataNormal;
