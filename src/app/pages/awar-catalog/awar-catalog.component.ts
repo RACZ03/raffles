@@ -1,9 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
-import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
-import { AlertService } from 'src/app/@core/utils/alert.service';
-import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-awar-catalog',
@@ -17,5 +12,4 @@ export class AwarCatalogComponent implements OnInit {
 
   ngOnInit(): void { }
  
-
 }

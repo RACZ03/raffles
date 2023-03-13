@@ -16,7 +16,6 @@ export class AddBusinessComponent implements OnInit {
   
   public businessSelected: any = null;
   @Input() set business(value: any) {
-    // console.log(value);
     if (value != null) {
       this.businessForm = this.initForm();
       this.loadForm(value);

@@ -2,7 +2,7 @@
                 <div class="card-body" *ngIf="!showFormAward">
                   <div class="row">
                     <div class="col-xl-6 col-sm-6 col-xs-6 col-6">
-                      <button class="btn btn-primary btn-sm" >{{ 'BUTTONS.ADD' | translate }}</button>
+                      <button class="btn btn-primary btn-sm" (click)="openDialogEspecial()">{{ 'BUTTONS.ADD' | translate }}</button>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-xs-6 col-6 text-right">
                       <button class="btn btn-sm btn-warning" title="Exporta a PDF">
@@ -26,7 +26,7 @@
                           <tr>
                             <th>
                               <input type="text" class="form-control form-control-placeholder" 
-                              placeholder="Buscar por monto" name="search-monto"  />
+                              placeholder="Buscar por monto" name="search-monto"/>
                             </th>
                             <th>
                               <input type="text" class="form-control form-control-placeholder" 
@@ -39,10 +39,10 @@
                               <td>{{ item?.monto }}</td>
                               <td>{{ item?.premio }}</td>
                               <td class="text-right">
-                                <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar">
+                                <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar"  (click)="editPremioEspecial(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar">
+                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="elimiarPremioEspecial(item)">
                                   <i class="bi bi-x-circle"></i>
                                 </button>
                               </td>

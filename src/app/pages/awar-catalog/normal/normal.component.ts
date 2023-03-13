@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
-declare let window: any;
+import { AddAwarCatalogComponent } from '../add-awar-catalog/add-awar-catalog.component';
+import { EditAwardCatalogComponent } from '../edit-award-catalog/edit-award-catalog.component';
+
 
 @Component({
   selector: 'app-normal',
@@ -27,19 +30,46 @@ export class NormalComponent implements OnInit, OnDestroy {
   constructor(
     private awardServ: awarCatalogService,
     private alertSvc: AlertService,
-    private dataTableSvc: DataTableServiceService
+    private dataTableSvc: DataTableServiceService,
+    public dialog: MatDialog
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
     
   }
 
-  ngOnInit(): void {  
-    this.modalAddAwardNormal = new window.bootstrap.Modal(
-      document.getElementById('modalAddAwardNormal')
-    );    
-  }
+  ngOnInit(): void {  }
 
+  openDialogNormal(): void {
+    const dialogRef = this.dialog.open(AddAwarCatalogComponent); 
+  
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();});
+    }
+
+    editPremioNormal(premioNormal: any){
+      const dialogRef = this.dialog.open(EditAwardCatalogComponent, {
+        data: {premio: premioNormal}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.loadData();});
+    }
+
+  async elimiarPremioNormal(premioNormal: any){
+ 
+      let confirm =  this.alertSvc.showConfirmLimit('Eliminar Premio','¿Estas seguro de eliminar este premio?', 'Eliminar',)
+      if(await confirm){   
+     let resp = await this.awardServ.deleteAwardCatalog(premioNormal.id)
+      let { status, comment } = resp;
+      if(status == 200){
+        this.alertSvc.showAlert(1,'Exito', comment);
+        this.loadData();
+      }
+    }else{
+      this.alertSvc.showAlert(3,'Eliminacion cancelada', 'Premio no eliminado');
+    }
+    }
+    
 
   async loadData(_band: boolean = false) {
     
@@ -62,15 +92,6 @@ export class NormalComponent implements OnInit, OnDestroy {
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
-  }
-
-  closeModalAddAwardCatalog(band: boolean) {
-    if ( band )
-    this.modalAddAwardNormal.hide();
-  }
-
-  openModalAddAwardCatalog() {
-    this.modalAddAwardNormal.show();
   }
 
   /* Search */
