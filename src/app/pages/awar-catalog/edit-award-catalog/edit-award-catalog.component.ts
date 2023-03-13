@@ -19,8 +19,8 @@ export class EditAwardCatalogComponent implements OnInit {
     public fb: FormBuilder,
     public awardServ: awarCatalogService,
     public alertSvc: AlertService
-  ) { 
-  
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -69,7 +69,7 @@ export class EditAwardCatalogComponent implements OnInit {
           premio: data?.premio?.premio,
         });
       }
-  
+
     // Form
     initForm(): FormGroup {
       return this.fb.group({

@@ -1,7 +1,7 @@
 <div >
     <h1 mat-dialog-title>Editar de Premios del Monto</h1>
 <div mat-dialog-content>
-        <form [formGroup]="awardFormEdit"  (click)="onSubmitEdit()">
+        <form [formGroup]="awardFormEdit"  (submit)="onSubmitEdit()">
             <div class="row">
                       <div class="col-xl-6 col-lg-6 col-sm-6 col-xs-6 col-6">
                          <!-- monto -->
@@ -27,11 +27,11 @@
 
                     <div class="text-center mt-3 mb-2">
                         <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
-                        <button class="btn btn-sm btn-primary" [disabled]="awardFormEdit.invalid">
+                        <button class="btn btn-sm btn-primary" type="submit" [disabled]="awardFormEdit.invalid">
                            Editar
                         </button>
                     </div>
-                    
+
         </form>
     </div>
 </div>

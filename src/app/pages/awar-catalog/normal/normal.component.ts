@@ -1,3 +1,4 @@
+
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
@@ -92,6 +93,7 @@ export class NormalComponent implements  OnDestroy {
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
+    this.dtTrigger.next(this.dtOptions);
   }
 
   /* Search */
