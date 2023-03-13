@@ -16,7 +16,6 @@ export class AddBusinessComponent implements OnInit {
   
   public businessSelected: any = null;
   @Input() set business(value: any) {
-    // console.log(value);
     if (value != null) {
       this.businessForm = this.initForm();
       this.loadForm(value);
@@ -45,7 +44,7 @@ export class AddBusinessComponent implements OnInit {
     }
 
     let resp = await this.businessSvc.add(this.businessForm.value, this.isEdit);
-    let { status, data } = resp;
+    let { status } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
       this.goBack.emit(true);

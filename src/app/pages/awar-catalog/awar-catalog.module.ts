@@ -14,6 +14,8 @@ import { EspecialComponent } from './especial/especial.component';
 import { AddAwwardEspecialComponent } from './add-awward-especial/add-awward-especial.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { NgSelectModule } from '@ng-select/ng-select';
+import {MatDialogModule} from '@angular/material/dialog';
+import { EditAwardCatalogComponent } from './edit-award-catalog/edit-award-catalog.component';
 
 
 
@@ -23,7 +25,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AddAwarCatalogComponent,
     NormalComponent,
     EspecialComponent,
-    AddAwwardEspecialComponent
+    AddAwwardEspecialComponent,
+    EditAwardCatalogComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgbModule,
     MatTabsModule,
     NgSelectModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ]
 })
 export class AwarCatalogModule { }

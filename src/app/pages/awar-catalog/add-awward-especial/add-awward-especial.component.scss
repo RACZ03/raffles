@@ -1,0 +1,13 @@
+.dialog-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .dialog-content {
+    max-width: 500px; /* ajusta el ancho del dialog como mejor convenga */
+    margin-top: 0;
+    position: relative;
+    top: 0;
+  }

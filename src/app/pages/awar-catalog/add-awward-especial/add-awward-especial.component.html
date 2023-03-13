@@ -1,1 +1,66 @@
-<p>add-awward-especial works!</p>
+<div >
+    <h3 mat-dialog-title>Agregar Catalogo de Premios Especiales</h3>
+<div mat-dialog-content>
+    <form [formGroup]="awardFormEspecial" (submit)="onSubmitEspecial()">
+        <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4">
+                     <!-- monto -->
+                     <div class="form-group">
+                         <label for="" class="form-label">Monto<span class="text-danger">*</span></label>
+                         <input type="number" class="form-control" formControlName="monto"/>
+                     </div>
+                 </div>
+                  <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4">
+                     <!-- premio -->
+                     <div class="form-group">
+                         <label for="" class="form-label">Premio</label>
+                         <input type="number" class="form-control" formControlName="premio"/>
+                     </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4 text-center mt-2">
+                    <button class="btn btn-sm btn-primary mt-4" type="button" 
+                    style="background-color: #6C55A4; border-color: #6C55A4;"
+                    (click)="addListPremioEspecial()">
+                        Agregar
+                    </button>
+              </div>
+            </div>
+                   <!--Tabla-->
+                   <div class="table-responsive mt-2" style="width: 100%;">
+                    <table class="table lign-items-center table-flush" ><!--table de limites sin afectar -->
+                        <thead>
+                            <tr>
+                                <th class="text-center">Monto</th>
+                                <th class="text-center">Premio</th>
+                                <th class="text-center">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let items of premiosListEspecial">
+                                <td class="align-middle text-center">
+                                    {{items.monto}}
+                                </td>
+                                <td class="align-middle text-center">
+                                    {{items.premio}}
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!-- DELETE -->
+                                    <button class="btn"  (click)="eliminarRegistroEspecial(items)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-3 mb-2">
+                    <button class="btn btn-sm btn-warning" type="button" (click)="closeEspecial()">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                    <button class="btn btn-sm btn-primary" >
+                        {{ 'BUTTONS.SAVE' | translate }}
+                    </button>
+                </div>
+                
+    </form>
+</div>
+</div>

@@ -1,15 +1,6 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite sin Afectar Limitados</h5>
-            <i class="bi bi-x-circle" (click)="close(true)" style="cursor: pointer;"></i>
-    </div>
-    <div class="modal-body">
-<div class="row ml-2 mr-2">
-    <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
-    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
-        <div class="mt-4">
-            <h4>{{ 'MODULES.AWARD.ADD' | translate }}</h4>
-        </div>
+<div >
+    <h1 mat-dialog-title>Agregar Catalogo de Premios</h1>
+<div mat-dialog-content>
         <form [formGroup]="awardForm" (submit)="onSubmit()">
             <div class="row">
                       <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4">
@@ -26,7 +17,7 @@
                              <input type="number" class="form-control" formControlName="premio"/>
                          </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4 text-right">
+                    <div class="col-xl-4 col-lg-4 col-sm-4 col-xs-4 col-4 text-center mt-2">
                         <button class="btn btn-sm btn-primary mt-4" type="button" 
                         style="background-color: #6C55A4; border-color: #6C55A4;"
                          (click)="addListPremio()">
@@ -39,22 +30,18 @@
                         <table class="table lign-items-center table-flush" ><!--table de limites sin afectar -->
                             <thead>
                                 <tr>
-                                    <th>Monto</th>
-                                    <th>Premio</th>
-                                    <th>Tipo</th>
+                                    <th class="text-center">Monto</th>
+                                    <th class="text-center">Premio</th>
                                     <th class="text-center">Accion</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let items of premiosList">
-                                    <td class="align-middle">
-                                        {{items.monto}}
+                                    <td class="align-middle text-center">
+                                        {{items.monto}} 
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle text-center">
                                         {{items.premio}}
-                                    </td>
-                                    <td class="align-middle">
-                                        {{items.tipo}}
                                     </td>
                                     <td class="align-middle text-center">
                                         <!-- DELETE -->
@@ -68,14 +55,12 @@
                     </div>
 
                     <div class="text-center mt-3 mb-2">
-                        <button class="btn btn-sm btn-warning" type="button" (click)="close(true)">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                        <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
                         <button class="btn btn-sm btn-primary" [disabled]="awardForm.invalid">
                             {{ 'BUTTONS.SAVE' | translate }}
                         </button>
                     </div>
                     
         </form>
-    </div>
-</div>
     </div>
 </div>

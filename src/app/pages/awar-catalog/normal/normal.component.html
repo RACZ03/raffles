@@ -1,13 +1,10 @@
-                       <!--Modal add-award-catalog-->
-            <div class="modal fade" id="modalAddAwardNormal" data-backdrop="static" tabindex="-1" role="dialog" 
-            aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
-              <app-add-awar-catalog (onClose)="closeModalAddAwardCatalog($event)"></app-add-awar-catalog>
-            </div>
+
+            
                 <!-- TABLE -->
                 <div class="card-body">
                   <div class="row">
                     <div class="col-xl-6 col-sm-6 col-xs-6 col-6">
-                      <button class="btn btn-primary btn-sm" (click)="openModalAddAwardCatalog()">{{ 'BUTTONS.ADD' | translate }}</button>
+                      <button class="btn btn-primary btn-sm" (click)="openDialogNormal()">{{ 'BUTTONS.ADD' | translate }}</button>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-xs-6 col-6 text-right">
                       <button class="btn btn-sm btn-warning" title="Exporta a PDF">
@@ -29,11 +26,11 @@
                             </th>
                           </tr>
                           <tr>
-                            <th>
+                            <th scope="col">
                               <input type="text" class="form-control form-control-placeholder" 
                               placeholder="Buscar por monto" name="search-monto"  />
                             </th>
-                            <th>
+                            <th scope="col">
                               <input type="text" class="form-control form-control-placeholder" 
                               placeholder="Buscar por premio" name="search-premio" />
                             </th>
@@ -44,10 +41,10 @@
                               <td>{{ item?.monto }}</td>
                               <td>{{ item?.premio }}</td>
                               <td class="text-right">
-                                <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar">
+                                <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="editPremioNormal(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar">
+                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar"(click)="elimiarPremioNormal(item)">
                                   <i class="bi bi-x-circle"></i>
                                 </button>
                               </td>
