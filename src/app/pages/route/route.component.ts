@@ -98,7 +98,7 @@ export class RouteComponent implements OnInit, OnDestroy {
   // unsubscribe the event
   this.dtTrigger.unsubscribe();
   // destroy the table
-  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  this.dtElement?.dtInstance.then((dtInstance: DataTables.Api) => {
     dtInstance.destroy();
     // new observable
     this.dtTrigger = new Subject();

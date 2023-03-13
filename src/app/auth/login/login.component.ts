@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     this.lang = (!status) ? 'en' : 'es';
     this.translate.use(this.lang);
   }
-  
+
   ngOnInit(): void {
     this.loginForm = this.initForm();
   }
@@ -55,11 +55,11 @@ export class LoginComponent implements OnInit {
   async onSubmit() {
     // login by password
     let resp = await this.authSvc.login(this.loginForm.value);
-    let { error } = resp;
+    let { error, comment } = resp;
 
     if ( error ) {
       let message = (this.lang === 'es') ? 'Credenciales Invalidas' : 'Invalid credentials';
-      this.alertSvc.showAlert(3, '', message);
+      this.alertSvc.showAlert(3, '', comment);
       return;
     }
 
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('business', JSON.stringify(business));
 
     let message = (this.lang === 'es') ? `Bienvenido ${ resp?.nombre }!` : `Welcome ${ resp.nombre }!`;
-    this.alertSvc.showAlert(1, '', message);
+    this.alertSvc.showAlert(1, '', comment);
     this.router.navigate(['/pages/dashboard']);
   }
 

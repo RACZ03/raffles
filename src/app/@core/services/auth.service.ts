@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, identity } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ConnectionService } from '../utils/connection.service';
 
@@ -21,6 +21,7 @@ export class AuthService {
     private router: Router,
     private connectionSvc: ConnectionService
   ) {
+    // console.log('Auth service ready')
   }
 
   getAuthToken():string {
@@ -136,12 +137,14 @@ export class AuthService {
       }
     });
   }
-  
+
   async logout(email: string)
   {
+    let identity = JSON.parse(await this.getIdentity()) as any;
+    let { id, codigoLogout } = identity;
     // Revisar este metodo
-    // let resp = await this.connectionSvc.send('put', `users/updateLastLogin?email=${email}`);
-    console.log('salir');
+    let resp = await this.connectionSvc.send('put', `api/public/logout/cod/${ codigoLogout }/id/${ id }`);
+
     this.token = null;
     this.identity = null;
     localStorage.removeItem('token');

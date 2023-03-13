@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
@@ -13,14 +14,16 @@ export class NavbarComponent implements OnInit {
   public focus: any;
   public listTitles!: any[];
   public location: Location;
+  public identity: any;
 
   constructor(
-    location: Location,  
-    private element: ElementRef, 
+    location: Location,
+    private element: ElementRef,
     private router: Router,
     private authService: AuthService
   ) {
     this.location = location;
+    this.identity = JSON.parse(localStorage.getItem('identity') || '{}');
   }
 
   ngOnInit() {
@@ -35,7 +38,7 @@ export class NavbarComponent implements OnInit {
     for(var item = 0; item < this.listTitles.length; item++){
       // remove /pages/ from path
       let pathWithoutPages = path.replace('/pages/', '');
-      
+
       if(this.listTitles[item].path == pathWithoutPages) {
           title = this.listTitles[item].title;
           break;
