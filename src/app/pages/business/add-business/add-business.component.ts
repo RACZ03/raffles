@@ -44,7 +44,7 @@ export class AddBusinessComponent implements OnInit {
     }
 
     let resp = await this.businessSvc.add(this.businessForm.value, this.isEdit);
-    let { status, data } = resp;
+    let { status } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
       this.goBack.emit(true);

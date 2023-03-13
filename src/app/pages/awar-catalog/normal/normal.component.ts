@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ import { EditAwardCatalogComponent } from '../edit-award-catalog/edit-award-cata
   templateUrl: './normal.component.html',
   styleUrls: ['./normal.component.scss']
 })
-export class NormalComponent implements OnInit, OnDestroy {
+export class NormalComponent implements  OnDestroy {
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -38,7 +38,7 @@ export class NormalComponent implements OnInit, OnDestroy {
     
   }
 
-  ngOnInit(): void {  }
+
 
   openDialogNormal(): void {
     const dialogRef = this.dialog.open(AddAwarCatalogComponent); 
