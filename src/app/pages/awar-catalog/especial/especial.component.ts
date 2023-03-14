@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 import { AddAwwardEspecialComponent } from '../add-awward-especial/add-awward-especial.component';
 import { EditAwardCatalogComponent } from '../edit-award-catalog/edit-award-catalog.component';
 
@@ -13,7 +16,12 @@ import { EditAwardCatalogComponent } from '../edit-award-catalog/edit-award-cata
 })
 export class EspecialComponent implements OnInit {
 
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
   public dataEspecial: any[] = [];
+
 
   public dataA: any[] = [];
   public showFormAward: boolean = false;
@@ -23,20 +31,22 @@ export class EspecialComponent implements OnInit {
     private awardServ: awarCatalogService,
     private alertSvc: AlertService,
     private dataTableSvc: DataTableServiceService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public exportSvc : ExporterDataService,
   ) {
-    
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.loadData();
   }
 
   ngOnInit(): void {
-    this.loadData();
+   
   }
 
   openDialogEspecial(): void {
     const dialogRef = this.dialog.open(AddAwwardEspecialComponent); 
   
     dialogRef.afterClosed().subscribe(result => {
-      this.loadData();});
+      window.location.reload();});
     }
 
     editPremioEspecial(premioEspecial: any){
@@ -44,7 +54,7 @@ export class EspecialComponent implements OnInit {
         data: {premio: premioEspecial}
       });
       dialogRef.afterClosed().subscribe(result => {
-        this.loadData();}
+        window.location.reload();}
         );
     }
 
@@ -56,7 +66,7 @@ export class EspecialComponent implements OnInit {
     let { status, comment } = resp;
     if(status == 200){
       this.alertSvc.showAlert(1,'Exito', comment);
-      this.loadData();
+      window.location.reload();
     }
   }else{
     this.alertSvc.showAlert(3,'Eliminacion cancelada', 'Premio no eliminado');
@@ -84,6 +94,31 @@ export class EspecialComponent implements OnInit {
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
+      this.dtTrigger.next(this.dtOptions);
   }
+
+   /* Export to Excel */
+   exportToExcelEspacial() {
+    let json = this.dataA.map((item: any) => {
+      return {
+        'Monto': item.monto,
+        'Premio': item.premio,
+        'Especial': item.especial ? 'Si' : 'No',
+      }
+    });
+    this.exportSvc.exportToExcel(json, 'catalogo de premios especiales');
+  }
+
+  exportToPDFEspecial() {
+    let json = this.dataA.map((item: any) => {
+      return {
+        'Monto': item.monto,
+        'Premio': item.premio,
+        'Especial': item.especial ? 'Si' : 'No',
+      }
+    });
+    this.exportSvc.exportPdf(json, 'Catalogo de premios especiales');
+  }
+
 
 }

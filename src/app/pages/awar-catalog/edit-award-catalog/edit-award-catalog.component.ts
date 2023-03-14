@@ -11,7 +11,7 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 })
 export class EditAwardCatalogComponent implements OnInit {
   awardFormEdit: any;
-  public disabled= true;
+ 
 
   constructor(
     public dialogRef: MatDialogRef<EditAwardCatalogComponent>,
@@ -25,6 +25,7 @@ export class EditAwardCatalogComponent implements OnInit {
 
   ngOnInit(): void {
     this.awardFormEdit = this.initForm();
+    this.awardFormEdit.get('monto')?.disable();
     this.loadData(this.data);
   }
 
@@ -35,20 +36,21 @@ export class EditAwardCatalogComponent implements OnInit {
         let obj = {
           idNegocio: this.data?.premio?.idNegocio,
           especial: this.data?.premio?.especial,
-          monto: this.awardFormEdit.value.monto,
+          monto: this.data?.premio?.monto,
           premio: this.awardFormEdit.value.premio,
       }
        let resp =  await this.awardServ.updateCatalogPremioxId(this.data?.premio?.id, obj);
         let { status, comment } = resp;
+        console.log(resp);
         if(status == 200){
           this.alertSvc.showAlert(1,'Exito', comment);
-          this.close();
         }
       }
     }else{
       this.alertSvc.showAlert(3,'Edicion cancelada', 'Premio no editado');
-      this.close();
     }
+
+    this.close();
   }
 
   close() {

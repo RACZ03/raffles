@@ -7,11 +7,8 @@
                          <!-- monto -->
                          <div class="form-group">
                              <label for="" class="form-label">Monto<span class="text-danger">*</span></label>
-                             <input type="number" class="form-control" formControlName="monto"/>
+                             <input type="text" class="form-control" formControlName="monto" />
                          </div>
-                         <span *ngIf="validInput('monto')" class="text-danger mt-1">
-                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                        </span>
                      </div>
                       <div class="col-xl-6 col-lg-6 col-sm-6 col-xs-6 col-6">
                          <!-- premio -->

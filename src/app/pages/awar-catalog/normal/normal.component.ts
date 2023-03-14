@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 import { AddAwarCatalogComponent } from '../add-awar-catalog/add-awar-catalog.component';
 import { EditAwardCatalogComponent } from '../edit-award-catalog/edit-award-catalog.component';
 
@@ -32,11 +33,11 @@ export class NormalComponent implements  OnDestroy {
     private awardServ: awarCatalogService,
     private alertSvc: AlertService,
     private dataTableSvc: DataTableServiceService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public exportSvc : ExporterDataService,
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
-
   }
 
 
@@ -45,7 +46,8 @@ export class NormalComponent implements  OnDestroy {
     const dialogRef = this.dialog.open(AddAwarCatalogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadData();});
+      window.location.reload();
+    });
     }
 
     editPremioNormal(premioNormal: any){
@@ -53,8 +55,11 @@ export class NormalComponent implements  OnDestroy {
         data: {premio: premioNormal}
       });
       dialogRef.afterClosed().subscribe(result => {
-        this.loadData();});
+        window.location.reload();
+      });
+  
     }
+  
 
   async elimiarPremioNormal(premioNormal: any){
 
@@ -64,9 +69,9 @@ export class NormalComponent implements  OnDestroy {
       let { status, comment } = resp;
       if(status == 200){
         this.alertSvc.showAlert(1,'Exito', comment);
-        this.loadData();
+        window.location.reload();
       }
-    }else{
+       }else{
       this.alertSvc.showAlert(3,'Eliminacion cancelada', 'Premio no eliminado');
     }
     }
@@ -85,7 +90,9 @@ export class NormalComponent implements  OnDestroy {
               this.dataNormal.push(item);
             }
           }
+         
           this.dataA = this.dataNormal;
+          console.log(this.dataA);
 
         } else {
           this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
@@ -118,12 +125,37 @@ export class NormalComponent implements  OnDestroy {
       this.dtTrigger = new Subject();
       this.loadData();
     });
+   
   }
 
   /* Destroy components */
   ngOnDestroy(): void {
     // this.renderer
     this.dtTrigger.unsubscribe();
+  }
+
+   /* Export to Excel */
+   exportToExcelNormal() {
+    let json = this.dataA.map((item: any) => {
+      return {
+        'Monto': item.monto,
+        'Premio': item.premio,
+        'Especial': item.especial ? 'Si' : 'No',
+      }
+    });
+ 
+    this.exportSvc.exportToExcel(json, 'cataglo de premios');
+  }
+
+  exportToPDFNormal() {
+    let json = this.dataA.map((item: any) => {
+      return {
+        'Monto': item.monto,
+        'Premio': item.premio,
+        'Especial': item.especial ? 'Si' : 'No',
+      }
+    });
+    this.exportSvc.exportPdf(json, 'catalogo de premios');
   }
 
 
