@@ -61,11 +61,16 @@
                         </thead>
                         <tbody id="tbody-table">
                           <tr *ngFor="let item of data">
-                              <td>{{ item?.nombre }}</td>
-                              <td>{{ item?.email }}</td>
-                              <td>{{ item?.telefono }}</td>
-                              <td>{{ item?.direccion }}</td>
-                              <td class="text-right">
+                              <td class="align-middle">
+                                <span class="avatar avatar-sm rounded-circle" style="align-items: normal !important;">
+                                  <img alt="business" [src]="item?.logo" appBrokenImagen>
+                                </span>
+                                <span class="business_name">{{ item?.nombre }}</span>
+                              </td>
+                              <td class="align-middle">{{ item?.email }}</td>
+                              <td class="align-middle">{{ item?.telefono }}</td>
+                              <td class="align-middle">{{ item?.direccion }}</td>
+                              <td class="text-right align-middle">
                                 <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar"  (click)="onEdit(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
@@ -86,4 +91,3 @@
         </div>
     </div>
 </div>
-  
