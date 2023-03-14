@@ -6,12 +6,21 @@
         </div>
         <form [formGroup]="businessForm" (submit)="onSubmit()">
             <!-- Name -->
-            <div class="form-group">
-                <label for="" class="form-label">{{ 'MODULES.BUSINESS.NAME' | translate }} <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="nombre"/>
-                <span *ngIf="validInput('nombre')" class="text-danger mt-1">
+            <div class="row">
+              <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="form-group">
+                  <label for="" class="form-label">{{ 'MODULES.BUSINESS.NAME' | translate }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" formControlName="nombre"/>
+                  <span *ngIf="validInput('nombre')" class="text-danger mt-1">
                     {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                </span>
+                  </span>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12" style="height: 90px !important;">
+                <div class="img-selected">
+                  <i class="bi bi-image"></i>
+                </div>
+              </div>
             </div>
             <!-- Phone and Email -->
             <div class="row">
