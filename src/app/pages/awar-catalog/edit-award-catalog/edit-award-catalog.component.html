@@ -1,0 +1,34 @@
+<div >
+    <h1 mat-dialog-title>Editar de Premios del Monto</h1>
+<div mat-dialog-content>
+        <form [formGroup]="awardFormEdit"  (submit)="onSubmitEdit()">
+            <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-sm-6 col-xs-6 col-6">
+                         <!-- monto -->
+                         <div class="form-group">
+                             <label for="" class="form-label">Monto<span class="text-danger">*</span></label>
+                             <input type="text" class="form-control" formControlName="monto" />
+                         </div>
+                     </div>
+                      <div class="col-xl-6 col-lg-6 col-sm-6 col-xs-6 col-6">
+                         <!-- premio -->
+                         <div class="form-group">
+                             <label for="" class="form-label">Premio</label>
+                             <input type="number" class="form-control" formControlName="premio"/>
+                         </div>
+                         <span *ngIf="validInput('premio')" class="text-danger mt-1">
+                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                    </div>
+                </div>
+
+                    <div class="text-center mt-3 mb-2">
+                        <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                        <button class="btn btn-sm btn-primary" type="submit" [disabled]="awardFormEdit.invalid">
+                           Editar
+                        </button>
+                    </div>
+
+        </form>
+    </div>
+</div>

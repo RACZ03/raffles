@@ -1,14 +1,5 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { map, Observable, startWith } from 'rxjs';
-import { LimitService } from 'src/app/@core/services/limit.service';
-import { RouteService } from 'src/app/@core/services/route.service';
-import { AlertService } from 'src/app/@core/utils/alert.service';
-
-declare var window: any;
+import { Component, OnInit } from '@angular/core';
+declare let window: any;
 
 @Component({
   selector: 'app-limit',
@@ -26,14 +17,7 @@ export class LimitComponent implements OnInit {
   public modalFreeNumberToBisness: any;
   public modalFreeLimitWitOutLimit: any;
 
-  constructor(
-    private limitServ: LimitService,
-    private alertSvc: AlertService,
-    private routeSvc: RouteService,
-
-  ) { 
-   
-  }
+  constructor() {   }
 
   ngOnInit(): void {
     this.modalChangelimitxruta = new window.bootstrap.Modal(

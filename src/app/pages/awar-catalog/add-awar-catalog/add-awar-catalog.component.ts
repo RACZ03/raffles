@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component,OnInit} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { awarCatalogService } from 'src/app/@core/services/awarCatalog.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
+import { AddAwwardEspecialComponent } from '../add-awward-especial/add-awward-especial.component';
 
 @Component({
   selector: 'app-add-awar-catalog',
@@ -9,63 +11,77 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
   styleUrls: ['./add-awar-catalog.component.scss']
 })
 export class AddAwarCatalogComponent implements OnInit {
+  public dataIdentity: any;
 
   public isEdit: boolean = false;
+  public premiosList: any[] = [];
+  public premioListComplet: any[] = [];
+  public dataNormal: any[] = [];
   awardForm!: FormGroup;
-  @Output() goBack = new EventEmitter<boolean>();
   
   public businessSelected: any = null;
-  @Input() set award(value: any) {
-    // console.log(value);
-    if (value != null) {
-      this.awardForm = this.initForm();
-      this.loadForm(value);
-    }
-  }
-
- // public emailRegex: string ='^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
   constructor(
     private fb: FormBuilder,
     private awwardSvr: awarCatalogService,
     private alertSvc: AlertService,
+    public dialogRef: MatDialogRef<AddAwwardEspecialComponent>,
   ) { }
 
   ngOnInit(): void {
     if ( this.awardForm ===  undefined ) {
       this.awardForm = this.initForm();
     }
+    this.loadListPremios();
   }
 
-  
-  async onSubmit() {
-    if (this.awardForm.invalid) {
-      return Object.values(this.awardForm.controls).forEach(control => {
-        control.markAsTouched();
-      });
-    }
-
-    let resp = await this.awwardSvr.addAwarCatalogo(this.awardForm.value, this.isEdit);
-    let { status, data } = resp;
-    if ( status && status == 200) {
-      this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
-      this.goBack.emit(true);
-    } else {
-      this.alertSvc.showAlert(4, 'Error', 'No se pudo guardar el registro');
+  async loadListPremios() {
+    let resp = await this.awwardSvr.getAwardCatalog();
+    this.dataNormal = [];
+    if ( resp !== undefined ) {
+      let { status, data } = resp;
+      if ( status && status == 200) {
+        for (const item of data) {
+          if(!item.especial){
+            this.dataNormal.push(item);
+          }
+        }
+      }
     }
 
   }
-  loadForm(data: any) {
-    if ( this.awardForm ===  undefined ) {
+
+async onSubmit() {
+    if(this.premiosList.length == 0){
+      this.alertSvc.showAlert(4,'Error','Debe agregar al menos un premio');
       return;
     }
 
-    this.awardForm.patchValue({
-      id: data?.id,
-      nombre: data?.nombre,
-      descripcion: data?.descripcion,
-    });
-    this.isEdit = true;
+    ///storage
+ this.dataIdentity= JSON.parse(localStorage.getItem('business') || '{}');
+ for (let i = 0; i < this.premiosList.length; i++) {
+    this.premioListComplet[i].idNegocio = this.dataIdentity.idNegocio;
+    this.premioListComplet[i].especial = false;
+    this.premioListComplet[i].premio = this.premiosList[i].premio;
+    this.premioListComplet[i].monto = this.premiosList[i].monto;
+ }
+
+    let resp = await this.awwardSvr.addAwarCatalogo(this.premioListComplet);
+    console.log(resp);
+    let {comment, status} = resp;
+    if(status == 200){
+      this.alertSvc.showAlert(1,'Exito',comment);
+      this.close();
+    }else{
+      this.alertSvc.showAlert(4,'Error','No se pudo agregar debido a un numero de la lista ya se encuentra registrado');
+    }
+
+ 
+  }
+  
+
+  close() {
+    this.dialogRef.close();
   }
 
   /* SECTION VALIDATIONS */
@@ -76,16 +92,70 @@ export class AddAwarCatalogComponent implements OnInit {
   // Form
   initForm(): FormGroup {
     return this.fb.group({
-      id: [null],
-      nombre: ['', Validators.required],
-      descripcion: [],
+      monto: [''],
+      premio: [''],
     });
   }
 
-  close() {
-    this.goBack.emit(false);
+  eliminarRegistro(item:any){
+      for (const i of this.premiosList) {
+        if(i.monto == item.monto){
+          this.premiosList.splice(this.premiosList.indexOf(i),1);
+        }
+      }
   }
 
+  busqueda(){
+  let dato =0;
+    for (const item of this.dataNormal) {
+      if(item.monto == this.awardForm.get('monto')?.value){
+        dato = 1;
+      }   
+    }
+    if(dato == 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  addListPremio(){
+    if(this.awardForm.get('premio')?.value == '' || this.awardForm.get('monto')?.value == ''){
+      this.alertSvc.showAlert(4,'Error','Debe llenar los campos para agregar a la lista');
+      return;
+    }
+
+    if(this.premiosList.length > 0){
+        for (const item of this.premiosList) {
+          if(item.monto == this.awardForm.get('monto')?.value){
+            this.alertSvc.showAlert(4,'Error','El monto ya existe en la lista');
+            this.awardForm.get('monto')?.setValue('');
+            this.awardForm.get('premio')?.setValue('');
+            return;
+          }
+        }
+    }
+
+    if(this.busqueda()){
+      this.alertSvc.showAlert(3,'Error','El monto ya se encuentra registrado');
+      this.awardForm.get('monto')?.setValue('');
+      this.awardForm.get('premio')?.setValue('');
+      return;
+    }
+       
+     
+      this.premioListComplet.push({
+        monto: this.awardForm.get('monto')?.value,
+        premio: this.awardForm.get('premio')?.value,
+      });
+
+      this.premiosList = this.premioListComplet;
+      console.log(this.premiosList);
+      this.awardForm.get('monto')?.setValue('');
+      this.awardForm.get('premio')?.setValue('');
+    }
+   
 
 
-}
+
+  }

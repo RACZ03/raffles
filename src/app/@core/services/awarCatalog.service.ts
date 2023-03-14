@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { identity } from 'rxjs';
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class awarCatalogService {
   private dataIdentity: any = null;
   constructor(
@@ -19,26 +19,20 @@ export class awarCatalogService {
   }
 
 
-  addAwarCatalogo(data: any, isEdit: boolean = false): Promise<any> {
-    
-//   let obj: any = {
-//     nombre: data.nombre,
-//     descripcion: data.descripcion,
-//     idNegocio: this.dataIdentity.idNegocio
-//   }
- // console.log(obj);
-    
-//      let params = JSON.stringify(obj);
-//      if (isEdit) {
-//        let { id } = data;
-//        return this.connectionSvc.send('put', `ruta/actualizar/${ id }`, params);
-//      } else {
-//        return this.connectionSvc.send('post', `ruta/guardar`, params);
-//   }
-return this.connectionSvc.send('post', `catalogo-premio/guardar`, data);
+  addAwarCatalogo(data: any, isEdit: boolean = false): Promise<any> {  
+   return this.connectionSvc.send('post', `catalogo-premio/guardar`, data);
   }
 
   delete(id: number): Promise<any> {
     return this.connectionSvc.send('delete', `ruta/eliminar/${ id }`);
   }
+
+  updateCatalogPremioxId(id: number, data: any): Promise<any> {
+    return this.connectionSvc.send('put', `catalogo-premio/actualizar/${ id }`, data);
+  }
+
+  deleteAwardCatalog(id: number): Promise<any> {
+    return this.connectionSvc.send('delete', `catalogo-premio/eliminar/${ id }`);
+  }
+  
 }

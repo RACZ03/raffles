@@ -1,86 +1,40 @@
 <!-- always keep -->
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
-  <div class="container-fluid">
-    <div class="header-body">
+    <div class="container-fluid">
+      <div class="header-body">
+      </div>
     </div>
   </div>
-</div>
-<!-- Contents -->
-<div class="container-fluid mt--9">
-  <div class="row">
-      <div class="col-12 mb-5 mb-xl-0">
-          <div class="card shadow" id="card-container-tables">
-              <div class="card-header bg-transparent">
-                  <div class="row align-items-center">
-                      <div class="col">
-                          <!-- Switch background -->
-                          <label class="switch float-right">
-                              <input type="checkbox" id="toggleTable" appToggleTable>
-                              <span class="slider round"></span>
-                          </label>
-                          <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.AWARD.TITLE' | translate }}</h4>
-                      </div>
-                      <div></div>
-                  </div>
-              </div>
-              <!-- TABLE -->
-              <div class="card-body" *ngIf="!showFormAward">
-                <div class="row">
-                  <div class="col-6">
-                    <button class="btn btn-primary btn-sm" (click)="addAward()">{{ 'BUTTONS.ADD' | translate }}</button>
-                    <div class="btn-group">
-                      <button type="button" [class]="'btn btn-outline-success btn-sm ' + (flag === 'normal' ? 'active' : '')" id="normal" (click)="loadData(true)">Normal</button>
-                      <button type="button" [class]="'btn btn-outline-warning btn-sm ' + (flag === 'especial' ? 'active' : '') " id="especial" (click)="changeFlag()">Especial</button>
+  <!-- Contents -->
+  <div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col-12 mb-5 mb-xl-0">
+            <div class="card shadow" id="card-container-tables">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Switch background -->
+                            <label class="switch float-right">
+                                <input type="checkbox" id="toggleTable" appToggleTable>
+                                <span class="slider round"></span>
+                            </label>
+                            <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{title}}</h4>
+                        </div>
+                        <div></div>
                     </div>
-                  </div>
-                  <div class="col-6 text-right">
-                    <button class="btn btn-sm btn-warning" title="Exporta a PDF">
-                      <i class="bi bi-filetype-pdf"></i>
-                    </button>
-                    <button class="btn btn-sm btn-warning" title="Exporta a Excel">
-                      <i class="bi bi-file-earmark-excel"></i>
-                    </button>
-                  </div>
                 </div>
-                <div class="table-responsive mt-2">
-                    <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                      <thead class="thead-light" id="thead-table">
-                        <tr>
-                          <th scope="col">Monto</th>
-                          <th scope="col">Premio</th>
-                          <th scope="col aling-center">
-                            Acciones
-                          </th>
-                        </tr>
-                        <tr>
-                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por monto" name="search-monto" (keyup)="searchData($event)" /></th>
-                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por premio" name="search-premio" (keyup)="searchData($event)" /></th>
-                          <th>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody id="tbody-table">
-                        <tr *ngFor="let item of dataA">
-                            <td>{{ item?.monto }}</td>
-                            <td>{{ item?.premio }}</td>
-                            <td class="text-right">
-                              <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEditAward(item)">
-                                <i class="bi bi-pencil-square"></i>
-                              </button>
-                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDeleteAward(item)">
-                                <i class="bi bi-x-circle"></i>
-                              </button>
-                            </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <!-- CARD -->
+                <div class="container mb-5">
+                    <mat-tab-group>
+                        <mat-tab label="Normal">
+                         <app-normal></app-normal>
+                        </mat-tab>
+                        <mat-tab label="Especial">
+                        <app-especial></app-especial>
+                        </mat-tab>
+                    </mat-tab-group>
                 </div>
-              </div>
-              <!-- FORM -->
-              <div *ngIf="showFormAward">
-                <app-add-awar-catalog [award]="awardSelected" (goBack)="closeAward($event)"></app-add-awar-catalog>
-              </div>
-          </div>
-      </div>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
