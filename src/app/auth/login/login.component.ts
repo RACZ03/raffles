@@ -35,14 +35,14 @@ export class LoginComponent implements OnInit {
     this.lang = (!status) ? 'en' : 'es';
     this.translate.use(this.lang);
   }
-  
+
   ngOnInit(): void {
     this.loginForm = this.initForm();
   }
 
   initForm(): FormGroup {
     return this.fb.group({
-      email: ['84962664', {
+      email: ['86604980', {
         validators: [
           Validators.required,
         ],
@@ -55,11 +55,11 @@ export class LoginComponent implements OnInit {
   async onSubmit() {
     // login by password
     let resp = await this.authSvc.login(this.loginForm.value);
-    let { error } = resp;
+    let { error, comment, message } = resp;
 
     if ( error ) {
-      let message = (this.lang === 'es') ? 'Credenciales Invalidas' : 'Invalid credentials';
-      this.alertSvc.showAlert(3, '', message);
+      //let message = (this.lang === 'es') ? 'Credenciales Invalidas' : 'Invalid credentials';
+      this.alertSvc.showAlert(3, '', error?.message ? error?.message : comment);
       return;
     }
 
@@ -69,8 +69,9 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('roles', JSON.stringify(roles));
     localStorage.setItem('business', JSON.stringify(business));
 
-    let message = (this.lang === 'es') ? `Bienvenido ${ resp?.nombre }!` : `Welcome ${ resp.nombre }!`;
-    this.alertSvc.showAlert(1, '', message);
+    let message2 = (this.lang === 'es') ? `Bienvenido ${ resp?.nombre }!` : `Welcome ${ resp.nombre }!`;
+    // console.log(message)
+    this.alertSvc.showAlert(1, '', message2);
     this.router.navigate(['/pages/dashboard']);
   }
 

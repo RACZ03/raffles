@@ -1,24 +1,23 @@
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ExtraordinarySalesService } from './../../@core/services/extraordinary-sales.service';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DataNumbers } from 'src/app/@core/data/numbers';
-import { AuthService } from 'src/app/@core/services/auth.service';
-import { SalesService } from 'src/app/@core/services/sales.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
-import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
-// import {  } from 'ngx-slick-carousel';
+import { AuthService } from 'src/app/@core/services/auth.service';
+import { PrintService } from 'src/app/@core/utils/print.service';
 
 @Component({
-  selector: 'app-sales',
-  templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+  selector: 'app-extraordinary-sales',
+  templateUrl: './extraordinary-sales.component.html',
+  styleUrls: ['./extraordinary-sales.component.scss']
 })
-export class SalesComponent implements OnInit, AfterViewInit {
+export class ExtraordinarySalesComponent implements OnInit {
 
-  @ViewChild('slickModal', { static: true }) slickModal!: SlickCarouselComponent;
-  @ViewChild('InputAmount', { static: false }) inputAmount!: ElementRef;
-  @ViewChild('InputNumber', { static: false }) inputNumber!: ElementRef;
+  @ViewChild('slickModalExtra', { static: true }) slickModal!: SlickCarouselComponent;
+  @ViewChild('InputAmountExtra', { static: false }) inputAmount!: ElementRef;
+  @ViewChild('InputNumberExtra', { static: false }) inputNumber!: ElementRef;
 
   public slideConfig: any = {
     autoplay: false,
@@ -47,7 +46,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private alertSvc: AlertService,
     private spinnerSvc: SpinnerService,
-    private salesSvc: SalesService,
+    private extraordinarySalesSvc: ExtraordinarySalesService,
     private authSvc: AuthService,
     private printSvc: PrintService,
   ) {
@@ -76,7 +75,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async getCurrentRaflle() {
-    let currentRaffle = await this.salesSvc.getCurrentRaffle();
+    let currentRaffle = await this.extraordinarySalesSvc.getCurrentRaffle();
+    console.log(currentRaffle);
     if (currentRaffle) {
       this.disabledActions = false;
       this.currentRaffle = currentRaffle;
@@ -142,17 +142,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // get limit
     await this.getLimit(number);
     await this.getSales(number);
-    // hide spinner
-    // setTimeout(() => {
-    //   this.spinnerSvc.hide();
-    // }, 500);
     // change focus to amount
     this.inputAmount.nativeElement.focus();
   }
 
   getLimit(number: number): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      let respLimit = await this.salesSvc.getLimit(number, this.currentRaffle?.id);
+      let respLimit = await this.extraordinarySalesSvc.getLimit(number, this.currentRaffle?.id);
       if (respLimit) {
         let { status, data } = respLimit;
         if (status && status == 200) {
@@ -168,7 +164,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   getSales(number: number): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      let respSales = await this.salesSvc.getSales(number, this.currentRaffle.id);
+      let respSales = await this.extraordinarySalesSvc.getSales(number, this.currentRaffle.id);
       if (respSales) {
         let { status, data } = respSales;
         if (status && status == 200) {
@@ -196,7 +192,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let resp = await this.salesSvc.getAward(amount);
+    let resp = await this.extraordinarySalesSvc.getAward(amount);
     if (resp) {
       let { status, data, comment } = resp;
       if (status && status == 200) {
@@ -255,7 +251,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // this.spinnerSvc.show();
 
     // send data
-    let resp = await this.salesSvc.save(this.listSales);
+    let resp = await this.extraordinarySalesSvc.save(this.listSales, this.currentRaffle.id);
     if (resp) {
       let { status, comment, data } = resp;
       if (status && status == 200) {
@@ -275,7 +271,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async getTickets(code: string) {
-    let resp = await this.salesSvc.getSaleByCode(code);
+    let resp = await this.extraordinarySalesSvc.getSaleByCode(code);
     if (resp) {
       let { status, data } = resp;
       if (status && status == 200) {

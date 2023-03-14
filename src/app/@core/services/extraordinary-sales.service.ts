@@ -5,7 +5,7 @@ import { ConnectionService } from '../utils/connection.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SalesService {
+export class ExtraordinarySalesService {
 
   constructor(
     private connectionSvc: ConnectionService,
@@ -31,17 +31,12 @@ export class SalesService {
 
   getCurrentRaffle(): Promise<any> {
     return new Promise((resolve, reject) => {
-      // get local storage if exist else get from server
-      // let currentRaffle = localStorage.getItem('currentRaffle');
-      // if (currentRaffle) {
-      //   resolve(JSON.parse(currentRaffle));
-      // } else {
         this.currentRaffle().then((res: any) => {
           if (res) {
-            localStorage.setItem('currentRaffle', JSON.stringify((res != null) ? res : true));
+            localStorage.setItem('currentRaffleExtra', JSON.stringify((res != null) ? res : true));
             resolve(res != null ? res : true );
           } else {
-            localStorage.setItem('currentRaffle', JSON.stringify(false));
+            localStorage.setItem('currentRaffleExtra', JSON.stringify(false));
             resolve(false);
           }
         }).catch((err: any) => {
@@ -52,7 +47,7 @@ export class SalesService {
   }
 
   private currentRaffle(): Promise<any> {
-    return this.connectionSvc.send('get', `sorteo/actual`);
+    return this.connectionSvc.send('get', `sorteo/obtener/extra`);
   }
 
   getLimit(number: number, lottery: number) {
@@ -73,7 +68,7 @@ export class SalesService {
     return this.connectionSvc.send('get', `catalogo-premio/obtener-premio/negocio/${ businessId }/monto/${ amount }?especial=${ tablaEspecial }`);
   }
 
-  save(data: any ): Promise<any> {
+  save(data: any, idSorteo: number): Promise<any> {
 
     let objArray = [];
     for (const item of data) {
@@ -84,7 +79,7 @@ export class SalesService {
       });
     }
     let params = JSON.stringify(objArray);
-    return this.connectionSvc.send('post', `venta/guardar`, params);
+    return this.connectionSvc.send('post', `venta/guardar/extra?idSorte=${ idSorteo }`, params);
   }
 
   getSaleByCode(code: string): Promise<any> {

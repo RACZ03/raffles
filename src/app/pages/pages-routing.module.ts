@@ -38,6 +38,10 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'extraordinary-sales', loadChildren: () => import('./extraordinary-sales/extraordinary-sales.module').then(m => m.ExtraordinarySalesModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

@@ -1,9 +1,9 @@
 <!-- always keep -->
 <div class="header bg-gradient-danger pb-4 pt-4 pt-md-8">
-    <div class="container-fluid">
-      <div class="header-body">
-      </div>
+  <div class="container-fluid">
+    <div class="header-body">
     </div>
+  </div>
 </div>
 <br class="mt-2">
 
@@ -15,12 +15,12 @@
     </div>
   </div>
 
-  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" *ngIf="!disabledActions">
+  <ngx-slick-carousel class="carousel" #slickModalExtra="slick-carousel" [config]="slideConfig" *ngIf="!disabledActions">
     <!-- Sales -->
     <div ngxSlickItem>
       <div class="card">
         <div class="card-header text-center">
-          <h3 class="mb-0">Formulario de Ventas</h3>
+          <h3 class="mb-0">Formulario de Ventas Extraordinarias</h3>
           <h2 class="mt-2">{{ currentRaffle?.nombre }}</h2>
         </div>
         <div class="card-body" style="padding-top: 0px;">
@@ -40,14 +40,14 @@
                 <div class="form-group">
                   <label for="exampleFormControlInput1">Número</label>
                   <input type="number" class="form-control" style="height: 38px !important;"
-                      formControlName="number" #InputNumber (change)="onChange()" (keyup)="onChangeFocus($event)">
+                      formControlName="number" #InputNumberExtra (change)="onChange()" (keyup)="onChangeFocus($event)">
                 </div>
               </div>
               <div class="col-6">
                 <!-- Form control monto -->
                 <div class="form-group">
                   <label for="exampleFormControlInput1">Monto</label>
-                  <input type="number" class="form-control" #InputAmount style="height: 38px !important;"
+                  <input type="number" class="form-control" #InputAmountExtra style="height: 38px !important;"
                         formControlName="amount">
                 </div>
               </div>
