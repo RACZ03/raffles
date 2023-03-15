@@ -13,16 +13,28 @@ const routes: Routes = [
         path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
         // canLoad: [ AdminGuard ]
       },
+      // SUPER ADMIN
       {
-        path: 'business', loadChildren: () => import('./business/business.module').then(m => m.BusinessModule),
+        path: 'business', loadChildren: () => import('./super-admin/business/business.module').then(m => m.BusinessModule),
+        // canLoad: [ AdminGuard ]
+      },
+      // SUPER ADMIN
+      {
+        path: 'users', loadChildren: () => import('./super-admin/users/users.module').then(m => m.UsersModule),
+        // canLoad: [ AdminGuard ]
+      },
+      // ADMIN
+      {
+        path: 'business-profile', loadChildren: () => import('./admin/business-profile/business-profile.module').then(m => m.BusinessProfileModule),
+        // canLoad: [ AdminGuard ]
+      },
+      // ADMIN
+      {
+        path: 'business-users', loadChildren: () => import('./admin/business-users/business-users.module').then(m => m.BusinessUsersModule),
         // canLoad: [ AdminGuard ]
       },
       {
         path: 'route', loadChildren: () => import('./route/route.module').then(m => m.RouteModule),
-        // canLoad: [ AdminGuard ]
-      },
-      {
-        path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
         // canLoad: [ AdminGuard ]
       },
       {
