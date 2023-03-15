@@ -72,7 +72,16 @@
             "ROUTE": "Ruta",
             "ROLE": "Rol",
             "LIMIT": "Límite"
+        },
+        "WINNER":{
+            "TITLE": "Ganadores",
+            "ADD": "Agregar Ganador",
+            "EDIT": "Editar Ganador",
+            "DELETE": "Eliminar Ganador",
+            "AWARD-PLACEHOLDER": "Seleccione un premio",
+            "ROUTE": "Ruta"
         }
+
     },
     "BUTTONS": {
         "ADD": "Agregar",

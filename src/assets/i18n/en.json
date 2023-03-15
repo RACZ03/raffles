@@ -78,7 +78,15 @@
             "ROUTE": "Route",
             "ROLE": "Role",
             "LIMIT": "Limit"
+        },
+        "WINNER" :{ 
+            "TITLE": "Winners",
+            "ADD": "Add Winner",
+            "EDIT": "Edit Winner",
+            "DELETE": "Delete Winner",
+            "RUTA": "Route"
         }
+
     },
     "BUTTONS": {
         "ADD": "Add",

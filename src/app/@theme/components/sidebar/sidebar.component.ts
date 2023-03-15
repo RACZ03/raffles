@@ -17,6 +17,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
     { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
     { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
+    { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
     // { path: '/maps', title: 'Maps',  icon:'ni-pin-3 text-orange', class: '' },
     // { path: '/user-profile', title: 'User profile',  icon:'ni-single-02 text-yellow', class: '' },
     // { path: '/tables', title: 'Tables',  icon:'ni-bullet-list-67 text-red', class: '' },

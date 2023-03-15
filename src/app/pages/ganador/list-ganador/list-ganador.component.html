@@ -1,0 +1,95 @@
+<!-- always keep -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+      <div class="header-body">
+      </div>
+    </div>
+</div>
+<!-- Contents -->
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col-12 mb-5 mb-xl-0">
+            <div class="card shadow" id="card-container-tables">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Switch background -->
+                            <label class="switch float-right">
+                                <input type="checkbox" id="toggleTable" appToggleTable>
+                                <span class="slider round"></span>
+                            </label>
+                            <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.WINNER.TITLE' | translate }}</h4>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- TABLE -->
+                <div class="card-body" >
+                  <div class="row">
+                    <div class="col-6">
+                      <button class="btn btn-primary btn-sm" >{{ 'BUTTONS.ADD' | translate }}</button>
+                    </div>
+                    <div class="col-6 text-right">
+                      <button class="btn btn-sm btn-warning" title="Exporta a PDF" >
+                        <i class="bi bi-filetype-pdf"></i>
+                      </button>
+                      <button class="btn btn-sm btn-warning" title="Exporta a Excel" >
+                        <i class="bi bi-file-earmark-excel"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="table-responsive mt-2">
+                      <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <thead class="thead-light" id="thead-table">
+                          <tr>
+                            <th scope="col" class="text-center">N° Ganador</th>
+                            <th scope="col" class="text-center">Ventas</th>
+                            <th scope="col" class="text-center">Inversion</th>
+                            <th scope="col" class="text-center">Premio</th>
+                            <th scope="col" class="text-center">Utilidad</th>
+                            <th scope="col" class="text-center">Fecha</th>
+                            <th scope="col" class="text-center">Sorteo</th>
+                            <th scope="col" class="text-center">
+                              Acciones
+                            </th>
+                          </tr>
+                          <tr>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-winner" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sale" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-investment" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-award" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utility" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-lottery" /></th>
+                            <th scope="col" class="text-center">
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbody-table">
+                          <tr *ngFor="let item of data">
+                              <td class="text-center">{{ item?.numeroGanador }}</td>
+                              <td class="text-center">{{ item?.ventasTotales }}</td>
+                              <td class="text-center">{{ item?.inversionAlGanador }}</td>
+                              <td class="text-center">{{ item?.premioTotal }}</td>
+                              <td class="text-center">{{ item?.utilidad }}</td>
+                              <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
+                              <td class="text-center">{{ item?.sorteo?.nombre }}</td>
+                              <td class="text-right">
+                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar"  >
+                                  <i class="bi bi-x-circle"></i>
+                                </button>
+                              </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+                </div>
+                <!-- FORM
+                <div *ngIf="showForm">
+                  <app-add-business [business]="businessSelected" (goBack)="close($event)"></app-add-business>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+  
