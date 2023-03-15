@@ -11,11 +11,20 @@ import { NgxMaskModule } from 'ngx-mask';
 import { TagInputModule } from 'ngx-chips';
 import { NgxTagsInputBoxModule } from 'ngx-tags-input-box';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AddwinnerComponent } from './addwinner/addwinner.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
   declarations: [
-    ListGanadorComponent
+    ListGanadorComponent,
+    AddwinnerComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +37,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TagInputModule,
     NgxTagsInputBoxModule,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatSelectModule
 
   ]
 })

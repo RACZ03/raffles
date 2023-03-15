@@ -23,4 +23,18 @@ export class WinnerService {
   getwinners(): Promise<any> {
     return this.connectionSvc.send('get', `ganador/todos`);
   }
+
+  getSorteo(): Promise<any> {
+    return this.connectionSvc.send('get', `sorteo/obtener`);
+  }
+
+  addWinner(data: any): Promise<any> {
+    return this.connectionSvc.send('post', `ganador/agregar`, data);
+  }
+
+  verifywinner(fecha: any,sorteo:any): Promise<any> {
+    return this.connectionSvc.send('get', `ganador/verificar/fecha/${fecha}/sorteo/${sorteo}`);
+  }
+
+
 }

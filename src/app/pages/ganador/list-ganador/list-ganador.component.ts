@@ -15,6 +15,8 @@ export class ListGanadorComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
+  public showFormAddWinner: boolean = false;
+
   public data: any[] = [];
 
   constructor(
@@ -41,5 +43,33 @@ export class ListGanadorComponent implements OnInit {
     this.dtTrigger.next(this.dtOptions);
   }
 
+  addWinner() {
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.showFormAddWinner = true;
+  }
+
+   close(e: boolean) {
+    this.showFormAddWinner = false;
+    this.renderer();
+  }
+  /* Section Render & Destoy */
+  renderer() {
+    this.dtElement = this.dataTableSvc.dtElements;
+    // unsubscribe the event
+    this.dtTrigger.unsubscribe();
+    // destroy the table
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      // new observable
+      this.dtTrigger = new Subject();
+      this.loadData();
+    });
+  }
+
+  /* Destroy components */
+  ngOnDestroy(): void {
+    // this.renderer
+    this.dtTrigger.unsubscribe();
+  }
 
 }

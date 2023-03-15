@@ -24,10 +24,10 @@
                     </div>
                 </div>
                 <!-- TABLE -->
-                <div class="card-body" >
+                <div class="card-body" *ngIf="!showFormAddWinner">
                   <div class="row">
                     <div class="col-6">
-                      <button class="btn btn-primary btn-sm" >{{ 'BUTTONS.ADD' | translate }}</button>
+                      <button class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
                     </div>
                     <div class="col-6 text-right">
                       <button class="btn btn-sm btn-warning" title="Exporta a PDF" >
@@ -42,13 +42,13 @@
                       <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                         <thead class="thead-light" id="thead-table">
                           <tr>
-                            <th scope="col" class="text-center">N° Ganador</th>
-                            <th scope="col" class="text-center">Ventas</th>
-                            <th scope="col" class="text-center">Inversion</th>
-                            <th scope="col" class="text-center">Premio</th>
-                            <th scope="col" class="text-center">Utilidad</th>
                             <th scope="col" class="text-center">Fecha</th>
                             <th scope="col" class="text-center">Sorteo</th>
+                            <th scope="col" class="text-center">Ventas Totales</th>
+                            <th scope="col" class="text-center">N° Ganador</th>
+                            <th scope="col" class="text-center">Inversion al ganador</th>
+                            <th scope="col" class="text-center">Premio a pagar</th>
+                            <th scope="col" class="text-center">Utilidad</th>
                             <th scope="col" class="text-center">
                               Acciones
                             </th>
@@ -67,13 +67,13 @@
                         </thead>
                         <tbody id="tbody-table">
                           <tr *ngFor="let item of data">
-                              <td class="text-center">{{ item?.numeroGanador }}</td>
+                              <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
+                              <td class="text-center">{{ item?.sorteo?.nombre }}</td>
                               <td class="text-center">{{ item?.ventasTotales }}</td>
+                              <td class="text-center">{{ item?.numeroGanador }}</td>
                               <td class="text-center">{{ item?.inversionAlGanador }}</td>
                               <td class="text-center">{{ item?.premioTotal }}</td>
                               <td class="text-center">{{ item?.utilidad }}</td>
-                              <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
-                              <td class="text-center">{{ item?.sorteo?.nombre }}</td>
                               <td class="text-right">
                                 <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar"  >
                                   <i class="bi bi-x-circle"></i>
@@ -84,10 +84,10 @@
                       </table>
                   </div>
                 </div>
-                <!-- FORM
-                <div *ngIf="showForm">
-                  <app-add-business [business]="businessSelected" (goBack)="close($event)"></app-add-business>
-                </div> -->
+                <!-- FORM-->
+                <div *ngIf="showFormAddWinner">
+                  <app-addwinner (goBack)="close($event)"></app-addwinner>
+                </div> 
             </div>
         </div>
     </div>
