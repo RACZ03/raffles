@@ -25,12 +25,12 @@
                 </div>
                 <!-- CARD -->
                 <div class="container mb-5">
-                    <mat-tab-group>
+                    <mat-tab-group  (click)="especialView(true)">
                         <mat-tab label="Normal">
                          <app-normal></app-normal>
                         </mat-tab>
                         <mat-tab label="Especial">
-                        <app-especial></app-especial>
+                        <app-especial *ngIf="view"></app-especial>
                         </mat-tab>
                     </mat-tab-group>
                 </div>

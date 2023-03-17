@@ -19,29 +19,29 @@
                       <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                         <thead class="thead-light" id="thead-table">
                           <tr>
-                            <th scope="col">Monto</th>
-                            <th scope="col">Premio</th>
-                            <th scope="col aling-center">
+                            <th class="text-center" scope="col">Monto</th>
+                            <th class="text-center" scope="col">Premio</th>
+                            <th class="text-center" scope="col aling-center">
                               Acciones
                             </th>
                           </tr>
                           <tr>
-                            <th scope="col">
+                            <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder"
                               placeholder="Buscar por monto" name="search-monto"  />
                             </th>
-                            <th scope="col">
+                            <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder"
                               placeholder="Buscar por premio" name="search-premio" />
                             </th>
-                            <th scope="col"></th>
+                            <th class="text-center" scope="col"></th>
                           </tr>
                         </thead>
                         <tbody id="tbody-table">
                           <tr *ngFor="let item of dataA">
-                              <td>{{ item?.monto }}</td>
-                              <td>{{ item?.premio }}</td>
-                              <td class="text-right">
+                              <td class="text-center">{{ item?.monto }}</td>
+                              <td class="text-center">{{ item?.premio }}</td>
+                              <td  class="text-right">
                                 <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="editPremioNormal(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>

@@ -89,10 +89,8 @@ export class NormalComponent implements  OnDestroy {
             if(!item.especial){
               this.dataNormal.push(item);
             }
-          }
-         
+          }       
           this.dataA = this.dataNormal;
-          console.log(this.dataA);
 
         } else {
           this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
@@ -106,7 +104,6 @@ export class NormalComponent implements  OnDestroy {
   /* Search */
   searchData(e: any) {
     if ( !this.dtElement ) return;
-
     let value = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.search(value).draw();

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { WinnerService } from 'src/app/@core/services/winner.service';
+import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class ListGanadorComponent implements OnInit {
 
   constructor(
     private dataTableSvc: DataTableServiceService,
-    private winnerSvc: WinnerService
+    private winnerSvc: WinnerService,
+    private alertSvc: AlertService
   ) { 
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
@@ -33,11 +35,14 @@ export class ListGanadorComponent implements OnInit {
   async loadData() {
     this.data = [];
     let resp = await this.winnerSvc.getwinners();
+    if(resp != undefined){
      let { data,status,message,comment } = resp;
-     console.log(data);
      if(status==200){
         this.data = data;
       }
+    }else{
+      this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
+    }
 
 
     this.dtTrigger.next(this.dtOptions);
