@@ -54,6 +54,10 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'winner', loadChildren: () => import('./ganador/ganador.module').then(m => m.GanadorModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

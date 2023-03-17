@@ -18,6 +18,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
     { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
     { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
+    { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
 ];
 
 export const ROUTES_ADMIN: RouteInfo[] = [
@@ -29,6 +30,7 @@ export const ROUTES_ADMIN: RouteInfo[] = [
     { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
     { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
     { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
+    { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
 ];
 
 export const ROUTES_SALES: RouteInfo[] = [
@@ -37,6 +39,7 @@ export const ROUTES_SALES: RouteInfo[] = [
   { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
   { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
   { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
+  { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
 ];
 
 @Component({
@@ -50,10 +53,10 @@ export class SidebarComponent implements OnInit {
   public isCollapsed: boolean = true;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private authService: AuthService,
     private userSvc: UsersService
-  ) { 
+  ) {
     let isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
     let isAdmin = this.userSvc.verifyRole('ROLE_ADMIN');
 

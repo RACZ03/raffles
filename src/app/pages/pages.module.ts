@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PagesComponent } from './pages.component';
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesRoutingModule } from './pages-routing.module';
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxMaskModule, IConfig } from 'ngx-mask';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -13,6 +13,7 @@ const maskConfig: Partial<IConfig> = {
 @NgModule({
   declarations: [
     PagesComponent,
+   
   ],
   imports: [
     CommonModule,
