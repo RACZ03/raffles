@@ -1,1 +1,112 @@
-<p>business-users works!</p>
+<!-- always keep -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+    </div>
+  </div>
+</div>
+<!-- Contents -->
+<div class="container-fluid mt--9">
+  <div class="row">
+      <div class="col-12 mb-5 mb-xl-0">
+          <div class="card shadow" id="card-container-tables">
+              <div class="card-header bg-transparent" style="padding: 10px 10px 0px 0px;">
+                  <div class="row align-items-center">
+                      <div class="col">
+                          <!-- Switch background -->
+                          <label class="switch float-right">
+                              <input type="checkbox" id="toggleTable" appToggleTable>
+                              <span class="slider round"></span>
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              <!-- TABLE -->
+              <div class="card-body" *ngIf="!showForm">
+                <div class="row">
+                  <div class="col-6">
+                    <button class="btn btn-primary btn-sm" (click)="add()">{{ 'BUTTONS.ADD' | translate }}</button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
+                      <i class="bi bi-filetype-pdf"></i>
+                    </button>
+                    <button class="btn btn-sm btn-warning" title="Exporta a Excel" (click)="exportToExcel()">
+                      <i class="bi bi-file-earmark-excel"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive mt-2">
+                    <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                      <thead class="thead-light" id="thead-table">
+                        <tr>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Teléfono</th>
+                          <th scope="col">Negocio</th>
+                          <th scope="col">Ruta</th>
+                          <th scope="col">Roles</th>
+                          <th scope="col">
+                            Acciones
+                          </th>
+                        </tr>
+                        <tr>
+                          <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)"/></th>
+                          <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por email" name="search-email" (keyup)="searchData($event)"/></th>
+                          <th scope="çol"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por teléfono" name="search-phone" (keyup)="searchData($event)"/></th>
+                          <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por negocio" name="search-bussines" (keyup)="searchData($event)"/></th>
+                          <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por ruta" name="search-route" (keyup)="searchData($event)"/></th>
+                          <th scope="col"> <input type="text" class="form-control form-control-placeholder" placeholder="Buscar por rol" name="search-route" (keyup)="searchData($event)"/></th>
+                          <th scope="col">
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody-table">
+                        <tr *ngFor="let item of data">
+                            <td>{{ item?.nombre }}</td>
+                            <td>{{ item?.email }}</td>
+                            <td>{{ item?.telefono }}</td>
+                            <td>{{ item?.negocioAndRuta?.negocio }}</td>
+                            <td>{{ item?.negocioAndRuta?.ruta }}</td>
+                            <td>
+                              <span *ngFor="let role of item?.roles">
+                                <span class="badge badge-pill badge-primary mt-2" style="font-size: 11px;">{{ role?.nombre }}</span><br>
+                              </span>
+                            </td>
+                            <td class="text-right">
+                              <button class="btn btn-sm text-info" placement="left" ngbTooltip="Historial de Limites" (click)="onViewLimits(item)">
+                                <i class="bi bi-list-stars"></i>
+                              </button>
+                              <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEdit(item)">
+                                <i class="bi bi-pencil-square"></i>
+                              </button>
+                              <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Cambiar contraseña" (click)="onChangePassword(item)">
+                                <i class="bi bi-key"></i>
+                              </button>
+                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDelete(item)">
+                                <i class="bi bi-x-circle"></i>
+                              </button>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+              <!-- FORM -->
+              <div *ngIf="showForm">
+                <app-add-user [user]="UserSelected" (goBack)="closeUser($event)"></app-add-user>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div class="modal fade" id="changePasswordUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <app-change-password [setUser]="UserSelected" (goBack)="closeModal($event)"></app-change-password>
+</div>
+
+<!-- View Limits -->
+<div class="modal fade" id="historyLimitUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <app-limit-history [setUser]="UserSelected" (goBack)="closeModalHistory($event)"></app-limit-history>
+</div>

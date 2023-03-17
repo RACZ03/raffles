@@ -1,8 +1,11 @@
+import { NgxMaskModule } from 'ngx-mask';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BusinessProfileComponent } from './business-profile.component';
 import { RouterModule } from '@angular/router';
 import { BusinessProfileRoutingModule } from './business-profile-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,7 +16,10 @@ import { BusinessProfileRoutingModule } from './business-profile-routing.module'
   imports: [
     CommonModule,
     RouterModule,
-    BusinessProfileRoutingModule
+    BusinessProfileRoutingModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    NgxMaskModule
   ]
 })
 export class BusinessProfileModule { }
