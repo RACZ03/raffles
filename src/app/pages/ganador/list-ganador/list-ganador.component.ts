@@ -119,7 +119,7 @@ export class ListGanadorComponent implements OnInit {
           'Utilidad':item?.utilidad 
         }
       });
-      this.exportSvc.exportToExcel(json, 'negocios');
+      this.exportSvc.exportToExcel(json, 'Numeros Ganadores');
     }
   
     exportToPDF() {
@@ -134,7 +134,7 @@ export class ListGanadorComponent implements OnInit {
           'Utilidad':item?.utilidad 
         }
       });
-      this.exportSvc.exportPdf(json, 'negocios');
+      this.exportSvc.exportPdf(json, 'Numeos Ganadores');
     }
 
 }
