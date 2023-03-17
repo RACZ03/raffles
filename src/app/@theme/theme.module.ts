@@ -1,3 +1,4 @@
+
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToggleTableDirective } from './directives/toggle-table.directive';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrokenImagenDirective } from './directives/broken-imagen.directive';
 
 const COMPONENTS = [
   NavbarComponent,
@@ -23,7 +25,8 @@ const COMPONENTS = [
 ];
 
 const DIRECTIVES = [
-  ToggleTableDirective
+  ToggleTableDirective,
+  BrokenImagenDirective,
 ];
 
 @NgModule({

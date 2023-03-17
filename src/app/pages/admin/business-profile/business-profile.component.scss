@@ -1,0 +1,34 @@
+
+.img-selected {
+  margin: auto;
+  width: 55%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.logo {
+  margin: auto;
+  width: 55%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: -8px;
+  right: 15px;
+  padding: 3px  5px!important;
+}

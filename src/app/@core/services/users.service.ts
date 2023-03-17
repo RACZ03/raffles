@@ -15,6 +15,10 @@ export class UsersService {
     return JSON.parse(localStorage.getItem('roles') || '') || [];
   }
 
+  getBusinessByAuth(): any {
+    return JSON.parse(localStorage.getItem('business') || '') || [];
+  }
+
   verifyRole(found: string, b: boolean = true): boolean|string {
     let roles = this.getRolesByAuth();
     let role = roles.find((item: any) => item.nombre === found);
@@ -26,9 +30,16 @@ export class UsersService {
   }
 
   getBusinessIdAndRoleCodeByAuth(): any {
-    let roles = this.getRolesByAuth();
-    let id = roles[0]?.idNegocio || 0;
-    let code = roles[0]?.codigo || '';
+    let rolesStorage = this.getRolesByAuth();
+    let business = this.getBusinessByAuth();
+    let id = business?.idNegocio || 0;
+    let role_name = rolesStorage[0]?.nombre || '';
+    let code = '';
+
+    let role = rolesList.find((item: any) => item.ref === role_name);
+    if ( role !== undefined ) {
+      code = role?.code || '';
+    }
 
     return { id, code };
   }
@@ -38,7 +49,7 @@ export class UsersService {
   }
 
   getUsersByBusinessAndRole(id: number, role: string): Promise<any> {
-    return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol`, { idNegocio: id, rol: role });
+    return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ id }/${ role }`);
   }
 
   findById(id: number): Promise<any> {

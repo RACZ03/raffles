@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { ConnectionService } from '../utils/connection.service';
 
 @Injectable({
@@ -34,6 +33,10 @@ export class WinnerService {
 
   verifywinner(fecha: any,sorteo:any): Promise<any> {
     return this.connectionSvc.send('get', `ganador/verificar/fecha/${fecha}/sorteo/${sorteo}`);
+  }
+
+  deleteWinner(id: number): Promise<any> {
+    return this.connectionSvc.send('delete', `ganador/eliminar/${id}`);
   }
 
 

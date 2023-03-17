@@ -30,6 +30,11 @@ import { LimitHistoryComponent } from './limit-history/limit-history.component';
     ReactiveFormsModule,
     NgxMaskModule,
     NgbModule
+  ],
+  exports: [
+    AddUserComponent,
+    ChangePasswordComponent,
+    LimitHistoryComponent
   ]
 })
 export class UsersModule { }

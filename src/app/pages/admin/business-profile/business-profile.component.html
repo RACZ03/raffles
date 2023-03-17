@@ -1,0 +1,105 @@
+<!-- always keep -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+    </div>
+  </div>
+</div>
+
+<!-- Contents -->
+<div class="container-fluid mt--9">
+  <div class="row">
+    <div class="col-12 mb-5 mb-xl-0">
+      <div class="card shadow" id="card-container-tables">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+                <!-- Switch background -->
+                <label class="switch float-right">
+                    <input type="checkbox" id="toggleTable" appToggleTable>
+                    <span class="slider round"></span>
+                </label>
+                <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.BUSINESS.TITLE' | translate }}</h4>
+            </div>
+            <div></div>
+          </div>
+        </div>
+        <!-- form -->
+        <div class="row ml-2 mr-2">
+          <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12"></div>
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12">
+              <div class="mt-4">
+
+              </div>
+              <form [formGroup]="businessForm" (submit)="onSubmit()">
+                  <!-- Name -->
+                  <div class="row">
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                      <div class="form-group mt-5">
+                        <label for="" class="form-label">{{ 'MODULES.BUSINESS.NAME' | translate }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="nombre"/>
+                        <span *ngIf="validInput('nombre')" class="text-danger mt-1">
+                          {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                        </span>
+                      </div>
+                    </div>
+                    <!-- IMAGE -->
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12" style="height: 140px !important;">
+                      <div class="img-selected" (click)="onSelectedFile()" *ngIf="logo == ''">
+                        <i class="bi bi-image"></i>
+                        <input type="file" id="file" class="d-none" (change)="onUploadImage($event)">
+                      </div>
+
+                      <img *ngIf="logo != ''" [src]="logo" alt="logo.png" class="logo">
+                      <!-- btn remove -->
+                      <button type="button" class="btn btn-sm text-red btn-remove-image" *ngIf="logo != ''" (click)="onRemoveImage()">
+                        <i class="bi bi-x-circle"></i>
+                      </button>
+                      <!-- progress bar -->
+                      <div  style="width: 60%; margin: auto; margin-top: 3px;">
+                        <div class="progress" style="height: 8px;">
+                          <div class="progress-bar progress-bar-striperd bg-success" role="progressbar" [style.width]="(updloadSvc.uploadPercent | async) + '%'">
+                          </div>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+                  <!-- Phone and Email -->
+                  <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label for="" class="form-label">{{ 'MODULES.BUSINESS.PHONE' | translate }} <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" formControlName="telefono"  [mask]="'0000 0000'" placeholder="0000 0000"
+                                      onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"/>
+                              <span *ngIf="validInput('telefono')" class="text-danger mt-1">
+                                  {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label for="" class="form-label">{{ 'MODULES.BUSINESS.EMAIL' | translate }}</label>
+                              <input type="email" class="form-control" formControlName="email" placeholder="mail@mail.com"/>
+                          </div>
+                          <span *ngIf="validEmail('email')" class="text-danger mt-1">
+                              {{ 'VALIDATIONS.INVALID_EMAIL' | translate }}
+                          </span>
+                      </div>
+                  </div>
+                  <!-- Address -->
+                  <div class="form-group">
+                      <label for="" class="form-label">{{ 'MODULES.BUSINESS.ADDRESS' | translate }}</label>
+                      <textarea class="form-control form-control-textarea" name="direccion" id="direccion" rows="5" formControlName="direccion"></textarea>
+                  </div>
+                  <div class="text-center mb-5">
+                      <button class="btn btn-sm btn-primary" [disabled]="businessForm.invalid">
+                          {{ 'BUTTONS.SAVE' | translate }}
+                      </button>
+                  </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,11 @@ export class BusinessService {
   constructor(
     private connectionSvc: ConnectionService
   ) { }
-  
+
+  getById(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `negocio/${ id }`);
+  }
+
   getBusiness(): Promise<any> {
     return this.connectionSvc.send('get', `negocio`);
   }
@@ -27,5 +31,5 @@ export class BusinessService {
   delete(id: number): Promise<any> {
     return this.connectionSvc.send('delete', `negocio/eliminar/${ id }`);
   }
-  
+
 }

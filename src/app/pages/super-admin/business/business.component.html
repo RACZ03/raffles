@@ -51,21 +51,26 @@
                             </th>
                           </tr>
                           <tr>
-                            <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)"/></th>
-                            <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por email" name="search-email" (keyup)="searchData($event)"/></th>
-                            <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por teléfono" name="search-phone" (keyup)="searchData($event)"/></th>
-                            <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por dirección" name="search-address" (keyup)="searchData($event)"/></th>
-                            <th>
+                            <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)"/></th>
+                            <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por email" name="search-email" (keyup)="searchData($event)"/></th>
+                            <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por teléfono" name="search-phone" (keyup)="searchData($event)"/></th>
+                            <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por dirección" name="search-address" (keyup)="searchData($event)"/></th>
+                            <th scope="col">
                             </th>
                           </tr>
                         </thead>
                         <tbody id="tbody-table">
                           <tr *ngFor="let item of data">
-                              <td>{{ item?.nombre }}</td>
-                              <td>{{ item?.email }}</td>
-                              <td>{{ item?.telefono }}</td>
-                              <td>{{ item?.direccion }}</td>
-                              <td class="text-right">
+                              <td class="align-middle">
+                                <span class="avatar avatar-sm rounded-circle" style="align-items: normal !important;">
+                                  <img alt="business" [src]="item?.logo" appBrokenImagen>
+                                </span>
+                                <span class="business_name">{{ item?.nombre }}</span>
+                              </td>
+                              <td class="align-middle">{{ item?.email }}</td>
+                              <td class="align-middle">{{ item?.telefono }}</td>
+                              <td class="align-middle">{{ item?.direccion }}</td>
+                              <td class="text-right align-middle">
                                 <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar"  (click)="onEdit(item)">
                                   <i class="bi bi-pencil-square"></i>
                                 </button>
@@ -86,4 +91,3 @@
         </div>
     </div>
 </div>
-  
