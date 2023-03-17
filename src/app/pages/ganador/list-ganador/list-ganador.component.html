@@ -30,10 +30,10 @@
                       <button class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
                     </div>
                     <div class="col-6 text-right">
-                      <button class="btn btn-sm btn-warning" title="Exporta a PDF" >
+                      <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
                         <i class="bi bi-filetype-pdf"></i>
                       </button>
-                      <button class="btn btn-sm btn-warning" title="Exporta a Excel" >
+                      <button class="btn btn-sm btn-warning" title="Exporta a Excel" (click)="exportToExcel()">
                         <i class="bi bi-file-earmark-excel"></i>
                       </button>
                     </div>
@@ -54,13 +54,13 @@
                             </th>
                           </tr>
                           <tr>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-winner" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sale" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-investment" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-award" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utility" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date" /></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-lottery" /></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-winner" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sale" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-investment" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-award" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utility" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-lottery" (keyup)="searchData($event)"/></th>
                             <th scope="col" class="text-center">
                             </th>
                           </tr>
@@ -75,7 +75,7 @@
                               <td class="text-center">{{ item?.premioTotal }}</td>
                               <td class="text-center">{{ item?.utilidad }}</td>
                               <td class="text-right">
-                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar"  >
+                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="deleteWinner(item.id)" >
                                   <i class="bi bi-x-circle"></i>
                                 </button>
                               </td>
