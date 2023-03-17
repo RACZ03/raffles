@@ -24,7 +24,9 @@ export class ListGanadorComponent implements OnInit {
 
   constructor(
     private dataTableSvc: DataTableServiceService,
-    private winnerSvc: WinnerService
+    private winnerSvc: WinnerService,
+    public alertSvc: AlertService,
+    private exportSvc: ExporterDataService
   ) { 
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
