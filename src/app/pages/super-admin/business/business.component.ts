@@ -20,6 +20,7 @@ export class BusinessComponent implements OnInit, OnDestroy {
   public data: any[] = [];
   public showForm: boolean = false;
   public businessSelected: any = null;
+  public search: string = '';
 
   constructor(
     private businessService: BusinessService,
@@ -87,9 +88,9 @@ export class BusinessComponent implements OnInit, OnDestroy {
 
   /* Search */
   searchData(e: any) {
-    let value = e.target.value;
+    this.search = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.search(value).draw();
+      dtInstance.search(this.search).draw();
     });
   }
 
@@ -114,28 +115,61 @@ export class BusinessComponent implements OnInit, OnDestroy {
   }
 
   /* Export to Excel */
-  exportToExcel() {
-    let json = this.data.map((item: any) => {
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'nombre': item[0],
+            'email': item[1],
+            'telefono': item[2],
+            'direccion': item[3],
+          }
+        });
+        resolve(filteredData);
+      });
+    });
+  }
+
+  async exportToExcel() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
       return {
         'Nombre': item.nombre,
-        'email': item.email,
-        'telefono': item.telefono,
-        'direccion': item.direccion
+        'Email': item.email,
+        'Teléfono': item.telefono,
+        'Dirección': item.direccion,
       }
     });
     this.exportSvc.exportToExcel(json, 'negocios');
   }
 
-  exportToPDF() {
-    let json = this.data.map((item: any) => {
+  async exportToPDF() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
       return {
         'Nombre': item.nombre,
-        'email': item.email,
-        'telefono': item.telefono,
-        'direccion': item.direccion
+        'Email': item.email,
+        'Teléfono': item.telefono,
+        'Dirección': item.direccion,
       }
     });
-    this.exportSvc.exportPdf(json, 'negocios');
+
+    this.exportSvc.exportPdf(json, 'negocios', 4, false);
   }
 
 }
