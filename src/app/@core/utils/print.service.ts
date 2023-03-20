@@ -27,20 +27,6 @@ export class PrintService {
     private storage: AngularFireStorage
   ) {}
 
-  ticketData = {
-    // logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB6q5FTeQY-de_wXL7jZB6p6hJYX_wG1AR3CxV0tjM17ymuuHCgj42C5FsdPIFNxDCVjs&usqp=CAU',
-    number: '123456',
-    date: '08/03/2023',
-    shift: 'mañana',
-    tableData: [
-      { number: 1, amount: 100, prize: 200 },
-      { number: 2, amount: 150, prize: 300 },
-      { number: 3, amount: 200, prize: 400 },
-    ],
-    total: 450,
-    seller: 'John Doe',
-  };
-
   async printTicket(ticket: any) {
     console.log(ticket);
     let {

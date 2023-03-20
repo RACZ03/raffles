@@ -1,7 +1,10 @@
+import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
+
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { RouteService } from 'src/app/@core/services/route.service';
+import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 
@@ -19,22 +22,31 @@ export class RouteComponent implements OnInit, OnDestroy {
   public data: any[] = [];
   public showFormRoute: boolean = false;
   public RouteSelected: any = null;
+  public isAdmin: boolean|string = false;
+  public search: string = '';
 
   constructor(
     private routeServ: RouteService,
     private alertSvc: AlertService,
-    private dataTableSvc: DataTableServiceService
+    private dataTableSvc: DataTableServiceService,
+    private usersSvc: UsersService,
+    private exportSvc: ExporterDataService
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
     this.loadData();
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async loadData() {
-    let resp = await this.routeServ.getRoute();
+    this.data = [];
+    let resp: any;
+    if ( this.isAdmin )
+      resp = await this.routeServ.getRoute();
+    else
+      resp = await this.routeServ.getRoutesByIdBusiness(this.usersSvc.getBusinessByAuth()?.idNegocio);
+
     // console.log(resp)
     if ( resp !== undefined ) {
       let { status, data } = resp;
@@ -86,9 +98,9 @@ export class RouteComponent implements OnInit, OnDestroy {
 
    /* Search */
    searchData(e: any) {
-    let value = e.target.value;
+    this.search = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.search(value).draw();
+      dtInstance.search(this.search).draw();
     });
   }
 
@@ -115,5 +127,56 @@ export class RouteComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
+
+  /* Export to Excel & PDF */
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'nombre': item[0],
+            'descripcion': item[1],
+          }
+        });
+        resolve(filteredData);
+      });
+    });
+  }
+
+  async exportToExcel() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
+      return {
+        'Nombre': item.nombre,
+        'Descripción': item.descripcion,
+      }
+    });
+    this.exportSvc.exportToExcel(json, 'rutas');
+  }
+
+  async exportToPDF() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
+      return {
+        'Nombre': item.nombre,
+        'Descripción': item.descripcion,
+      }
+    });
+    this.exportSvc.exportPdf(json, 'rutas', 2, false);
+  }
 
 }

@@ -28,6 +28,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public modalChangePassword: any;
   public modalHistory: any;
+  public search: string = '';
 
   constructor(
     private usersSvc: UsersService,
@@ -138,9 +139,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   searchData(e: any) {
     if ( !this.dtElement ) return;
 
-    let value = e.target.value;
+    this.search = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.search(value).draw();
+      dtInstance.search(this.search).draw();
     });
   }
 
@@ -165,27 +166,69 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   /* Export to Excel */
-  exportToExcel() {
-    let json = this.data.map((item: any) => {
-      return {
-        'Nombre': item.nombre,
-        'email': item.email,
-        'telefono': item.telefono,
-        'direccion': item.direccion
-      }
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'nombre': item[0],
+            'email': item[1],
+            'telefono': item[2],
+            'negocio': item[3],
+            'ruta': item[4],
+            'roles': '',
+          }
+        });
+        resolve(filteredData);
+      });
     });
-    this.exportSvc.exportToExcel(json, 'negocios');
   }
 
-  exportToPDF() {
-    let json = this.data.map((item: any) => {
+  async exportToExcel() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
       return {
         'Nombre': item.nombre,
-        'email': item.email,
-        'telefono': item.telefono,
-        'direccion': item.direccion
+        'Email': item.email,
+        'Teléfono': item.telefono,
+        'Negocio': (this.search === '') ? item.negocioAndRuta.negocio : item.negocio,
+        'Ruta': (this.search === '') ? item.negocioAndRuta.ruta : item.ruta,
+        'Roles': (this.search === '') ? item.roles.map((item: any) => item.nombre).join(', ') :
+                                        this.data.find((i: any) => i.telefono === item.telefono).roles.map((item: any) => item.nombre).join(', '),
       }
     });
-    this.exportSvc.exportPdf(json, 'negocios');
+    this.exportSvc.exportToExcel(json, 'usuarios');
   }
+
+  async exportToPDF() {
+    let data: any = [];
+    if ( this.search === '' ) {
+      data = this.data;
+    } else {
+      // obtener los registros filtrados en el datatable
+      data = await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
+      return {
+        'Nombre': item.nombre,
+        'Email': item.email,
+        'Teléfono': item.telefono,
+        'Negocio': (this.search === '') ? item.negocioAndRuta.negocio : item.negocio,
+        'Ruta': (this.search === '') ? item.negocioAndRuta.ruta : item.ruta,
+        'Roles': (this.search === '') ? item.roles.map((item: any) => item.nombre).join(', ') :
+                                        this.data.find((i: any) => i.telefono === item.telefono).roles.map((item: any) => item.nombre).join(', '),
+      }
+    });
+
+    this.exportSvc.exportPdf(json, 'usuarios', 6, true);
+  }
+
 }
