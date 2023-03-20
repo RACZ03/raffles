@@ -42,24 +42,24 @@
                     <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                       <thead class="thead-light" id="thead-table">
                         <tr>
-                          <th scope="col">Nombre</th>
-                          <th scope="col">Descripcion</th>
-                          <th scope="col aling-center">
+                          <th class="text-center" scope="col">Nombre</th>
+                          <th class="text-center" scope="col">Descripcion</th>
+                          <th class="text-center" scope="col aling-center">
                             Acciones
                           </th>
                         </tr>
                         <tr>
-                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)" /></th>
-                          <th><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por descripcion" name="search-descripcion" (keyup)="searchData($event)" /></th>
-                          <th>
+                          <th class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)" /></th>
+                          <th class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por descripcion" name="search-descripcion" (keyup)="searchData($event)" /></th>
+                          <th class="text-center">
                           </th>
                         </tr>
                       </thead>
                       <tbody id="tbody-table">
                         <tr *ngFor="let item of data">
-                            <td>{{ item?.nombre }}</td>
-                            <td>{{ item?.descripcion }}</td>
-                            <td class="text-right">
+                            <td class="text-center" >{{ item?.nombre }}</td>
+                            <td class="text-center">{{ item?.descripcion }}</td>
+                            <td class="text-center" class="text-right">
                               <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEditRoute(item)">
                                 <i class="bi bi-pencil-square"></i>
                               </button>

@@ -25,7 +25,7 @@ export class ListGanadorComponent implements OnInit {
   constructor(
     private dataTableSvc: DataTableServiceService,
     private winnerSvc: WinnerService,
-    private alertSvc: AlertService,
+    public alertSvc: AlertService,
     private exportSvc: ExporterDataService
   ) { 
     this.dtOptions = this.dataTableSvc.dtOptions || {};
@@ -38,12 +38,16 @@ export class ListGanadorComponent implements OnInit {
   async loadData() {
     this.data = [];
     let resp = await this.winnerSvc.getwinners();
+    if(resp != undefined){
      let { data,status,message,comment } = resp;
      if(status==200){
         this.data = data;
       }else{
         this.alertSvc.showAlert(4,comment,message);
       }
+    }else{
+      this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
+    }
 
 
     this.dtTrigger.next(this.dtOptions);

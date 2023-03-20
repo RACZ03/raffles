@@ -8,8 +8,13 @@ import { Component} from '@angular/core';
 export class AwarCatalogComponent  {
 
   public title = '';
+  public view = false;
   constructor() {
     this.title = 'Catalogo de Premios';
+  }
+
+  especialView(e : any){
+    this.view = e;
   }
  
 }
