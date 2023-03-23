@@ -26,11 +26,11 @@
                           <tr>
                             <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder" 
-                              placeholder="Buscar por monto" name="search-monto"/>
+                              placeholder="Buscar por monto" name="search-monto" (keyup)="searchData($event)"/>
                             </th>
                             <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder" 
-                              placeholder="Buscar por premio" name="search-premio" />
+                              placeholder="Buscar por premio" name="search-premio" (keyup)="searchData($event)"/>
                             </th>
                             <th class="text-center" scope="col"></th>
                           </tr>

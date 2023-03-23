@@ -25,6 +25,7 @@ export class EspecialComponent implements OnInit {
 
   public dataA: any[] = [];
   public showFormAward: boolean = false;
+  public search: string = '';
 
 
   constructor(
@@ -97,27 +98,60 @@ export class EspecialComponent implements OnInit {
       this.dtTrigger.next(this.dtOptions);
   }
 
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
+
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'monto': item[0],
+            'premio': item[1],
+          }
+        });
+        resolve(filteredData);
+      });
+    });
+  }
+
    /* Export to Excel */
-   exportToExcelEspacial() {
-    let json = this.dataA.map((item: any) => {
+  async exportToExcelEspacial() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.dataA;
+    }else{
+      data= await this.getFilteredData();
+    }
+    let json = data.map((item: any) => {
       return {
         'Monto': item.monto,
-        'Premio': item.premio,
-        'Especial': item.especial ? 'Si' : 'No',
+        'Premio': item.premio
       }
     });
     this.exportSvc.exportToExcel(json, 'catalogo de premios especiales');
   }
 
-  exportToPDFEspecial() {
-    let json = this.dataA.map((item: any) => {
+
+ async exportToPDFEspecial() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.dataA;
+    }else{
+      data= await this.getFilteredData();
+    }
+
+    let json = data.map((item: any) => {
       return {
         'Monto': item.monto,
         'Premio': item.premio,
-        'Especial': item.especial ? 'Si' : 'No',
       }
     });
-    this.exportSvc.exportPdf(json, 'Catalogo de premios especiales');
+    this.exportSvc.exportPdf(json, 'Catalogo de premios especiales',2,false);
   }
 
 

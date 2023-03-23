@@ -28,17 +28,17 @@
                           <tr>
                             <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder"
-                              placeholder="Buscar por monto" name="search-monto"  />
+                              placeholder="Buscar por monto" name="search-monto" (keyup)="searchData($event)" />
                             </th>
                             <th class="text-center" scope="col">
                               <input type="text" class="form-control form-control-placeholder"
-                              placeholder="Buscar por premio" name="search-premio" />
+                              placeholder="Buscar por premio" name="search-premio" (keyup)="searchData($event)"/>
                             </th>
                             <th class="text-center" scope="col"></th>
                           </tr>
                         </thead>
                         <tbody id="tbody-table">
-                          <tr *ngFor="let item of dataA">
+                          <tr *ngFor="let item of data">
                               <td class="text-center">{{ item?.monto }}</td>
                               <td class="text-center">{{ item?.premio }}</td>
                               <td  class="text-right">

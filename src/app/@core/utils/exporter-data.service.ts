@@ -5,7 +5,6 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
-import * as moment from 'moment';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { formatDate } from '@angular/common';
 

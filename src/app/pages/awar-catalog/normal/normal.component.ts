@@ -24,8 +24,9 @@ export class NormalComponent implements  OnDestroy {
   dtTrigger: Subject<any> = new Subject<any>();
   public modalAddAwardNormal: any;
   public dataNormal: any[] = [];
-  public dataA: any[] = [];
+  public data: any[] = [];
   public showFormAward: boolean = false;
+  public search: string = '';
 
 
 
@@ -81,7 +82,7 @@ export class NormalComponent implements  OnDestroy {
 
       let resp = await this.awardServ.getAwardCatalog();
       this.dataNormal = [];
-      this.dataA=[];
+      this.data=[];
       if ( resp !== undefined ) {
         let { status, data } = resp;;
         if ( status && status == 200) {
@@ -90,7 +91,7 @@ export class NormalComponent implements  OnDestroy {
               this.dataNormal.push(item);
             }
           }       
-          this.dataA = this.dataNormal;
+          this.data = this.dataNormal;
 
         } else {
           this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
@@ -103,10 +104,9 @@ export class NormalComponent implements  OnDestroy {
 
   /* Search */
   searchData(e: any) {
-    if ( !this.dtElement ) return;
-    let value = e.target.value;
+    this.search = e.target.value;
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.search(value).draw();
+      dtInstance.search(this.search).draw();
     });
   }
 
@@ -131,28 +131,55 @@ export class NormalComponent implements  OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
+    /* Export to Excel */
+    getFilteredData(): Promise<any[]> {
+      return new Promise((resolve, reject) => {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+            return {
+              'monto': item[0],
+              'premio': item[1],
+            }
+          });
+          resolve(filteredData);
+        });
+      });
+    }
+
    /* Export to Excel */
-   exportToExcelNormal() {
-    let json = this.dataA.map((item: any) => {
+  async exportToExcelNormal() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data= await this.getFilteredData();
+    }
+    let json = data.map((item: any) => {
       return {
         'Monto': item.monto,
         'Premio': item.premio,
-        'Especial': item.especial ? 'Si' : 'No',
       }
     });
  
-    this.exportSvc.exportToExcel(json, 'cataglo de premios');
+    this.exportSvc.exportToExcel(json, 'cataglo de premios normal');
   }
 
-  exportToPDFNormal() {
-    let json = this.dataA.map((item: any) => {
-      return {
-        'Monto': item.monto,
-        'Premio': item.premio,
-        'Especial': item.especial ? 'Si' : 'No',
-      }
-    });
-    this.exportSvc.exportPdf(json, 'catalogo de premios');
+   async exportToPDFNormal() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data= await this.getFilteredData();
+    }
+     let json = data.map((item: any) => {
+       return {
+         'Monto': item.monto,
+         'Premio': item.premio,
+       }
+     });
+     this.exportSvc.exportPdf(json, 'catalogo de premios normal',2, false);
+   
+    
   }
 
 
