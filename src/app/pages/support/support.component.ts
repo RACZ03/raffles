@@ -23,9 +23,11 @@ export class SupportComponent implements OnInit {
     })
       .then(device => {
         console.log('Found device:', device);
+        this.alertSvc.showAlert(1, 'Found device', device.name);
         this.device = device;
       })
       .catch(error => {
+        this.alertSvc.showAlert(4, 'Error discovering device', error);
         console.error('Error discovering device:', error);
       });
   }
