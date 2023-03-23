@@ -19,6 +19,7 @@ export class ListGanadorComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   public showFormAddWinner: boolean = false;
+  public search: string = '';
 
   public data: any[] = [];
 
@@ -105,17 +106,42 @@ export class ListGanadorComponent implements OnInit {
 
     /* Search */
     searchData(e: any) {
-      let value = e.target.value;
+      this.search = e.target.value;
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.search(value).draw();
+        dtInstance.search(this.search).draw();
       });
     }
 
-    exportToExcel() {
-      let json = this.data.map((item: any) => {
+    getFilteredData(): Promise<any[]> {
+      return new Promise((resolve, reject) => {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+            return {
+              'fecha': item[0],
+              'sorteo': item[1],
+              'ventasTotales': item[2],
+              'numeroGanador': item[3],
+              'inversionAlGanador': item[4],
+              'premioTotal': item[5],
+              'utilidad': item[6]
+            }
+          });
+          resolve(filteredData);
+        });
+      });
+    }
+
+  async  exportToExcel() {
+      let data : any = [];
+      if(this.search === ''){
+        data = this.data;
+      }else{
+        data= await this.getFilteredData();
+      }
+      let json = data.map((item: any) => {
         return {
-          'Fecha': moment(item?.fecha).format('DD/MM/YYYY'),
-          'Sorteo':item?.sorteo?.nombre,
+          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+          'Sorteo':item?.sorteo?.nombre == undefined ? item?.sorteo : item?.sorteo?.nombre,
           'Ventas Totales':item?.ventasTotales,
           'Numero Ganador':item?.numeroGanador,
           'Inversion al Ganador':item?.inversionAlGanador,
@@ -126,11 +152,19 @@ export class ListGanadorComponent implements OnInit {
       this.exportSvc.exportToExcel(json, 'Numeros Ganadores');
     }
   
-    exportToPDF() {
-      let json = this.data.map((item: any) => {
+   async exportToPDF() {
+      let data : any = [];
+      if(this.search === ''){
+        data = this.data;
+      }else{
+        data = await this.getFilteredData();
+      }
+      console.log(data);
+      let json = data.map((item: any) => {
+
         return {
-          'Fecha': moment(item?.fecha).format('DD/MM/YYYY'),
-          'Sorteo':item?.sorteo?.nombre,
+          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+          'Sorteo':item?.sorteo?.nombre == undefined ? item?.sorteo : item?.sorteo?.nombre,
           'Ventas Totales':item?.ventasTotales,
           'Numero Ganador':item?.numeroGanador,
           'Inversion al Ganador':item?.inversionAlGanador,
@@ -138,7 +172,7 @@ export class ListGanadorComponent implements OnInit {
           'Utilidad':item?.utilidad 
         }
       });
-      this.exportSvc.exportPdf(json, 'Numeos Ganadores');
+      this.exportSvc.exportPdf(json, 'Numeos Ganadores',7,true);
     }
 
 }
