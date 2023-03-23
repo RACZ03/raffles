@@ -42,6 +42,7 @@
                       <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                         <thead class="thead-light" id="thead-table">
                           <tr>
+                            <th scope="col"></th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Email</th>
                             <th scope="col">Teléfono</th>
@@ -51,6 +52,7 @@
                             </th>
                           </tr>
                           <tr>
+                            <th scope="col"></th>
                             <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por nombre" name="search-name" (keyup)="searchData($event)"/></th>
                             <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por email" name="search-email" (keyup)="searchData($event)"/></th>
                             <th scope="col"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar por teléfono" name="search-phone" (keyup)="searchData($event)"/></th>
@@ -65,7 +67,9 @@
                                 <span class="avatar avatar-sm rounded-circle" style="align-items: normal !important;">
                                   <img alt="business" [src]="item?.logo" appBrokenImagen>
                                 </span>
-                                <span class="business_name">{{ item?.nombre }}</span>
+                              </td>
+                              <td class="align-middle">
+                                {{ item?.nombre }}
                               </td>
                               <td class="align-middle">{{ item?.email }}</td>
                               <td class="align-middle">{{ item?.telefono }}</td>

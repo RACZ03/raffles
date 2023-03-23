@@ -107,6 +107,9 @@ export class BusinessProfileComponent implements OnInit {
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
       this.getBusiness(this.userSvc.getBusinessByAuth()?.idNegocio);
+      // update business.logo in localstorage
+      localStorage.getItem('business')?.replace(this.logo, 'logo');
+      
     } else {
       this.alertSvc.showAlert(4, 'Error', 'No se pudo guardar el registro');
     }

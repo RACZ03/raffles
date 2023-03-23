@@ -33,7 +33,7 @@ export class BusinessComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    console.log('ngOnInit')
   }
 
   async loadData() {
@@ -120,10 +120,10 @@ export class BusinessComponent implements OnInit, OnDestroy {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
           return {
-            'nombre': item[0],
-            'email': item[1],
-            'telefono': item[2],
-            'direccion': item[3],
+            'nombre': item[1],
+            'email': item[2],
+            'telefono': item[3],
+            'direccion': item[4],
           }
         });
         resolve(filteredData);
