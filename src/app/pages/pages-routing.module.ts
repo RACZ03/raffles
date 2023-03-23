@@ -13,6 +13,12 @@ const routes: Routes = [
         path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
         // canLoad: [ AdminGuard ]
       },
+      {
+        path: 'user-profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),
+      },
+      {
+        path: 'support', loadChildren: () => import('./support/support.module').then(m => m.SupportModule),
+      },
       // SUPER ADMIN
       {
         path: 'business', loadChildren: () => import('./super-admin/business/business.module').then(m => m.BusinessModule),

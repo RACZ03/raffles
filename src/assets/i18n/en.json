@@ -85,8 +85,24 @@
             "EDIT": "Edit Winner",
             "DELETE": "Delete Winner",
             "RUTA": "Route"
+        },
+        "SUPPORT": {
+            "TITLE": "Support"
+        },
+        "PROFILE": {
+            "TITLE": "Profile",
+            "EDIT": "Edit Profile",
+            "CHANGE-PASS": "Change Password",
+            "NAME": "Name",
+            "PHONE": "Phone Number",
+            "EMAIL": "Email",
+            "PASSWORD": "Password",
+            "PASSWORD-CONFIRM": "Confirm Password",
+            "BUSINESS": "Business",
+            "ROUTE": "Route",
+            "ROLE": "Role",
+            "LIMIT": "Limit"
         }
-
     },
     "BUTTONS": {
         "ADD": "Add",
