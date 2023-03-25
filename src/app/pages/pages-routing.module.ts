@@ -64,6 +64,9 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'report', loadChildren: () => import('./report/report.module').then(m => m.ReportModule),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
