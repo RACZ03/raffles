@@ -6,6 +6,8 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
+declare const navigator: any;
+
 @Component({
   selector: 'app-support',
   templateUrl: './support.component.html',
@@ -18,43 +20,58 @@ export class SupportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('support')
   }
 
   private device!: BluetoothDevice;
 
-  findPrinter(band = false) {
-    navigator.bluetooth.requestDevice({
-      filters: [{
-        // services: ['public-a001']
-        services: ['000018f0-0000-1000-8000-00805f9b34fb']
-      }]
-    })
-    .then((device: any) => {
-      console.log('Impresora encontrada:', device);
-      this.alertSvc.showAlert(1, 'Impresora encontrada', device.name);
-      this.device = device;
-      // set device in localstorage
-      localStorage.setItem('devicePrint', JSON.stringify(device));
-      return device.gatt.connect();
-    })
-    .then((server) => {
-      this.alertSvc.showAlert(1, 'Conectado', 'Conectado a la impresora');
-      // return server.getPrimaryService('public-a001');
-      return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-    })
-    .then((service) => {
-      // Aquí puedes utilizar los métodos y características del servicio para enviar datos de impresión a la impresora.
-      // Por ejemplo:
-      // service.getCharacteristic('public-a002').then((characteristic) => {
-      //   let data = new Uint8Array([0x41, 0x42, 0x43]); // Datos de impresión
-      //   characteristic.writeValue(data);
-      // });
-      this.print();
-    })
-    .catch((error) => {
-      console.error(error);
-      this.alertSvc.showAlert(4, 'Error', error);
-    });
+  async findPrinter(band = false) {
+    if ('permissions' in navigator && 'request' in navigator.permissions) {
+
+      try {
+        const result = await navigator.permissions.request({ name: 'bluetooth' });
+        if (result.state === 'granted') {
+          navigator.bluetooth.requestDevice({
+            filters: [{
+              // services: ['public-a001']
+              services: ['000018f0-0000-1000-8000-00805f9b34fb']
+            }]
+          })
+          .then((device: any) => {
+            console.log('Impresora encontrada:', device);
+            this.alertSvc.showAlert(1, 'Impresora encontrada', device.name);
+            this.device = device;
+            // set device in localstorage
+            localStorage.setItem('devicePrint', JSON.stringify(device));
+            return device.gatt.connect();
+          })
+          .then((server: any) => {
+            this.alertSvc.showAlert(1, 'Conectado', 'Conectado a la impresora');
+            // return server.getPrimaryService('public-a001');
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            // Aquí puedes utilizar los métodos y características del servicio para enviar datos de impresión a la impresora.
+            // Por ejemplo:
+            // service.getCharacteristic('public-a002').then((characteristic) => {
+            //   let data = new Uint8Array([0x41, 0x42, 0x43]); // Datos de impresión
+            //   characteristic.writeValue(data);
+            // });
+            this.print();
+          })
+          .catch((error: any) => {
+            console.error(error);
+            this.alertSvc.showAlert(4, 'Error', error);
+          });
+        } else {
+          console.log('Permiso denegado');
+        }
+      } catch (error) {
+        console.log('Error al conectar con el dispositivo', error);
+      }
+    } else {
+      console.log('El método "navigator.permissions.request" no está disponible en este navegador.');
+    }
   }
 
   async print() {
