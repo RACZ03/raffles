@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DataNumbers } from 'src/app/@core/data/numbers';
 import { AuthService } from 'src/app/@core/services/auth.service';
@@ -8,6 +9,8 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
 // import {  } from 'ngx-slick-carousel';
+
+declare const navigator: any;
 
 @Component({
   selector: 'app-sales',
@@ -54,6 +57,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // get business from localstorage
     this.business = JSON.parse(localStorage.getItem('business') || '{}');
     this.getCurrentRaflle();
+    console.log('SalesComponent');
   }
 
   async ngOnInit() {
@@ -251,9 +255,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // spinner
-    // this.spinnerSvc.show();
-
     // send data
     let resp = await this.salesSvc.save(this.listSales);
     if (resp) {
@@ -275,12 +276,196 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async getTickets(code: string) {
-    let resp = await this.salesSvc.getSaleByCode(code);
-    if (resp) {
-      let { status, data } = resp;
-      if (status && status == 200) {
-        this.printSvc.printTicket(data);
+
+    if ( navigator.bluetooth ) {
+      try {
+        if ( this.printSvc.device ) {
+          this.printSvc.device.gatt.connect().then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+
+              let resp = await this.salesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              if (status && status == 200) {
+                let { status, data } = resp;
+                let {
+                  codigo,
+                  vendedor,
+                  ruta,
+                  sorteo,
+                  cantidadNumeros,
+                  montoTotal,
+                  fecha,
+                  hora,
+                  ventaDetalles,
+                } = data;
+
+                // convertir nombre ruta a mayusculas
+                ruta.nombre = ruta?.nombre.toUpperCase();
+                // convertir nombre sorteo a mayusculas
+                sorteo.nombre = sorteo?.nombre.toUpperCase();
+                // convertir nombre vendedor a mayusculas
+                vendedor = vendedor?.nombre.toUpperCase();
+                // cambiar formato fecha a dd/mm/yyyy
+                fecha = moment(fecha).format('DD/MM/YYYY');
+                // cambiar formato hora a hh:mm a
+                hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+
+                let arrayPrint: string[] = [
+                  '        RECIBO ' + codigo,
+                  '   RUTA: ' + ruta?.nombre,
+                  '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                  '',
+                  '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+                ];
+                // ADD NUMBERS TO PRINT
+                ventaDetalles.forEach((element: any) => {
+                  arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+                });
+                arrayPrint.push('');
+                // ADD TOTAL TO PRINT
+                arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
+                arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+                arrayPrint.push('    ' + vendedor);
+                arrayPrint.push('');
+                arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+
+                for (const iterator of arrayPrint) {
+                  const element = iterator + '\n'; // Agregar un salto de línea al final
+                  const encoder = new TextEncoder();
+                  const data = encoder.encode(element);
+                  await characteristic.writeValue(data);
+                }
+              }
+            });
+          }).catch((error: any) => {
+            console.log('INFO:', error);
+            this.printSvc.device = null;
+            this.getTickets(code);
+          });
+        } else {
+          navigator.bluetooth.requestDevice({
+            filters: [{
+              services: ['000018f0-0000-1000-8000-00805f9b34fb']
+            }]
+          })
+          .then((device: any) => {
+            console.log('Impresora encontrada:', device);
+            // set device in localstorage
+            this.printSvc.device = device;
+            return device.gatt.connect();
+          })
+          .then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+
+              let resp = await this.salesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              let {
+                codigo,
+                vendedor,
+                ruta,
+                sorteo,
+                cantidadNumeros,
+                montoTotal,
+                fecha,
+                hora,
+                ventaDetalles,
+              } = data;
+
+              // convertir nombre ruta a mayusculas
+              ruta.nombre = ruta?.nombre.toUpperCase();
+              // convertir nombre sorteo a mayusculas
+              sorteo.nombre = sorteo?.nombre.toUpperCase();
+              // convertir nombre vendedor a mayusculas
+              vendedor = vendedor?.nombre.toUpperCase();
+              // cambiar formato fecha a dd/mm/yyyy
+              fecha = moment(fecha).format('DD/MM/YYYY');
+              // cambiar formato hora a hh:mm a
+              hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+
+              let arrayPrint: string[] = [
+                '        RECIBO ' + codigo,
+                '   RUTA: ' + ruta?.nombre,
+                '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                '',
+                '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+              ];
+              // ADD NUMBERS TO PRINT
+              ventaDetalles.forEach((element: any) => {
+                arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+              });
+              arrayPrint.push('');
+              // ADD TOTAL TO PRINT
+              arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
+              arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+              arrayPrint.push('    ' + vendedor);
+              arrayPrint.push('');
+              arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+
+              for (const iterator of arrayPrint) {
+                const element = iterator + '\n'; // Agregar un salto de línea al final
+                const encoder = new TextEncoder();
+                const data = encoder.encode(element);
+                await characteristic.writeValue(data);
+              }
+            });
+          })
+          .catch((error: any) => {
+            console.log('INFO:', error);
+            this.printSvc.device = null;
+            this.getTickets(code);
+          });
+        }
+      } catch (error) {
+        this.printSvc.device = null;
+        this.getTickets(code);
       }
+    } else {
+
+      let resp = await this.salesSvc.getSaleByCode(code);
+      if (resp) {
+        let { status, data } = resp;
+        if (status && status == 200) {
+          await this.printSvc.printTicket(data);
+        }
+      }
+    }
+  }
+
+  connectBluetooth() {
+    if ( navigator.bluetooth ) {
+      if (this.printSvc.device) {
+        this.printSvc.device = null;
+      } else {
+        // verificar permisos de bluetooth
+        navigator.bluetooth.requestDevice({
+          filters: [{
+            services: ['000018f0-0000-1000-8000-00805f9b34fb']
+          }]
+        })
+        .then((device: any) => {
+          // console.log('Impresora encontrada:', device);
+          // set device in localstorage
+          this.printSvc.device = device;
+          return device.gatt.connect();
+        })
+        .then((server: any) => {
+          this.alertSvc.showAlert(1, 'Success', 'Impresora conectada');
+          return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+        })
+        .catch((error: any) => {
+
+          this.printSvc.device = null;
+          this.alertSvc.showAlert(3, 'Info', 'No se pudo conectar con la impresora');
+        });
+      }
+    } else {
+      this.alertSvc.showAlert(3, 'Info', 'Su navegador no soporta esta funcionalidad');
     }
   }
 
