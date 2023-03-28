@@ -51,7 +51,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                   </div>
-                  <input class="form-control" type="text" name="email" autocomplete="new-email" 
+                  <input class="form-control" type="text" name="email" autocomplete="new-email"
                         formControlName="email" placeholder="{{ 'MODULES.LOGIN.EMAIL-P' | translate }}">
                 </div>
               </div>
@@ -65,7 +65,7 @@
                 </div>
               </div>
               <div class="custom-control custom-control-alternative custom-checkbox">
-                <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
+                <input class="custom-control-input" id="customCheckLogin" type="checkbox" (change)="rememberUser($event)">
                 <label class="custom-control-label" for=" customCheckLogin">
                   <span class="text-muted">{{ 'MODULES.LOGIN.REMEMBER' | translate }}</span>
                 </label>
@@ -87,4 +87,3 @@
       </div>
     </div>
   </div>
-  

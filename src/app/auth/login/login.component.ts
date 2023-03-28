@@ -38,17 +38,25 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.initForm();
+    let user = localStorage.getItem('remeberUser');
+    if (user) {
+      this.loginForm.get('email')?.setValue(user);
+      // check by id customCheckLogin
+      document.getElementById('customCheckLogin')?.setAttribute('checked', 'true');
+    } else {
+      document.getElementById('customCheckLogin')?.removeAttribute('checked');
+    }
   }
 
   initForm(): FormGroup {
     return this.fb.group({
-      email: ['86604980', {
+      email: ['', {
         validators: [
           Validators.required,
         ],
         updateOn: 'blur'
       }],
-      password: ['1234', [Validators.required, Validators.minLength(4) ]],
+      password: ['', [Validators.required, Validators.minLength(4) ]],
     });
   }
 
@@ -73,6 +81,15 @@ export class LoginComponent implements OnInit {
     // console.log(message)
     this.alertSvc.showAlert(1, '', message2);
     this.router.navigate(['/pages/dashboard']);
+  }
+
+  rememberUser(e: any) {
+    let status = e?.target?.checked;
+    if (status) {
+      localStorage.setItem('remeberUser', this.loginForm.get('email')?.value);
+    } else {
+      localStorage.removeItem('remeberUser');
+    }
   }
 
   /* SECTION VALIDATIONS */
