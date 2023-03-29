@@ -54,7 +54,9 @@ export class FreenumbertobisnessComponent implements OnInit {
  async loadDataBusiness() {
 
      let resp = await this.businessSvc.getBusiness();
-      this.BusinessData = resp.data;
+     if(resp == undefined) 
+     return;
+    this.BusinessData = resp?.data;
   }
 
  async onSubmit(){

@@ -55,6 +55,9 @@ export class FreenumbertorouteComponent implements OnInit {
  async loadDataSeller() {
   let dataIdentity = JSON.parse(localStorage.getItem('business') || '{}');
     let resp = await this.routeSvc.getRoutesByIdBusiness(dataIdentity.idNegocio);
+    if(resp == undefined) 
+    return;
+    
     this.RutasData = resp.data;
   }
 

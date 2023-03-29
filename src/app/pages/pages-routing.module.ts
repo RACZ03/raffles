@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
+import { DetalleVendedoresComponent } from './report/detalle-vendedores/detalle-vendedores.component';
 // import { AuthGuard } from '../shared/guards/auth.guard';
 
 const routes: Routes = [
@@ -62,6 +63,9 @@ const routes: Routes = [
       {
         path: 'winner', loadChildren: () => import('./ganador/ganador.module').then(m => m.GanadorModule),
         // canLoad: [ AdminGuard ]
+      },
+      {
+        path: 'report', loadChildren: () => import('./report/report.module').then(m => m.ReportModule),
       },
       {
         path: '',

@@ -19,6 +19,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
     { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
     { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
+    {path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
 ];
 
 export const ROUTES_ADMIN: RouteInfo[] = [
@@ -31,6 +32,7 @@ export const ROUTES_ADMIN: RouteInfo[] = [
     { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
     { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
     { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
+    {path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
 ];
 
 export const ROUTES_SALES: RouteInfo[] = [
