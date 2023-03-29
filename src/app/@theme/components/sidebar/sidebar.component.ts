@@ -67,6 +67,7 @@ export class SidebarComponent implements OnInit {
     } else {
       this.menuItems = ROUTES_SALES;
     }
+    console.log('hi');
   }
 
   ngOnInit() {
@@ -74,6 +75,10 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
    });
+  }
+
+  changeRoute() {
+    this.isCollapsed = true;
   }
 
   logout() {

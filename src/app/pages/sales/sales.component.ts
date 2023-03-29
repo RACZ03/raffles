@@ -222,6 +222,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
           // change focus to number
           this.inputNumber.nativeElement.focus();
           // change carousel
+          this.limit = 0;
+          this.amount_sold = 0;
           this.slickModal?.slickNext();
         }
       } else {

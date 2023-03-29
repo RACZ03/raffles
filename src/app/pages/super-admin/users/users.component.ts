@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       if ( status && status == 200) {
         let { content } = data;
         this.data = content;
-        console.log(this.data)
+        // console.log(this.data)
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }

@@ -33,7 +33,7 @@ export class BusinessComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit')
+    // console.log('ngOnInit')
   }
 
   async loadData() {

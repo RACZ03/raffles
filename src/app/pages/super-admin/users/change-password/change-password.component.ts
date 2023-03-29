@@ -34,7 +34,7 @@ export class ChangePasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.formChangePassword = this.initForm();
-    console.log('change-pass');
+    // console.log('change-pass');
   }
 
   async onSave() {

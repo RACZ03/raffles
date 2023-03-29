@@ -25,7 +25,7 @@ export class ExporterDataService {
   constructor(
     private storage: AngularFireStorage
   ) {
-    console.log('ExporterDataService');
+    // console.log('ExporterDataService');
   }
 
   getBusinessByAuth(): any {
