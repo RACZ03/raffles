@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       if ( status && status == 200) {
         let { content } = data;
         this.data = content;
-        console.log(this.data)
+        // console.log(this.data)
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
@@ -72,6 +72,26 @@ export class UsersComponent implements OnInit, OnDestroy {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
     this.dtTrigger.next(this.dtOptions);
+  }
+
+  async changeStatusPrinter(item: any) {
+    // modal confirm
+    let resp = await this.alertSvc.showConfirmLimit('Estado de Impresiòn', '¿Está seguro de cambiar el estado de impresión?', 'Cambiar');
+    if (!resp) return;
+
+
+    let resp2 = await this.usersSvc.changeStatusPrinter(item.id);
+    if ( resp2 ) {
+      let { status } = resp2;
+      if ( status && status == 200) {
+        this.alertSvc.showAlert(1, '', 'Se le han otorgado los permisos de impresión');
+      } else {
+        this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
+      }
+      this.renderer();
+    } else {
+      this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
+    }
   }
 
   // Actions

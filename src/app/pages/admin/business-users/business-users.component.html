@@ -74,6 +74,9 @@
                               </span>
                             </td>
                             <td class="text-right">
+                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)">
+                                <i class="bi bi-printer-fill"></i>
+                              </button>
                               <button class="btn btn-sm text-info" placement="left" ngbTooltip="Historial de Limites" (click)="onViewLimits(item)">
                                 <i class="bi bi-list-stars"></i>
                               </button>

@@ -98,7 +98,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <!-- ID Route -->
                     <div class="form-group">
-                        <label for="" class="form-label">{{ 'MODULES.USER.ROUTE' | translate }} <span class="text-danger">*</span></label>
+                        <label for="" class="form-label">{{ 'MODULES.USER.ROUTE' | translate }} <span class="text-danger" *ngIf="!isAdmin">*</span></label>
                         <!-- <input type="text" class="form-control" formControlName="idRuta"/> -->
                         <select class="form-control" formControlName="idRuta" style="padding: 6px 12px !important;">
                             <option value="0">Seleccione</option>

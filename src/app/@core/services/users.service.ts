@@ -11,6 +11,10 @@ export class UsersService {
     private connectionSvc: ConnectionService
   ) { }
 
+  changeStatusPrinter(id: number): Promise<any> {
+    return this.connectionSvc.send('put', `usuario/statusImprimeTicket/${ id }`);
+  }
+
   getRolesByAuth(): any {
     return JSON.parse(localStorage.getItem('roles') || '') || [];
   }
@@ -45,7 +49,7 @@ export class UsersService {
   }
 
   getUsers(): Promise<any> {
-    return this.connectionSvc.send('get', `usuario?page=1&size=10000`);
+    return this.connectionSvc.send('get', `usuario/all?page=1&size=10000`);
   }
 
   getUsersByBusinessAndRole(id: number, role: string): Promise<any> {
@@ -67,8 +71,8 @@ export class UsersService {
       telefono: data.telefono,
       email: data.email,
       password: data.password,
-      idNegocio: data.idNegocio,
-      idRuta: data.idRuta,
+      idNegocio: parseInt(data.idNegocio),
+      idRuta: (data.idRuta !==  0 ) ? data.idRuta : null,
     }
 
     let role: string = data.role;

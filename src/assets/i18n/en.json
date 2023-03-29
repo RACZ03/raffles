@@ -79,7 +79,7 @@
             "ROLE": "Role",
             "LIMIT": "Limit"
         },
-        "WINNER" :{ 
+        "WINNER" :{
             "TITLE": "Winners",
             "ADD": "Add Winner",
             "EDIT": "Edit Winner",
