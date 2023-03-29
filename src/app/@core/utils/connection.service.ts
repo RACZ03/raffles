@@ -83,6 +83,12 @@ export class ConnectionService {
         return error;
       }
 
+      if ( error?.error?.fatal_user ) {
+        // logout
+        this.logout();
+        return;
+      }
+
       let  { error_message, token_invalid } = error.error;
       // Refresh token
       if ( error_message != undefined ) {
@@ -99,13 +105,13 @@ export class ConnectionService {
     });
 
   }
-  
+
 
   private async refreshToken(): Promise<any>
   {
     let refresh_token = localStorage.getItem('refresh_token');
     if ( refresh_token && refresh_token != '' ) {
-    
+
       let promise = new Promise((resolve, reject) => {
 
         let headers2 = new HttpHeaders({
@@ -121,7 +127,7 @@ export class ConnectionService {
             } else {
               localStorage.removeItem('token');
               localStorage.removeItem('refresh_token');
-              
+
               localStorage.setItem('token', access_token);
               localStorage.setItem('refresh_token', refresh_token);
               resolve(true);
@@ -142,10 +148,24 @@ export class ConnectionService {
     }
   }
 
-  private logout() {
+  async getIdentity()
+  {
+    let value = localStorage.getItem('identity');
+    return (value != null) ? value : '';
+  }
+
+  async logout() {
+    let identity = JSON.parse(await this.getIdentity()) as any;
+    let { id, codigoLogout } = identity;
+    // Revisar este metodo
+    let resp = await this.send('put', `api/public/logout/cod/${ codigoLogout }/id/${ id }`);
+
+
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('identity');
+    localStorage.removeItem('business');
+    localStorage.removeItem('roles');
     this.router.navigateByUrl('/auth/login');
   }
 

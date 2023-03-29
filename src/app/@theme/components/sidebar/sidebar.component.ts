@@ -35,11 +35,11 @@ export const ROUTES_ADMIN: RouteInfo[] = [
 
 export const ROUTES_SALES: RouteInfo[] = [
   { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
-  { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
-  { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
+  // { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
+  // { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
   { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
   { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
-  { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
+  // { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
 ];
 
 @Component({

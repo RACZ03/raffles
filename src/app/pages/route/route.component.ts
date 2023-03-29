@@ -133,9 +133,19 @@ export class RouteComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-          return {
-            'nombre': item[0],
-            'descripcion': item[1],
+          if ( this.isAdmin ) {
+            return {
+              'negocio': {
+                'nombre': item[0]
+              },
+              'nombre': item[1],
+              'descripcion': item[2],
+            }
+          } else {
+            return {
+              'nombre': item[0],
+              'descripcion': item[1],
+            }
           }
         });
         resolve(filteredData);
@@ -153,9 +163,17 @@ export class RouteComponent implements OnInit, OnDestroy {
     }
 
     let json = data.map((item: any) => {
-      return {
-        'Nombre': item.nombre,
-        'Descripción': item.descripcion,
+      if ( this.isAdmin ) {
+        return {
+          'Negocio': item.negocio.nombre,
+          'Nombre': item.nombre,
+          'Descripción': item.descripcion,
+        }
+      } else {
+        return {
+          'Nombre': item.nombre,
+          'Descripción': item.descripcion,
+        }
       }
     });
     this.exportSvc.exportToExcel(json, 'rutas');
@@ -171,12 +189,20 @@ export class RouteComponent implements OnInit, OnDestroy {
     }
 
     let json = data.map((item: any) => {
-      return {
-        'Nombre': item.nombre,
-        'Descripción': item.descripcion,
+      if ( this.isAdmin ) {
+        return {
+          'Negocio': item.negocio.nombre,
+          'Nombre': item.nombre,
+          'Descripción': item.descripcion,
+        }
+      } else {
+        return {
+          'Nombre': item.nombre,
+          'Descripción': item.descripcion,
+        }
       }
     });
-    this.exportSvc.exportPdf(json, 'rutas', 2, false);
+    this.exportSvc.exportPdf(json, 'rutas', (this.isAdmin) ? 3 : 2, false);
   }
 
 }

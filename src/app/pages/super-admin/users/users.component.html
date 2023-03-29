@@ -72,10 +72,13 @@
                             <td>{{ item?.negocioAndRuta?.ruta }}</td>
                             <td>
                               <span *ngFor="let role of item?.roles">
-                                <span class="badge badge-pill badge-primary" style="font-size: 11px;">{{ role?.nombre }}</span>
+                                <span class="badge badge-pill badge-primary mt-2" style="font-size: 11px;">{{ role?.nombre }}</span><br>
                               </span>
                             </td>
                             <td class="text-right">
+                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)">
+                                <i class="bi bi-printer-fill"></i>
+                              </button>
                               <button class="btn btn-sm text-info" placement="left" ngbTooltip="Historial de Limites" (click)="onViewLimits(item)">
                                 <i class="bi bi-list-stars"></i>
                               </button>

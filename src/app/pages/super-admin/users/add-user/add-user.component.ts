@@ -201,7 +201,7 @@ export class AddUserComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirm_password: ['', [Validators.required, Validators.minLength(6)]],
       idNegocio: ['', Validators.required],
-      idRuta: ['', Validators.required],
+      idRuta: [''],
       role: ['', Validators.required],
       limit: [0],
     });

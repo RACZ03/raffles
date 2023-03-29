@@ -5,6 +5,14 @@
             <h4>{{ isEdit ? ('MODULES.ROUTE.EDIT' | translate) : ('MODULES.ROUTE.ADD' | translate) }}</h4>
         </div>
         <form [formGroup]="routeForm" (submit)="onSubmit()">
+            <!-- Business -->
+            <div class="form-group" *ngIf="isAdmin">
+              <label for="" class="form-label">{{ 'MODULES.ROUTE.BUSINESS' | translate }} <span class="text-danger">*</span></label>
+              <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;">
+                <option value="0">Seleccione</option>
+                <option *ngFor="let business of business" [value]="business.id">{{ business.nombre }}</option>
+              </select>
+            </div>
             <!-- Name -->
             <div class="form-group">
                 <label for="" class="form-label">{{ 'MODULES.ROUTE.NAME' | translate }} <span class="text-danger">*</span></label>
