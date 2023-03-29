@@ -19,7 +19,7 @@
                               <input type="checkbox" id="toggleTable" appToggleTable>
                               <span class="slider round"></span>
                           </label>
-                          <h4 id="title-table" class="text-uppercase ls-1 mb-1">{{ 'MODULES.LIMITS.TITLE' | translate }}</h4>
+                          <h4 id="title-table" class="text-uppercase ls-1 mb-1">Reportes</h4>
                       </div>
                       <div></div>
                   </div>
@@ -28,13 +28,13 @@
               <div class="container mb-5">
                    <div class="row">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
-                      <div style="cursor: pointer;" >
+                      <div style="cursor: pointer;" (click)="detailsSeller()">
                         <div class="card card-stats mb-4 mb-lg-0" >
                           <div class="card-body">
                             <div class="row">
                               <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Cambiar </h5>
-                                <span class="h2 font-weight-bold mb-0">Limite</span>
+                                <h5 class="card-title text-uppercase text-muted mb-0">Reporte</h5>
+                                <span class="h2 font-weight-bold mb-0"></span>
                               </div>
                               <div class="col-auto">
                                 <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
@@ -44,7 +44,7 @@
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
                               <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
-                              <span class="text-nowrap">Numeros por Rutas</span>
+                              <span class="text-nowrap">Detalle de vendedores</span>
                             </p>
                           </div>
                         </div>

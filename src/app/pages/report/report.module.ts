@@ -9,11 +9,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask';
 import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DetalleVendedoresComponent } from './detalle-vendedores/detalle-vendedores.component';
+import { DetalleRutasComponent } from './detalle-rutas/detalle-rutas.component';
 
 
 @NgModule({
   declarations: [
-    ReportComponent
+    ReportComponent,
+    DetalleVendedoresComponent,
+    DetalleRutasComponent
   ],
   imports: [
     CommonModule,
