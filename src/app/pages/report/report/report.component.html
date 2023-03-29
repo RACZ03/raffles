@@ -7,7 +7,7 @@
   </div>
 </div>
 <!-- Contents -->
-<div class="container-fluid mt--9">
+<div class="container-fluid mt--9" *ngIf="showMenu">
   <div class="row">
       <div class="col-12 mb-5 mb-xl-0">
           <div class="card shadow" id="card-container-tables">
@@ -28,7 +28,7 @@
               <div class="container mb-5">
                    <div class="row">
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
-                      <div style="cursor: pointer;" (click)="detailsSeller()">
+                      <a routerLink="./detalle-rutas">
                         <div class="card card-stats mb-4 mb-lg-0" >
                           <div class="card-body">
                             <div class="row">
@@ -48,7 +48,7 @@
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </a>
                       <div style="cursor: pointer;" class="mt-4">
                         <div class="card card-stats mb-4 mb-lg-0">
                           <div class="card-body">
@@ -210,6 +210,8 @@
   </div>
 </div>
 
+<!-- Incorporacion de routes -->
+<router-outlet></router-outlet>
 
 <!-- Modal Cambiar limite de numeros por ruta
 <div class="modal fade" id="modalchangelimitxruta" data-backdrop="static" tabindex="-1" role="dialog"
