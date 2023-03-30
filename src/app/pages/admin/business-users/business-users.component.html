@@ -97,7 +97,7 @@
               </div>
               <!-- FORM -->
               <div *ngIf="showForm">
-                <app-add-user [user]="UserSelected" (goBack)="closeUser($event)"></app-add-user>
+                <app-add-user [user]="UserSelected" [showBusinessUser]="true" (goBack)="closeUser($event)"></app-add-user>
               </div>
           </div>
       </div>

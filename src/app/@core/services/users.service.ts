@@ -60,6 +60,10 @@ export class UsersService {
     return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ id }/${ role }`);
   }
 
+  getUsersByBusiness(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `usuario/obtenerPorNegocio/${ id }`);
+  }
+
   findById(id: number): Promise<any> {
     return this.connectionSvc.send('get', `usuario/${ id }`);
   }

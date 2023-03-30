@@ -79,65 +79,73 @@
             </div>
             <!-- Business & Routes -->
             <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <!-- ID Business -->
-                    <div class="form-group">
-                        <label for="" class="form-label">{{ 'MODULES.USER.BUSINESS' | translate }} <span class="text-danger">*</span></label>
-                        <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;" (change)="onSelectBusiness()">
-                            <option value="0">Seleccione</option>
-                            <option *ngFor="let business of businesses" [value]="business.id">{{ business.nombre }}</option>
-                        </select>
-                        <span *ngIf="validInput('idNegocio')" class="text-danger mt-1">
-                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                        </span>
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <!-- Role -->
+                  <div class="form-group">
+                    <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="role" style="padding: 6px 12px !important;" (click)="onChangeRole()">
+                        <option value="0">Seleccione</option>
+                        <option *ngFor="let route of roles" [value]="route.ref">{{ route.nombre }}</option>
+                    </select>
+                    <span *ngIf="validInput('role')" class="text-danger mt-1">
+                        {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                    </span>
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="!activeFromBusinessUser">
+                <!-- ID Business -->
+                <div class="form-group">
+                    <label for="" class="form-label">{{ 'MODULES.USER.BUSINESS' | translate }} <span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="idNegocio" style="padding: 6px 12px !important;" (change)="onSelectBusiness()">
+                        <option value="0">Seleccione</option>
+                        <option *ngFor="let business of businesses" [value]="business.id">{{ business.nombre }}</option>
+                    </select>
+                    <span *ngIf="validInput('idNegocio')" class="text-danger mt-1">
+                        {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                    </span>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <!-- ID Route -->
-                    <div class="form-group">
-                        <label for="" class="form-label">{{ 'MODULES.USER.ROUTE' | translate }} <span class="text-danger" *ngIf="!isAdmin">*</span></label>
-                        <!-- <input type="text" class="form-control" formControlName="idRuta"/> -->
-                        <select class="form-control" formControlName="idRuta" style="padding: 6px 12px !important;">
-                            <option value="0">Seleccione</option>
-                            <option *ngFor="let route of routes" [value]="route.id">{{ route.nombre }}</option>
-                        </select>
-                        <span *ngIf="validInput('idRuta')" class="text-danger mt-1">
-                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                        </span>
-                    </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <!-- ID Route -->
+                <div class="form-group">
+                  <label for="" class="form-label">{{ 'MODULES.USER.ROUTE' | translate }} <span class="text-danger" *ngIf="!isAdmin">*</span></label>
+                  <select class="form-control" formControlName="idRuta" style="padding: 6px 12px !important;">
+                      <option value="0">Seleccione</option>
+                      <option *ngFor="let route of routes" [value]="route.id">{{ route.nombre }}</option>
+                  </select>
+                  <span *ngIf="validInput('idRuta')" class="text-danger mt-1">
+                      {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                  </span>
                 </div>
-            </div>
-            <!-- Roles & Limit -->
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <!-- Role -->
-                    <div class="form-group">
-                        <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>
-                        <select class="form-control" formControlName="role" style="padding: 6px 12px !important;" (click)="onChangeRole()">
-                            <option value="0">Seleccione</option>
-                            <option *ngFor="let route of roles" [value]="route.ref">{{ route.nombre }}</option>
-                        </select>
-                        <span *ngIf="validInput('role')" class="text-danger mt-1">
-                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                        </span>
-                    </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="existsLimit">
+                  <!-- LIMIT -->
+                  <div class="form-group">
+                      <label for="" class="form-label">{{ 'MODULES.USER.LIMIT' | translate }} <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="limit" autocomplete="auto-limit"/>
+                      <span *ngIf="validInput('limit')" class="text-danger mt-1">
+                          {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                      </span>
+                  </div>
+              </div>
+
+              <!-- DIV Imprime Ticket -->
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="form-check mt-4">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="imprimeTicket">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Permisos de impresión
+                  </label>
+                  <i [ngClass]="(userForm.get('imprimeTicket')?.value == true) ? 'bi bi-printer-fill text-success' : 'bi bi-printer-fill text-danger'"
+                    style="margin-left: 10px; margin-top: 5px;"></i>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <!-- LIMIT -->
-                    <div class="form-group" *ngIf="existsLimit">
-                        <label for="" class="form-label">{{ 'MODULES.USER.LIMIT' | translate }} <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" formControlName="limit" autocomplete="auto-limit"/>
-                        <span *ngIf="validInput('limit')" class="text-danger mt-1">
-                            {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                        </span>
-                    </div>
-                </div>
+              </div>
             </div>
             <!--  -->
-            <div class="text-center mt-2 mb-5">
+            <div class="text-center mt-4 mb-5">
                 <button class="btn btn-sm btn-warning" type="button" (click)="close()">{{ 'BUTTONS.CANCEL' | translate }}</button>
                 <button class="btn btn-sm btn-primary" [disabled]="userForm.invalid">
                     {{ 'BUTTONS.SAVE' | translate }}

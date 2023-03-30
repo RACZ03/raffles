@@ -1,3 +1,4 @@
+import { UsersService } from 'src/app/@core/services/users.service';
 import { ExtraordinarySalesService } from './../../@core/services/extraordinary-sales.service';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +8,9 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
 import { AuthService } from 'src/app/@core/services/auth.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
+import * as moment from 'moment';
+
+declare const navigator: any;
 
 @Component({
   selector: 'app-extraordinary-sales',
@@ -15,7 +19,7 @@ import { PrintService } from 'src/app/@core/utils/print.service';
 })
 export class ExtraordinarySalesComponent implements OnInit {
 
-  @ViewChild('slickModalExtra', { static: true }) slickModal!: SlickCarouselComponent;
+  @ViewChild('slickModalExtra', { static: false }) slickModal!: SlickCarouselComponent;
   @ViewChild('InputAmountExtra', { static: false }) inputAmount!: ElementRef;
   @ViewChild('InputNumberExtra', { static: false }) inputNumber!: ElementRef;
 
@@ -49,14 +53,16 @@ export class ExtraordinarySalesComponent implements OnInit {
     private extraordinarySalesSvc: ExtraordinarySalesService,
     private authSvc: AuthService,
     private printSvc: PrintService,
+    private userSvc: UsersService
   ) {
     // get business from localstorage
     this.business = JSON.parse(localStorage.getItem('business') || '{}');
-    this.getCurrentRaflle();
   }
 
   async ngOnInit() {
     this.formSale = this.initForm();
+    this.getCurrentRaflle();
+
     if (window.innerWidth < 992) {
       this.slideConfig.slidesToShow = 1;
     } else {
@@ -65,25 +71,22 @@ export class ExtraordinarySalesComponent implements OnInit {
     let user = await this.authSvc.getIdentity();
     this.identity = JSON.parse(user);
 
-    // set 5 elements to list whith values aleatory
-    // for (let i = 0; i < 5; i++) {
-    //   let number = Math.floor(Math.random() * 100);
-    //   let amount = Math.floor(Math.random() * 100);
-    //   let prize = Math.floor(Math.random() * 100);
-    //   this.listSales.push({ number, amount, prize });
-    // };
   }
 
   async getCurrentRaflle() {
     let currentRaffle = await this.extraordinarySalesSvc.getCurrentRaffle();
     console.log(currentRaffle);
-    if (currentRaffle) {
+    if (currentRaffle && currentRaffle?.status == 200 ) {
       this.disabledActions = false;
-      this.currentRaffle = currentRaffle;
+      this.currentRaffle = currentRaffle?.data;
     } else {
       this.alertSvc.showAlert(3,'', 'No hay sorteo activo');
       // disabled form
       this.disabledActions = true;
+      // get div by class carousel
+      let carousel = document.getElementById('div-carousel-extra');
+      // add clase hide
+        carousel?.classList.add('d-none');
     }
   }
 
@@ -100,8 +103,8 @@ export class ExtraordinarySalesComponent implements OnInit {
   }
 
   async onChangeFocus(e: any) {
-    // console.log(e);
-    let value = e?.target?.value;
+
+    let value: any = e?.target?.value;
 
     if (value.length == 2) {
       this.inputAmount.nativeElement.focus();
@@ -136,8 +139,6 @@ export class ExtraordinarySalesComponent implements OnInit {
     if (!number) {
       return;
     }
-    // spinner
-    // this.spinnerSvc.show();
 
     // get limit
     await this.getLimit(number);
@@ -214,6 +215,8 @@ export class ExtraordinarySalesComponent implements OnInit {
           // change focus to number
           this.inputNumber.nativeElement.focus();
           // change carousel
+          this.limit = 0;
+          this.amount_sold = 0;
           this.slickModal?.slickNext();
         }
       } else {
@@ -247,36 +250,226 @@ export class ExtraordinarySalesComponent implements OnInit {
       return;
     }
 
-    // spinner
-    // this.spinnerSvc.show();
-
     // send data
     let resp = await this.extraordinarySalesSvc.save(this.listSales, this.currentRaffle.id);
     if (resp) {
-      let { status, comment, data } = resp;
+      let { status, comment, data: dataTiket } = resp;
       if (status && status == 200) {
         this.alertSvc.showAlert(1, '', comment);
         this.listSales = [];
-        this.getTickets(data);
+
+        let respTicket = await this.userSvc.verifyPrint();
+        if (respTicket) {
+          let { status, data } = respTicket;
+          if (status && status == 200) {
+            if ( data ) {
+              await this.getTickets(dataTiket);
+            }
+          }
+        }
+        // move to first carousel
+        this.slickModal?.slickGoTo(0);
+        // change focus to number
+        this.inputNumber.nativeElement.focus();
+
         this.getCurrentRaflle();
       } else {
         this.alertSvc.showAlert(3, '', comment);
       }
     }
-    // hide spinner
-    // setTimeout(() => {
-    //   this.spinnerSvc.hide();
-    // }, 500);
-
   }
 
   async getTickets(code: string) {
-    let resp = await this.extraordinarySalesSvc.getSaleByCode(code);
-    if (resp) {
-      let { status, data } = resp;
-      if (status && status == 200) {
-        this.printSvc.printTicket(data);
+
+    if ( navigator.bluetooth ) {
+      try {
+        if ( this.printSvc.device ) {
+          this.printSvc.device.gatt.connect().then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+
+              let resp = await this.extraordinarySalesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              if (status && status == 200) {
+                let { status, data } = resp;
+                let {
+                  codigo,
+                  vendedor,
+                  ruta,
+                  sorteo,
+                  cantidadNumeros,
+                  montoTotal,
+                  fecha,
+                  hora,
+                  ventaDetalles,
+                } = data;
+
+                // convertir nombre ruta a mayusculas
+                ruta.nombre = ruta?.nombre.toUpperCase();
+                // convertir nombre sorteo a mayusculas
+                sorteo.nombre = sorteo?.nombre.toUpperCase();
+                // convertir nombre vendedor a mayusculas
+                vendedor = vendedor?.nombre.toUpperCase();
+                // cambiar formato fecha a dd/mm/yyyy
+                fecha = moment(fecha).format('DD/MM/YYYY');
+                // cambiar formato hora a hh:mm a
+                hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+
+                let arrayPrint: string[] = [
+                  '        RECIBO ' + codigo,
+                  '   RUTA: ' + ruta?.nombre,
+                  '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                  '',
+                  '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+                ];
+                // ADD NUMBERS TO PRINT
+                ventaDetalles.forEach((element: any) => {
+                  arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+                });
+                arrayPrint.push('');
+                // ADD TOTAL TO PRINT
+                arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
+                arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+                arrayPrint.push('    ' + vendedor);
+                arrayPrint.push('');
+                arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+
+                for (const iterator of arrayPrint) {
+                  const element = iterator + '\n'; // Agregar un salto de línea al final
+                  const encoder = new TextEncoder();
+                  const data = encoder.encode(element);
+                  await characteristic.writeValue(data);
+                }
+              }
+            });
+          }).catch((error: any) => {
+            console.log('INFO:', error);
+            this.printSvc.device = null;
+            this.getTickets(code);
+          });
+        } else {
+          navigator.bluetooth.requestDevice({
+            filters: [{
+              services: ['000018f0-0000-1000-8000-00805f9b34fb']
+            }]
+          })
+          .then((device: any) => {
+            console.log('Impresora encontrada:', device);
+            // set device in localstorage
+            this.printSvc.device = device;
+            return device.gatt.connect();
+          })
+          .then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+
+              let resp = await this.extraordinarySalesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              let {
+                codigo,
+                vendedor,
+                ruta,
+                sorteo,
+                cantidadNumeros,
+                montoTotal,
+                fecha,
+                hora,
+                ventaDetalles,
+              } = data;
+
+              // convertir nombre ruta a mayusculas
+              ruta.nombre = ruta?.nombre.toUpperCase();
+              // convertir nombre sorteo a mayusculas
+              sorteo.nombre = sorteo?.nombre.toUpperCase();
+              // convertir nombre vendedor a mayusculas
+              vendedor = vendedor?.nombre.toUpperCase();
+              // cambiar formato fecha a dd/mm/yyyy
+              fecha = moment(fecha).format('DD/MM/YYYY');
+              // cambiar formato hora a hh:mm a
+              hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+
+              let arrayPrint: string[] = [
+                '        RECIBO ' + codigo,
+                '   RUTA: ' + ruta?.nombre,
+                '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                '',
+                '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+              ];
+              // ADD NUMBERS TO PRINT
+              ventaDetalles.forEach((element: any) => {
+                arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+              });
+              arrayPrint.push('');
+              // ADD TOTAL TO PRINT
+              arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
+              arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+              arrayPrint.push('    ' + vendedor);
+              arrayPrint.push('');
+              arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+
+              for (const iterator of arrayPrint) {
+                const element = iterator + '\n'; // Agregar un salto de línea al final
+                const encoder = new TextEncoder();
+                const data = encoder.encode(element);
+                await characteristic.writeValue(data);
+              }
+            });
+          })
+          .catch((error: any) => {
+            // console.log('INFO:', error);
+            this.printSvc.device = null;
+            this.getTickets(code);
+          });
+        }
+      } catch (error) {
+        this.printSvc.device = null;
+        this.getTickets(code);
       }
+    } else {
+
+      let resp = await this.extraordinarySalesSvc.getSaleByCode(code);
+      if (resp) {
+        let { status, data } = resp;
+        if (status && status == 200) {
+          await this.printSvc.printTicket(data);
+        }
+      }
+    }
+  }
+
+  connectBluetooth() {
+    if ( navigator.bluetooth ) {
+      if (this.printSvc.device) {
+        this.printSvc.device = null;
+      } else {
+        // verificar permisos de bluetooth
+        navigator.bluetooth.requestDevice({
+          filters: [{
+            services: ['000018f0-0000-1000-8000-00805f9b34fb']
+          }]
+        })
+        .then((device: any) => {
+          // console.log('Impresora encontrada:', device);
+          // set device in localstorage
+          this.printSvc.device = device;
+          return device.gatt.connect();
+        })
+        .then((server: any) => {
+          this.alertSvc.showAlert(1, 'Success', 'Impresora conectada');
+          return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+        })
+        .catch((error: any) => {
+
+          this.printSvc.device = null;
+          this.alertSvc.showAlert(3, 'Info', 'No se pudo conectar con la impresora');
+        });
+      }
+    } else {
+      this.alertSvc.showAlert(3, 'Info', 'Su navegador no soporta esta funcionalidad');
     }
   }
 

@@ -31,10 +31,17 @@ export class AddUserComponent implements OnInit {
 
   public businessSelected: any = null;
   @Input() set user(value: any) {
-    console.log(value);
     if (value != null) {
       this.userForm = this.initForm();
       this.loadForm(value);
+    }
+  }
+
+  public activeFromBusinessUser: boolean = false;
+
+  @Input() set showBusinessUser(value: any) {
+    if (value != null) {
+      this.activeFromBusinessUser = value;
     }
   }
 
@@ -64,6 +71,18 @@ export class AddUserComponent implements OnInit {
   }
 
   async getBusiness() {
+    if ( this.activeFromBusinessUser ) {
+      // get id business from localstorage
+      let business = localStorage.getItem('business');
+      if ( business !== null ) {
+        this.businessSelected = JSON.parse(business);
+        this.getRoutesByIdBusiness(this.businessSelected?.idNegocio);
+        // set value idNegocio
+        this.userForm.get('idNegocio')?.setValue(this.businessSelected?.idNegocio);
+      }
+      return
+    }
+
     let resp = await this.businessSvc.getBusiness();
     if ( resp !== undefined ) {
       let { status, data } = resp;
@@ -204,6 +223,7 @@ export class AddUserComponent implements OnInit {
       idRuta: [''],
       role: ['', Validators.required],
       limit: [0],
+      imprimeTicket: [false],
     });
   }
 
