@@ -5,6 +5,7 @@ import { SlickCarouselComponent } from 'ngx-slick-carousel';
 import { DataNumbers } from 'src/app/@core/data/numbers';
 import { AuthService } from 'src/app/@core/services/auth.service';
 import { SalesService } from 'src/app/@core/services/sales.service';
+import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
@@ -19,7 +20,7 @@ declare const navigator: any;
 })
 export class SalesComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('slickModal', { static: true }) slickModal!: SlickCarouselComponent;
+  @ViewChild('slickModal', { static: false }) slickModal!: SlickCarouselComponent;
   @ViewChild('InputAmount', { static: false }) inputAmount!: ElementRef;
   @ViewChild('InputNumber', { static: false }) inputNumber!: ElementRef;
 
@@ -53,30 +54,26 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private salesSvc: SalesService,
     private authSvc: AuthService,
     private printSvc: PrintService,
+    private userSvc: UsersService
   ) {
     // get business from localstorage
     this.business = JSON.parse(localStorage.getItem('business') || '{}');
-    this.getCurrentRaflle();
-    console.log('SalesComponent');
+    // console.log('SalesComponent');
   }
 
   async ngOnInit() {
     this.formSale = this.initForm();
+    this.getCurrentRaflle();
+
     if (window.innerWidth < 992) {
       this.slideConfig.slidesToShow = 1;
     } else {
       this.slideConfig.slidesToShow = 2;
     }
+    console.log(this.slickModal);
+
     let user = await this.authSvc.getIdentity();
     this.identity = JSON.parse(user);
-
-    // set 5 elements to list whith values aleatory
-    // for (let i = 0; i < 5; i++) {
-    //   let number = Math.floor(Math.random() * 100);
-    //   let amount = Math.floor(Math.random() * 100);
-    //   let prize = Math.floor(Math.random() * 100);
-    //   this.listSales.push({ number, amount, prize });
-    // };
   }
 
   async getCurrentRaflle() {
@@ -88,6 +85,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
       this.alertSvc.showAlert(3,'', 'No hay sorteo activo');
       // disabled form
       this.disabledActions = true;
+       // get div by class carousel
+      let carousel = document.getElementById('div-carousel');
+      // add clase hide
+        carousel?.classList.add('d-none');
     }
   }
 
@@ -146,11 +147,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // get limit
     await this.getLimit(number);
     await this.getSales(number);
-    // hide spinner
-    // setTimeout(() => {
-    //   this.spinnerSvc.hide();
-    // }, 500);
-    // change focus to amount
+
     this.inputAmount.nativeElement.focus();
   }
 
@@ -260,20 +257,29 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // send data
     let resp = await this.salesSvc.save(this.listSales);
     if (resp) {
-      let { status, comment, data } = resp;
+      let { status, comment, data: dataTiket } = resp;
       if (status && status == 200) {
         this.alertSvc.showAlert(1, '', comment);
         this.listSales = [];
-        this.getTickets(data);
+
+        let respTicket = await this.userSvc.verifyPrint();
+        if (respTicket) {
+          let { status, data } = respTicket;
+          if (status && status == 200) {
+            if ( data ) {
+              this.getTickets(dataTiket);
+            }
+          }
+        }
+        // move to first carousel
+        this.slickModal?.slickGoTo(0);
+
         this.getCurrentRaflle();
+        // change carousel to first
       } else {
         this.alertSvc.showAlert(3, '', comment);
       }
     }
-    // hide spinner
-    // setTimeout(() => {
-    //   this.spinnerSvc.hide();
-    // }, 500);
 
   }
 
@@ -418,7 +424,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
             });
           })
           .catch((error: any) => {
-            console.log('INFO:', error);
+            // console.log('INFO:', error);
             this.printSvc.device = null;
             this.getTickets(code);
           });

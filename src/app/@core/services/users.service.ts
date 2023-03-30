@@ -15,6 +15,10 @@ export class UsersService {
     return this.connectionSvc.send('put', `usuario/statusImprimeTicket/${ id }`);
   }
 
+  verifyPrint(): Promise<any> {
+    return this.connectionSvc.send('get', `usuario/statusImprimeTicket`);
+  }
+
   getRolesByAuth(): any {
     return JSON.parse(localStorage.getItem('roles') || '') || [];
   }
