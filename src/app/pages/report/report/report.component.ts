@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report',
@@ -18,13 +18,16 @@ export class ReportComponent implements OnInit {
     this.route.events.subscribe((val) => {
       if (this.route.url.includes('/pages/report/')) {
         this.showMenu = false;
+      } else {
+        this.showMenu = true;
       }
+
+      
+
     });
   }
 
-  detailsSeller(){
-   this.route.navigate(['./pages/report/detalle-rutas']);
-  }
+
 
 
 }
