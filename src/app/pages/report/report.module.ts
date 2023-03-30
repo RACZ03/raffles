@@ -11,13 +11,17 @@ import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetalleVendedoresComponent } from './detalle-vendedores/detalle-vendedores.component';
 import { DetalleRutasComponent } from './detalle-rutas/detalle-rutas.component';
+import { ResumenVendedorFechaComponent } from './resumen-vendedor-fecha/resumen-vendedor-fecha.component';
+import { DetalleNegociosComponent } from './detalle-negocios/detalle-negocios.component';
 
 
 @NgModule({
   declarations: [
     ReportComponent,
     DetalleVendedoresComponent,
-    DetalleRutasComponent
+    DetalleRutasComponent,
+    ResumenVendedorFechaComponent,
+    DetalleNegociosComponent
   ],
   imports: [
     CommonModule,
