@@ -79,7 +79,7 @@
             </div>
             <!-- Business & Routes -->
             <div class="row">
-              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="!isEdit">
                   <!-- Role -->
                   <div class="form-group">
                     <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>

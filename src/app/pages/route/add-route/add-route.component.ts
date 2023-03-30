@@ -43,6 +43,7 @@ export class AddRouteComponent implements OnInit {
     if ( this.routeForm ===  undefined ) {
       this.routeForm = this.initForm();
     }
+    // console.log('is');
 
     if ( this.isAdmin ) {
       this.getBusiness();
@@ -78,6 +79,9 @@ export class AddRouteComponent implements OnInit {
     let { status, data } = resp;
     if ( status && status == 200) {
       this.alertSvc.showAlert(1, 'Exito', 'Registro guardado');
+      // resete formulario
+      this.routeForm = this.initForm();
+      this.isEdit = false;
       this.goBack.emit(true);
     } else {
       this.alertSvc.showAlert(4, 'Error', 'No se pudo guardar el registro');
