@@ -79,7 +79,7 @@ export class ExtraordinarySalesService {
       });
     }
     let params = JSON.stringify(objArray);
-    return this.connectionSvc.send('post', `venta/guardar/extra?idSorte=${ idSorteo }`, params);
+    return this.connectionSvc.send('post', `venta/guardar/extra?idSorteo=${ idSorteo }`, params);
   }
 
   getSaleByCode(code: string): Promise<any> {

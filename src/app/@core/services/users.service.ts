@@ -15,6 +15,10 @@ export class UsersService {
     return this.connectionSvc.send('put', `usuario/statusImprimeTicket/${ id }`);
   }
 
+  verifyPrint(): Promise<any> {
+    return this.connectionSvc.send('get', `usuario/statusImprimeTicket`);
+  }
+
   getRolesByAuth(): any {
     return JSON.parse(localStorage.getItem('roles') || '') || [];
   }
@@ -54,6 +58,10 @@ export class UsersService {
 
   getUsersByBusinessAndRole(id: number, role: string): Promise<any> {
     return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ id }/${ role }`);
+  }
+
+  getUsersByBusiness(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `usuario/obtenerPorNegocio/${ id }`);
   }
 
   findById(id: number): Promise<any> {
