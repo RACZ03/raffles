@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detalle-rutas.component.scss']
 })
 export class DetalleRutasComponent implements OnInit {
+ public data: any = [];
 
   constructor() { }
 

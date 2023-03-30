@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detalle-vendedores.component.scss']
 })
 export class DetalleVendedoresComponent implements OnInit {
-
+public data: any = [];
   constructor() { }
 
   ngOnInit(): void {
