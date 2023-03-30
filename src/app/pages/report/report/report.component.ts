@@ -14,6 +14,13 @@ export class ReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // validate if url contains /pages/report/ and hide menu
+    if (this.route.url.includes('/pages/report/')) {
+      this.showMenu = false;
+    } else {
+      this.showMenu = true;
+    }
+
     // detectar rutas hijas y ocultar el contenedor con id slidemenureport
     this.route.events.subscribe((val) => {
       if (this.route.url.includes('/pages/report/')) {
@@ -21,9 +28,6 @@ export class ReportComponent implements OnInit {
       } else {
         this.showMenu = true;
       }
-
-      
-
     });
   }
 
