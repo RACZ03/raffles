@@ -422,12 +422,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
           .catch((error: any) => {
             // console.log('INFO:', error);
             this.printSvc.device = null;
-            this.getTickets(code);
+            // this.getTickets(code);
           });
         }
       } catch (error) {
         this.printSvc.device = null;
-        this.getTickets(code);
+        // console.log('tri catch error', error);
+        // this.getTickets(code);
       }
     } else {
 

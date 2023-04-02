@@ -51,6 +51,10 @@ export class ProfileComponent implements OnInit {
 
     // load test form
     this.getInfoUser();
+
+    // disabled idNegocio and idRuta
+    this.userForm.get('idNegocio')?.disable();
+    this.userForm.get('idRuta')?.disable();
   }
 
   async getInfoUser() {
