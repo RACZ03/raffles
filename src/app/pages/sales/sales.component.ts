@@ -36,6 +36,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public currentRaffle: any = null;
   public limit: number = 0;
   public amount_sold: number = 0;
+  public isInputFocused: boolean = false;
 
   public formSale!: FormGroup;
 
@@ -103,17 +104,17 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async onChangeFocus(e: any) {
-
+    // console.log('onChangeFocus');
     let value: any = e?.target?.value;
 
     if (value.length == 2) {
       this.inputAmount.nativeElement.focus();
     }
-
+    this.isInputFocused = true;
   }
 
   async onChange() {
-
+    this.isInputFocused = true;
     this.limit = 0;
     this.amount_sold = 0;
     // get value number
@@ -180,11 +181,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async onSave() {
-
+    // console.log('onSave');
     // validate form
     if (this.formSale.invalid) {
       return;
     }
+
+    this.isInputFocused = false;
 
     let amount = this.formSale.get('amount')?.value;
     // validate amount is more than 0
@@ -480,12 +483,15 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (event.target.innerWidth < 992) {
-      this.slideConfig.slidesToShow = 1;
-    } else {
-      this.slideConfig.slidesToShow = 2;
+
+    if ( !this.isInputFocused ) {
+      if (event.target.innerWidth < 992) {
+        this.slideConfig.slidesToShow = 1;
+      } else {
+        this.slideConfig.slidesToShow = 2;
+      }
+      this.slickModal?.unslick();
+      this.slickModal?.initSlick();
     }
-    this.slickModal?.unslick();
-    this.slickModal?.initSlick();
   }
 }
