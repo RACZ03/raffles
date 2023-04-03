@@ -9,17 +9,15 @@ declare interface RouteInfo {
     icon: string;
     class: string;
 }
-export const ROUTES: RouteInfo[] = [
+export const ROUTES_SUPER_ADMIN: RouteInfo[] = [
     { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
     { path: 'business', title: 'Negocio',  icon:'ni-building text-orange', class: '' },
     { path: 'route', title: 'Rutas',  icon:'ni-square-pin text-default', class: '' },
     { path: 'users', title: 'Usuarios',  icon:'ni-single-02 text-yellow', class: '' },
     { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
     { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
-    { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
-    { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
     { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
-    {path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
+    {  path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
 ];
 
 export const ROUTES_ADMIN: RouteInfo[] = [
@@ -29,19 +27,18 @@ export const ROUTES_ADMIN: RouteInfo[] = [
     { path: 'business-users', title: 'Usuarios',  icon:'ni-single-02 text-yellow', class: '' },
     { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
     { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
-    { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
-    { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
     { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
-    {path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
+    { path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''}
+];
+
+export const ROUTES_SUPERVISOR: RouteInfo[] = [
+  { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
 ];
 
 export const ROUTES_SALES: RouteInfo[] = [
   { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
-  // { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
-  // { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
   { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
-  { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''} ,
-  // { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
+  { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''}
 ];
 
 @Component({
@@ -61,15 +58,18 @@ export class SidebarComponent implements OnInit {
   ) {
     let isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
     let isAdmin = this.userSvc.verifyRole('ROLE_ADMIN');
+    let isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR');
 
     if ( isSuperAdmin ) {
-      this.menuItems = ROUTES;
+      this.menuItems = ROUTES_SUPER_ADMIN;
     } else if ( isAdmin ) {
       this.menuItems = ROUTES_ADMIN;
+    } else if ( isSupervisor ) {
+      this.menuItems = ROUTES_SUPERVISOR;
     } else {
       this.menuItems = ROUTES_SALES;
     }
-    console.log('hi');
+    // console.log('hi');
   }
 
   ngOnInit() {
