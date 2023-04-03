@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   public modalChangePassword: any;
   public modalHistory: any;
   public search: string = '';
-
+  public identity: any = null;
   constructor(
     private usersSvc: UsersService,
     private alertSvc: AlertService,
@@ -38,6 +38,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
+    this.identity = localStorage.getItem('identity') || '';
+    this.identity = JSON.parse(this.identity);
     this.loadData();
   }
 
@@ -74,6 +76,33 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.dtTrigger.next(this.dtOptions);
   }
 
+  async onCloseSession(item: any) {
+    let { nombre } = item;
+    let resp = await this.alertSvc.showConfirmLimit('Cerrar Sesión', `¿Está seguro de cerrar la sesión del usuario ${ nombre }?`, 'Cerrar Sesión');
+    if (resp) {
+      // obtener usuario por id
+      let findUser = await this.usersSvc.findById(item.id);
+      let { status: statusFind, data } = findUser;
+      if ( statusFind && statusFind == 200) {
+        let { codigoLogout } = data;
+
+        // validate codigoLogout not null
+        if ( codigoLogout ) {
+          let resp2 = await this.usersSvc.closeSessionByCode(codigoLogout, item.id);
+          let { status: statusClose, comment } = resp2;
+          if ( statusClose && statusClose == 200) {
+            this.alertSvc.showAlert(1, '', comment);
+          } else {
+            this.alertSvc.showAlert(4, '', 'No se pudo cerrar la sesión');
+          }
+        } else {
+          this.alertSvc.showAlert(3, '', 'El usuario no tiene sesión iniciada');
+        }
+      } else {
+        this.alertSvc.showAlert(3, '', 'No se pudo cerrar la sesión');
+      }
+    }
+  }
   async changeStatusPrinter(item: any) {
     // modal confirm
     let resp = await this.alertSvc.showConfirmLimit('Estado de Impresiòn', '¿Está seguro de cambiar el estado de impresión?', 'Cambiar');
