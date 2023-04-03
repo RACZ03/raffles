@@ -45,6 +45,11 @@ $text-dark: #9F9F9F;
     width: 85%;
 }
 
+.mat-mdc-tab-label-container {
+  z-index: 0 !important;
+}
+
+
 @media (max-width: 980px) {
     .content-1 {
         width: 100%;

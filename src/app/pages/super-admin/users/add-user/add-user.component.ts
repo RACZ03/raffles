@@ -172,7 +172,7 @@ export class AddUserComponent implements OnInit {
     if ( this.userForm ===  undefined ) {
       return;
     }
-
+    // console.log(data);
     this.isEdit = true;
     this.userForm.patchValue({
       id: data?.id,
@@ -185,12 +185,15 @@ export class AddUserComponent implements OnInit {
       // idRuta: data?.negocioAndRuta?.idRuta,
     });
     this.getRoutesByIdBusiness(data?.negocioAndRuta?.idNegocio);
-
+    // if is edit, remove role required
+    this.userForm.get('role')?.clearValidators();
+    // set role from data roles
+    this.userForm.get('role')?.setValue(data?.roles[0]?.id);
     setTimeout(() => {
       // enable idRuta
       this.userForm.get('idRuta')?.enable();
       this.userForm.get('idRuta')?.patchValue(data?.negocioAndRuta?.idRuta);
-    }, 300);
+    }, 500);
   }
 
   /* SECTION VALIDATIONS */

@@ -56,7 +56,7 @@ export class BusinessUsersComponent implements OnInit {
 
     let { id, code } = this.usersSvc.getBusinessIdAndRoleCodeByAuth();
     resp = await this.usersSvc.getUsersByBusiness(id);
-    console.log(resp)
+    // console.log(resp)
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200) {

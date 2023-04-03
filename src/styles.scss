@@ -114,3 +114,11 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.mat-mdc-tab-label-container {
+  z-index: 0 !important;
+}
+
+.table-td-white {
+  color: #fff;
+}

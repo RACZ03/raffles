@@ -36,6 +36,7 @@ export class ExtraordinarySalesComponent implements OnInit {
   public currentRaffle: any = null;
   public limit: number = 0;
   public amount_sold: number = 0;
+  public isInputFocused: boolean = false;
 
   public formSale!: FormGroup;
 
@@ -109,11 +110,12 @@ export class ExtraordinarySalesComponent implements OnInit {
     if (value.length == 2) {
       this.inputAmount.nativeElement.focus();
     }
-
+    this.isInputFocused = true;
   }
 
   async onChange() {
 
+    this.isInputFocused = true;
     this.limit = 0;
     this.amount_sold = 0;
     // get value number
@@ -186,6 +188,7 @@ export class ExtraordinarySalesComponent implements OnInit {
       return;
     }
 
+    this.isInputFocused = false;
     let amount = this.formSale.get('amount')?.value;
     // validate amount is more than 0
     if (amount <= 0) {
@@ -217,7 +220,7 @@ export class ExtraordinarySalesComponent implements OnInit {
           // change carousel
           this.limit = 0;
           this.amount_sold = 0;
-          this.slickModal?.slickNext();
+          // this.slickModal?.slickNext();
         }
       } else {
         this.alertSvc.showAlert(3, '', comment);
@@ -304,8 +307,10 @@ export class ExtraordinarySalesComponent implements OnInit {
                   fecha,
                   hora,
                   ventaDetalles,
-                } = data;
 
+                } = data;
+                // convertir nombre de negocio a mayusculas
+                let negocio = vendedor?.negocioAndRuta?.negocio.toUpperCase();
                 // convertir nombre ruta a mayusculas
                 ruta.nombre = ruta?.nombre.toUpperCase();
                 // convertir nombre sorteo a mayusculas
@@ -318,9 +323,10 @@ export class ExtraordinarySalesComponent implements OnInit {
                 hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
 
                 let arrayPrint: string[] = [
-                  '        RECIBO ' + codigo,
-                  '   RUTA: ' + ruta?.nombre,
-                  '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                  'RECIBO ' + codigo,
+                  'NEGOCIO: ' + negocio,
+                  'RUTA: ' + ruta?.nombre,
+                  fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
                   '',
                   '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
                 ];
@@ -330,9 +336,9 @@ export class ExtraordinarySalesComponent implements OnInit {
                 });
                 arrayPrint.push('');
                 // ADD TOTAL TO PRINT
-                arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
-                arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
-                arrayPrint.push('    ' + vendedor);
+                arrayPrint.push(cantidadNumeros + ' NUMEROS VENDIDOS');
+                arrayPrint.push('TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+                arrayPrint.push(vendedor);
                 arrayPrint.push('');
                 arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
 
@@ -422,12 +428,13 @@ export class ExtraordinarySalesComponent implements OnInit {
           .catch((error: any) => {
             // console.log('INFO:', error);
             this.printSvc.device = null;
-            this.getTickets(code);
+            // this.getTickets(code);
           });
         }
       } catch (error) {
         this.printSvc.device = null;
-        this.getTickets(code);
+        // console.log('tri catch error', error);
+        // this.getTickets(code);
       }
     } else {
 
@@ -440,6 +447,7 @@ export class ExtraordinarySalesComponent implements OnInit {
       }
     }
   }
+
 
   connectBluetooth() {
     if ( navigator.bluetooth ) {
@@ -479,12 +487,15 @@ export class ExtraordinarySalesComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (event.target.innerWidth < 992) {
-      this.slideConfig.slidesToShow = 1;
-    } else {
-      this.slideConfig.slidesToShow = 2;
+
+    if ( !this.isInputFocused ) {
+      if (event.target.innerWidth < 992) {
+        this.slideConfig.slidesToShow = 1;
+      } else {
+        this.slideConfig.slidesToShow = 2;
+      }
+      this.slickModal?.unslick();
+      this.slickModal?.initSlick();
     }
-    this.slickModal?.unslick();
-    this.slickModal?.initSlick();
   }
 }

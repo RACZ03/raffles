@@ -36,6 +36,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public currentRaffle: any = null;
   public limit: number = 0;
   public amount_sold: number = 0;
+  public isInputFocused: boolean = false;
 
   public formSale!: FormGroup;
 
@@ -103,17 +104,17 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async onChangeFocus(e: any) {
-
+    // console.log('onChangeFocus');
     let value: any = e?.target?.value;
 
     if (value.length == 2) {
       this.inputAmount.nativeElement.focus();
     }
-
+    this.isInputFocused = true;
   }
 
   async onChange() {
-
+    this.isInputFocused = true;
     this.limit = 0;
     this.amount_sold = 0;
     // get value number
@@ -180,11 +181,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   async onSave() {
-
+    // console.log('onSave');
     // validate form
     if (this.formSale.invalid) {
       return;
     }
+
+    this.isInputFocused = false;
 
     let amount = this.formSale.get('amount')?.value;
     // validate amount is more than 0
@@ -217,7 +220,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
           // change carousel
           this.limit = 0;
           this.amount_sold = 0;
-          this.slickModal?.slickNext();
+          // this.slickModal?.slickNext();
         }
       } else {
         this.alertSvc.showAlert(3, '', comment);
@@ -304,8 +307,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
                   fecha,
                   hora,
                   ventaDetalles,
-                } = data;
 
+                } = data;
+                // convertir nombre de negocio a mayusculas
+                let negocio = vendedor?.negocioAndRuta?.negocio.toUpperCase();
                 // convertir nombre ruta a mayusculas
                 ruta.nombre = ruta?.nombre.toUpperCase();
                 // convertir nombre sorteo a mayusculas
@@ -318,9 +323,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
                 hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
 
                 let arrayPrint: string[] = [
-                  '        RECIBO ' + codigo,
-                  '   RUTA: ' + ruta?.nombre,
-                  '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                  'RECIBO ' + codigo,
+                  'NEGOCIO: ' + negocio,
+                  'RUTA: ' + ruta?.nombre,
+                  fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
                   '',
                   '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
                 ];
@@ -330,9 +336,9 @@ export class SalesComponent implements OnInit, AfterViewInit {
                 });
                 arrayPrint.push('');
                 // ADD TOTAL TO PRINT
-                arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
-                arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
-                arrayPrint.push('    ' + vendedor);
+                arrayPrint.push(cantidadNumeros + ' NUMEROS VENDIDOS');
+                arrayPrint.push('TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+                arrayPrint.push(vendedor);
                 arrayPrint.push('');
                 arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
 
@@ -422,12 +428,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
           .catch((error: any) => {
             // console.log('INFO:', error);
             this.printSvc.device = null;
-            this.getTickets(code);
+            // this.getTickets(code);
           });
         }
       } catch (error) {
         this.printSvc.device = null;
-        this.getTickets(code);
+        // console.log('tri catch error', error);
+        // this.getTickets(code);
       }
     } else {
 
@@ -479,12 +486,15 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (event.target.innerWidth < 992) {
-      this.slideConfig.slidesToShow = 1;
-    } else {
-      this.slideConfig.slidesToShow = 2;
+
+    if ( !this.isInputFocused ) {
+      if (event.target.innerWidth < 992) {
+        this.slideConfig.slidesToShow = 1;
+      } else {
+        this.slideConfig.slidesToShow = 2;
+      }
+      this.slickModal?.unslick();
+      this.slickModal?.initSlick();
     }
-    this.slickModal?.unslick();
-    this.slickModal?.initSlick();
   }
 }

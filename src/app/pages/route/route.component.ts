@@ -78,11 +78,13 @@ export class RouteComponent implements OnInit, OnDestroy {
   closeRoute(e: boolean) {
 
     this.showFormRoute = false;
+    this.RouteSelected = null;
     this.renderer();
   }
 
   async onDeleteRoute(item: any) {
     let resp = await this.alertSvc.showConfirm('Eliminar', '¿Está seguro de eliminar el registro?');
+
     if (resp) {
       let resp = await this.routeServ.delete(item.id);
       let { status } = resp;
@@ -91,9 +93,9 @@ export class RouteComponent implements OnInit, OnDestroy {
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo eliminar el registro');
       }
+      // this.dataTableSvc.dtElements = this.dtElement;
+      this.renderer();
     }
-    this.dataTableSvc.dtElements = this.dtElement;
-    this.renderer();
   }
 
    /* Search */
