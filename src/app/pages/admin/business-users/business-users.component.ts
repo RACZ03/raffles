@@ -24,10 +24,15 @@ export class BusinessUsersComponent implements OnInit {
   public showForm: boolean = false;
 
   public UserSelected: any = null;
+  public UserSelectedChangePass: any = null;
+  public UserSelectedModalRoles: any = null;
+
   public isAdmin: boolean|string = false;
 
   public modalChangePassword: any;
   public modalHistory: any;
+  public modalRoles: any;
+
   public search: string = '';
 
   constructor(
@@ -43,10 +48,13 @@ export class BusinessUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalChangePassword = new window.bootstrap.Modal(
-      document.getElementById('changePasswordUser')
+      document.getElementById('changePasswordUserAdmin')
     );
     this.modalHistory = new window.bootstrap.Modal(
-      document.getElementById('historyLimitUser')
+      document.getElementById('historyLimitUserAdmin')
+    );
+    this.modalRoles = new window.bootstrap.Modal(
+      document.getElementById('rolesUserAdmin')
     );
   }
 
@@ -68,6 +76,13 @@ export class BusinessUsersComponent implements OnInit {
       this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
     }
     this.dtTrigger.next(this.dtOptions);
+    this.dataTableSvc.dtElements = this.dtElement;
+  }
+
+  onEditRoles(item: any) {
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.UserSelectedModalRoles = item;
+    this.modalRoles.show();
   }
 
   // Actions
@@ -83,7 +98,7 @@ export class BusinessUsersComponent implements OnInit {
   }
 
   onChangePassword(item: any) {
-    this.UserSelected = item;
+    this.UserSelectedChangePass = item;
     this.modalChangePassword.show();
   }
 
@@ -96,6 +111,7 @@ export class BusinessUsersComponent implements OnInit {
     this.showForm = false;
     // refresh data
     this.UserSelected = null;
+    this.UserSelectedChangePass = null;
     this.renderer();
   }
 
@@ -106,7 +122,15 @@ export class BusinessUsersComponent implements OnInit {
       return;
     } else {
       this.modalChangePassword.hide();
-      this.renderer();
+      // this.renderer();
+    }
+  }
+
+  closeModalRoles(e: any) {
+    this.UserSelectedModalRoles = null;
+    this.modalRoles.hide();
+    if ( e ) {
+      window.location.reload();
     }
   }
 
@@ -117,7 +141,9 @@ export class BusinessUsersComponent implements OnInit {
 
   async changeStatusPrinter(item: any) {
     // modal confirm
-    let resp = await this.alertSvc.showConfirmLimit('Estado de Impresiòn', '¿Está seguro de cambiar el estado de impresión?', 'Cambiar');
+    // modal confirm
+    let message = item.imprimeTicket ? '¿Está seguro de quitar los permisos de impresión?' : '¿Está seguro de otorgar los permisos de impresión?';
+    let resp = await this.alertSvc.showConfirmLimit('Estado de Impresiòn', message, 'Cambiar');
     if (!resp) return;
 
 
@@ -129,9 +155,34 @@ export class BusinessUsersComponent implements OnInit {
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
       }
-      this.renderer();
+      item.imprimeTicket = !item.imprimeTicket;
     } else {
       this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
+    }
+  }
+
+  async changeStatus(item: any) {
+    // modal confirm
+    let message = item.habilitado ? '¿Está seguro de Inhabilitar el usuario?' : '¿Está seguro de habilitar el usuario?';
+    let btn = item.habilitado ? 'Inhabilitar' : 'Habilitar';
+    let resp = await this.alertSvc.showConfirmLimit('Estado de Usuario', message, btn);
+    if ( resp ) {
+      let resp2 = await this.usersSvc.enableOrDisabledUser(item.id);
+      if ( resp2 ) {
+        let { status } = resp2;
+        if ( status && status == 200) {
+          this.alertSvc.showAlert(1, '', 'Se ha cambiado el estado del usuario');
+
+          // update item
+          item.habilitado = !item?.habilitado
+        } else {
+          this.alertSvc.showAlert(4, '', 'No se pudo cambiar el estado del usuario');
+        }
+      } else {
+        this.alertSvc.showAlert(4, '', 'No se pudo cambiar el estado del usuario');
+      }
+    } else {
+      return;
     }
   }
 

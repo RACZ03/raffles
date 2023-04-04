@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AddUserComponent } from './add-user/add-user.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LimitHistoryComponent } from './limit-history/limit-history.component';
+import { ModalRolesComponent } from './modal-roles/modal-roles.component';
 
 
 
@@ -19,7 +20,8 @@ import { LimitHistoryComponent } from './limit-history/limit-history.component';
     UsersComponent,
     AddUserComponent,
     ChangePasswordComponent,
-    LimitHistoryComponent
+    LimitHistoryComponent,
+    ModalRolesComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { LimitHistoryComponent } from './limit-history/limit-history.component';
   exports: [
     AddUserComponent,
     ChangePasswordComponent,
-    LimitHistoryComponent
+    LimitHistoryComponent,
+    ModalRolesComponent
   ]
 })
 export class UsersModule { }

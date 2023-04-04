@@ -147,4 +147,20 @@ export class UsersService {
     return this.connectionSvc.send('put', `api/public/logout/cod/${ codigo }/id/${ id }`);
   }
 
+  enableOrDisabledUser(id: number): Promise<any> {
+    return this.connectionSvc.send('put', `usuario/habilitar-inhabilitar/${ id }`);
+  }
+
+  addOrRole(phone: number, role: string, add: boolean = true ): Promise<any> {
+    let params = {
+      emailOrPhone: phone,
+      nombreRol: role
+    };
+
+    if ( add )
+      return this.connectionSvc.send('post', `rol/agregarRolAlUsuario`, JSON.stringify(params));
+    else
+      return this.connectionSvc.send('post', `rol/eliminarRolDelUsuario`, JSON.stringify(params));
+  }
+
 }

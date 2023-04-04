@@ -12,7 +12,7 @@ export class DataTableServiceService {
   constructor() {
     this.dtOptions = {
       pagingType: "simple_numbers",
-      pageLength: 5,
+      pageLength: 8,
       scrollX: true,
       autoWidth: false,
       destroy: true,

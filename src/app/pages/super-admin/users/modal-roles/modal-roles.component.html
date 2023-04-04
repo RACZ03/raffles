@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Administracion de Roles</h4>
+    </div>
+    <div class="modal-body">
+
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let item of roles; let i = index">
+          <input class="form-check-input" style="margin-left: 5px;" type="checkbox"
+                [value]="item.checket" [checked]="item.checket" (change)="submit(item, i)"
+                [id]="'itemCheck' + i">
+          <label class="form-check-label stretched-link" style="margin-left: 40px;" [for]="'itemCheck' + i">{{ item.nombre }}</label>
+        </li>
+      </ul>
+      <br>
+
+      <div class="text-center mt-2">
+        <button type="button" class="btn btn-secondary" (click)="close()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
