@@ -26,62 +26,106 @@
                 <!-- TABLE -->
                 <div class="card-body" >
                   <div class="row">
-                    <div class="col-6">
-                      <a routerLink="../"><button class="btn btn-info btn-sm"><i class="fas fa-arrow-left"></i> Regresar</button></a>
+                    <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-9 col-sm-12 col-12">
+                      <div class="row" style="display: flex;">
+                        <div class="col-xxl-4 col-xl-1 col-lg-6 col-md-3 col-sm-2 col-12">
+                          <a routerLink="../"><button class="btn btn-info btn-sm mb-3 mt-1"><i class="fas fa-arrow-left"></i> Regresar</button></a>
+                        </div>
+                           <div class="col-xxl-4 col-xl-3 col-lg-6 col-md-4 col-sm-5 col-12">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                              <mat-label>Fecha Inicio</mat-label>
+                              <input matInput [matDatepicker]="pickerinicio" [formControl]="fechaInicio" placeholder="MM/DD/YYYY" >
+                              <mat-datepicker-toggle matIconSuffix [for]="pickerinicio"></mat-datepicker-toggle>
+                              <mat-datepicker #pickerinicio></mat-datepicker>
+                                <mat-error *ngIf="fechaInicio.hasError('fechaInicioValida')">
+                                  fecha no puede ser mayor a la fecha actual
+                                </mat-error>
+                            </mat-form-field>
+                           </div>
+                           <div class="col-xxl-4 col-xl-3 col-lg-6 col-md-4 col-sm-5 col-12">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                              <mat-label>Fecha Fin</mat-label>
+                              <input matInput [matDatepicker]="pickerFin" [formControl]="fechaFin" placeholder="MM/DD/YYYY" >
+                              <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                              <mat-datepicker #pickerFin></mat-datepicker>
+                                <mat-error *ngIf="fechaFin.hasError('fechaFinInvalida')">
+                                  fecha no puede ser mayor a la fecha actual
+                                </mat-error>
+                                <mat-error *ngIf="fechaFin.hasError('fechaFinInvalida2')">
+                                  fecha inicio no puede ser mayor a fecha fin
+                                </mat-error>
+                            </mat-form-field>
+                           </div>
+                           <div class="col-xxl-4 col-xl-3 col-lg-6 col-md-10 col-sm-10 col-12">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                              <mat-label>Sorteo</mat-label>
+                              <mat-select [formControl]="selected" >
+                                <mat-option *ngFor="let item of dataSorteo" [value]="item.id">
+                                  {{item.nombre}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                           </div>
+                           <div class="col-xxl-4 col-xl-2 col-lg-6 col-md-2 col-sm-2 col-12">
+                            <button class="btn btn-primary mt-1" (click)="report()">
+                              <i class="fas fa-search"></i>
+                            </button>
+                           </div>
+                      </div>
                     </div>
-                    <div class="col-6 text-right">
-                      <button class="btn btn-sm btn-warning" title="Exporta a PDF" >
+                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-3 col-sm-12 col-12 text-right">
+                      <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
                         <i class="bi bi-filetype-pdf"></i>
                       </button>
-                      <button class="btn btn-sm btn-warning" title="Exporta a Excel" >
+                      <button class="btn btn-sm btn-warning" title="Exporta a Excel" (click)="exportToExcel()">
                         <i class="bi bi-file-earmark-excel"></i>
                       </button>
                     </div>
                   </div>
                   <div class="table-responsive mt-2">
-                      <table class="table align-items-center table-flush" >
-                        <thead class="thead-light" id="thead-table">
-                          <tr>
-                            <th scope="col" class="text-center">Fecha</th>
-                            <th scope="col" class="text-center">Sorteo</th>
-                            <th scope="col" class="text-center">Ventas Totales</th>
-                            <th scope="col" class="text-center">N° Ganador</th>
-                            <th scope="col" class="text-center">Inversion al ganador</th>
-                            <th scope="col" class="text-center">Premio a pagar</th>
-                            <th scope="col" class="text-center">Utilidad</th>
-                            <th scope="col" class="text-center">
-                              Acciones
-                            </th>
-                          </tr>
-                          <tr>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-winner"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sale"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-investment"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-award"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utility"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-lottery"/></th>
-                            <th scope="col" class="text-center">
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody-table">
-                          <tr *ngFor="let item of data">
-                              <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
-                              <td class="text-center">{{ item?.sorteo?.nombre }}</td>
-                              <td class="text-center">{{ item?.ventasTotales }}</td>
-                              <td class="text-center">{{ item?.numeroGanador }}</td>
-                              <td class="text-center">{{ item?.inversionAlGanador }}</td>
-                              <td class="text-center">{{ item?.premioTotal }}</td>
-                              <td class="text-center">{{ item?.utilidad }}</td>
-                              <td class="text-right">
-                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar">
-                                  <i class="bi bi-x-circle"></i>
-                                </button>
-                              </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                      <thead class="thead-light" id="thead-table">
+                        <tr>
+                          <th scope="col" class="text-center">Fecha</th>
+                          <th scope="col" class="text-center">Inversion al ganador</th>
+                          <th scope="col" class="text-center">N° Ganador</th>
+                          <th scope="col" class="text-center">Premio Total</th>
+                          <th scope="col" class="text-center">Sorteo</th>
+                          <th scope="col" class="text-center">Utilidad</th>
+                          <th scope="col" class="text-center">Ventas Totales</th>
+                          <th scope="col" class="text-center">
+                            Acciones
+                          </th>
+                        </tr>
+                        <tr>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-inversion"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-numero"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sorteo"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utilidad"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ventas"/></th>
+                          <th scope="col" class="text-center">
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody-table">
+                        <tr *ngFor="let item of data">
+                            <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
+                            <td class="text-center">{{ item?.inversionalganador }}</td>
+                            <td class="text-center">{{ item?.numeroganador }}</td>
+                            <td class="text-center">{{ item?.premiototal }}</td>
+                            <td class="text-center">{{ item?.sorteo }}</td>
+                            <td class="text-center">{{ item?.utilidad }}</td>
+                            <td class="text-center">{{ item?.ventastotales }}</td>
+                            <td class="text-right">
+                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar">
+                                <i class="bi bi-x-circle"></i>
+                              </button>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
 
@@ -89,4 +133,3 @@
         </div>
     </div>
 </div>
-  
