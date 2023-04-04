@@ -179,7 +179,7 @@ selected = new FormControl('',[Validators.required]);
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Inversion Al Ganador': item?.inversionalganador,
           'Numero Ganador': item?.numeroganador,
-          'Premio Total': item?.premioTotal,
+          'Premio Total': item?.premiototal,
           'Ruta': item?.ruta,
           'Sorteo': item?.sorteo,
           'Utilidad': item?.utilidad,
