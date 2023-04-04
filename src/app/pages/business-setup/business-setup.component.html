@@ -1,0 +1,88 @@
+<!-- always keep -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+    </div>
+  </div>
+</div>
+<!-- Contents -->
+<div class="container-fluid mt--9">
+  <div class="row">
+    <div class="col-12 mb-5 mb-xl-0">
+      <div class="card shadow" id="card-container-tables">
+        <div class="card-header bg-transparent" style="padding: 10px 10px 0px 0px;">
+          <div class="row align-items-center">
+            <div class="col">
+              <!-- Switch background -->
+              <label class="switch float-right">
+                  <input type="checkbox" id="toggleTable" appToggleTable>
+                  <span class="slider round"></span>
+              </label>
+
+            </div>
+            <div></div>
+          </div>
+        </div>
+        <!-- TABLE -->
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-12">
+              <!-- SELECT 2 -->
+              <div class="form-group" *ngIf="isAdmin">
+                <label class="form-label" for="business">Negocio</label>
+                <ng-select (change)="onSelectedBusiness($event)">
+                  <ng-option *ngFor="let item of dataBusiness" [value]="item.id">{{item.nombre}}</ng-option>
+               </ng-select>
+              </div>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-xs-12 text-right">
+              <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
+                <i class="bi bi-filetype-pdf"></i>
+              </button>
+              <button class="btn btn-sm btn-warning" title="Exporta a Excel" (click)="exportToExcel()">
+                <i class="bi bi-file-earmark-excel"></i>
+              </button>
+            </div>
+          </div>
+          <div class="table-responsive mt-2">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light" id="thead-table">
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Hora Inicio</th>
+                    <th scope="col">Hora FIN</th>
+                    <th scope="col">Limite</th>
+                    <th scope="col">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-table">
+                  <tr *ngFor="let item of data">
+                      <td class="align-middle">
+                        {{ item?.sorteo?.nombre }}
+                      </td>
+                      <td class="align-middle">{{ item?.sorteo?.horaInicio }}</td>
+                      <td class="align-middle">{{ item?.sorteo?.horaFin }}</td>
+                      <td class="align-middle">
+                        <span class="badge badge-pill badge-success" *ngIf="item?.limitado == true">Limitado</span>
+                        <span class="badge badge-pill badge-danger" *ngIf="item?.limitado == false">No Limitado</span>
+                      </td>
+                      <td class="align-middle">
+                        <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Cambiar Estado"  (click)="changeStatus(item)">
+                          <i class="bi bi-toggle-off" *ngIf="item?.limitado == false"></i>
+                          <i class="bi bi-toggle-on" *ngIf="item?.limitado == true"></i>
+                        </button>
+                      </td>
+                  </tr>
+                  <tr *ngIf="data.length == 0">
+                    <td colspan="5" class="text-center">No hay datos</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,6 +18,10 @@ export class BusinessService {
     return this.connectionSvc.send('get', `negocio`);
   }
 
+  getSorteosByBusiness(id: number): Promise<any> {
+    return this.connectionSvc.send('get', `negocio/${ id }/sorteos`);
+  }
+
   add(data: any, isEdit: boolean = false): Promise<any> {
     let params = JSON.stringify(data);
     if (isEdit) {
@@ -26,6 +30,10 @@ export class BusinessService {
     } else {
       return this.connectionSvc.send('post', `negocio/guardar`, params);
     }
+  }
+
+  changeStatus(sorteo: number, id: number): Promise<any> {
+    return this.connectionSvc.send('put', `sorteo/update/limitado/sorteo/${ sorteo }/negocio/${ id }`);
   }
 
   delete(id: number): Promise<any> {

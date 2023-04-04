@@ -75,8 +75,23 @@ export class ExtraordinarySalesComponent implements OnInit {
   }
 
   async getCurrentRaflle() {
+
+    // VALIDATE IF HOUR IS NOT PASSET TO 6:00 PM
+    let hour = moment().format('HH:mm');
+    let hourLimit = moment('18:00', 'HH:mm').format('HH:mm');
+    if (hour > hourLimit) {
+      this.alertSvc.showAlert(3,'', 'No hay sorteo activo');
+      // disabled form
+      this.disabledActions = true;
+      // get div by class carousel
+      let carousel = document.getElementById('div-carousel-extra');
+      // add clase hide
+        carousel?.classList.add('d-none');
+      return;
+    }
+
     let currentRaffle = await this.extraordinarySalesSvc.getCurrentRaffle();
-    console.log(currentRaffle);
+    // console.log(currentRaffle);
     if (currentRaffle && currentRaffle?.status == 200 ) {
       this.disabledActions = false;
       this.currentRaffle = currentRaffle?.data;
@@ -138,9 +153,10 @@ export class ExtraordinarySalesComponent implements OnInit {
     }
 
     // validate if number is empty
-    if (!number) {
+    if (number == null && number == undefined) {
       return;
     }
+
 
     // get limit
     await this.getLimit(number);
