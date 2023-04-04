@@ -89,6 +89,12 @@ export class ConnectionService {
         return;
       }
 
+      // acceso denegado
+      if ( error?.error?.message === 'Acceso denegado' && error?.error?.status == 403 ) {
+        this.logout();
+        return;
+      }
+
       let  { error_message, token_invalid } = error.error;
       // Refresh token
       if ( error_message != undefined ) {

@@ -119,9 +119,9 @@ export class SalesComponent implements OnInit, AfterViewInit {
     this.amount_sold = 0;
     // get value number
     let number = this.formSale.get('number')?.value;
-
+    console.log('hey')
     // validate if number is minor than 0 and major than 99
-    if (number < 0 || number > 99) {
+    if (number < -1 || number > 99) {
       this.alertSvc.showAlert(3, '', 'Número no valido');
       this.formSale.get('number')?.setValue('');
       this.inputNumber.nativeElement.focus();
@@ -137,7 +137,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
     }
 
     // validate if number is empty
-    if (!number) {
+    if (number == null && number == undefined) {
       return;
     }
 

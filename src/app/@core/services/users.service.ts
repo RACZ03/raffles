@@ -143,4 +143,8 @@ export class UsersService {
     return this.connectionSvc.send('get', `limite/obtener/${ id }`);
   }
 
+  closeSessionByCode(codigo: string, id: string): Promise<any> {
+    return this.connectionSvc.send('put', `api/public/logout/cod/${ codigo }/id/${ id }`);
+  }
+
 }

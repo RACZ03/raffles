@@ -41,6 +41,10 @@ const routes: Routes = [
         // canLoad: [ AdminGuard ]
       },
       {
+        path: 'business-setup', loadChildren: () => import('./business-setup/business-setup.module').then(m => m.BusinessSetupModule),
+        // canLoad: [ AdminGuard ]
+      },
+      {
         path: 'route', loadChildren: () => import('./route/route.module').then(m => m.RouteModule),
         // canLoad: [ AdminGuard ]
       },

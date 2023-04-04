@@ -12,6 +12,7 @@ declare interface RouteInfo {
 export const ROUTES_SUPER_ADMIN: RouteInfo[] = [
     { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
     { path: 'business', title: 'Negocio',  icon:'ni-building text-orange', class: '' },
+    { path: 'business-setup', title: 'Configuración Negocio',  icon:'ni-building text-info', class: '' },
     { path: 'route', title: 'Rutas',  icon:'ni-square-pin text-default', class: '' },
     { path: 'users', title: 'Usuarios',  icon:'ni-single-02 text-yellow', class: '' },
     { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
@@ -23,6 +24,7 @@ export const ROUTES_SUPER_ADMIN: RouteInfo[] = [
 export const ROUTES_ADMIN: RouteInfo[] = [
     { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
     { path: 'business-profile', title: 'Negocio',  icon:'ni-building text-orange', class: '' },
+    { path: 'business-setup', title: 'Configuración Negocio',  icon:'ni-building text-info', class: '' },
     { path: 'route', title: 'Rutas',  icon:'ni-square-pin text-default', class: '' },
     { path: 'business-users', title: 'Usuarios',  icon:'ni-single-02 text-yellow', class: '' },
     { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },

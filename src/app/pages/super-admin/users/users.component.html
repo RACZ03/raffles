@@ -76,7 +76,8 @@
                               </span>
                             </td>
                             <td class="text-right">
-                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)">
+                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)"
+                                placement="left" ngbTooltip="Permisos de Impresión">
                                 <i class="bi bi-printer-fill"></i>
                               </button>
                               <button class="btn btn-sm text-info" placement="left" ngbTooltip="Historial de Limites" (click)="onViewLimits(item)">
@@ -88,7 +89,12 @@
                               <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Cambiar contraseña" (click)="onChangePassword(item)">
                                 <i class="bi bi-key"></i>
                               </button>
-                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDelete(item)">
+                              <button *ngIf="identity.id !== item.id"
+                                class="btn btn-sm text-default" placement="left" ngbTooltip="Cerrar Sesión" (click)="onCloseSession(item)">
+                                <i class="bi bi-box-arrow-in-left"></i>
+                              </button>
+                              <button  *ngIf="identity.id !== item.id"
+                                class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDelete(item)">
                                 <i class="bi bi-x-circle"></i>
                               </button>
                             </td>
