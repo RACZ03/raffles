@@ -39,7 +39,7 @@ selected = new FormControl('',[Validators.required]);
 
   ngOnInit(): void {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
-    this.loadData();
+    this.loadData(null);
     this.loadDataSorteo();
   }
 
@@ -73,10 +73,11 @@ selected = new FormControl('',[Validators.required]);
      }
    }
 
-  async loadData() {
+  async loadData(_data:any) {
+    if(_data == null){
      let resp = await  this.reportSvr.getDetailSellerAllBusiness();
      let {data , comment, status} = resp;
-     console.log(resp);
+     //console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -85,6 +86,10 @@ selected = new FormControl('',[Validators.required]);
         }
       }
       this.dtTrigger.next(this.dtOptions);
+    }else{
+      this.data = _data;
+      this.dtTrigger.next(this.dtOptions);
+    }
   }
 
  async report(){
@@ -101,24 +106,23 @@ selected = new FormControl('',[Validators.required]);
         this.fechaInicio.setValue('');
         this.fechaFin.setValue('');
         this.selected.setValue('')
-        this.renderer();
-        this.dataTableSvc.dtElements = this.dtElement;
       }else{
           this.AlertSvc.showAlert(3,'REPORTES VENDEDORES',comment);
           this.data=data;
           this.fechaInicio.setValue('');
           this.fechaFin.setValue('');
           this.selected.setValue('')
-          this.renderer();
-          this.dataTableSvc.dtElements = this.dtElement;
         }
-
+      //  this.dataTableSvc.dtElements = this.dtElement;
+        this.renderer(this.data);
       }
+
       this.clean();
   }
 
     /* Section Render & Destoy */
-    renderer() {
+    renderer(_data:any) {
+      this.data = _data;
       this.dtElement = this.dataTableSvc.dtElements;
       // unsubscribe the event
       this.dtTrigger.unsubscribe();
@@ -127,7 +131,7 @@ selected = new FormControl('',[Validators.required]);
         dtInstance.destroy();
         // new observable
         this.dtTrigger = new Subject();
-        this.loadData();
+        this.loadData(this.data);
       });
     }
 
@@ -146,7 +150,7 @@ selected = new FormControl('',[Validators.required]);
     }
 
     getFilteredData(): Promise<any[]> {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
             return {
