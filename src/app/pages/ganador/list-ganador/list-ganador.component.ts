@@ -28,7 +28,7 @@ export class ListGanadorComponent implements OnInit {
     private winnerSvc: WinnerService,
     public alertSvc: AlertService,
     private exportSvc: ExporterDataService
-  ) { 
+  ) {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData();
   }
@@ -71,8 +71,8 @@ export class ListGanadorComponent implements OnInit {
       } else {
         this.alertSvc.showAlert(4, comment, message);
       }
-      
-    
+
+
   }
 
   addWinner() {
@@ -145,13 +145,13 @@ export class ListGanadorComponent implements OnInit {
           'Ventas Totales':item?.ventasTotales,
           'Numero Ganador':item?.numeroGanador,
           'Inversion al Ganador':item?.inversionAlGanador,
-          'Premio Total':item?.premioTotal, 
-          'Utilidad':item?.utilidad 
+          'Premio Total':item?.premioTotal,
+          'Utilidad':item?.utilidad
         }
       });
       this.exportSvc.exportToExcel(json, 'Numeros Ganadores');
     }
-  
+
    async exportToPDF() {
       let data : any = [];
       if(this.search === ''){
@@ -159,7 +159,7 @@ export class ListGanadorComponent implements OnInit {
       }else{
         data = await this.getFilteredData();
       }
-      console.log(data);
+      //console.log(data);
       let json = data.map((item: any) => {
 
         return {
@@ -168,8 +168,8 @@ export class ListGanadorComponent implements OnInit {
           'Ventas Totales':item?.ventasTotales,
           'Numero Ganador':item?.numeroGanador,
           'Inversion al Ganador':item?.inversionAlGanador,
-          'Premio Total':item?.premioTotal, 
-          'Utilidad':item?.utilidad 
+          'Premio Total':item?.premioTotal,
+          'Utilidad':item?.utilidad
         }
       });
       this.exportSvc.exportPdf(json, 'Numeos Ganadores',7,true);
