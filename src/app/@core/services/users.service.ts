@@ -81,7 +81,8 @@ export class UsersService {
       password: data.password,
       idNegocio: parseInt(data.idNegocio),
       idRuta: (data.idRuta !==  0 ) ? data.idRuta : null,
-      imprimeTicket: data?.imprimeTicket
+      imprimeTicket: data?.imprimeTicket,
+      tablaEspecial: data?.tablaEspecial,
     }
 
     let role: string = data.role;

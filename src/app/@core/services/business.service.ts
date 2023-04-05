@@ -40,4 +40,8 @@ export class BusinessService {
     return this.connectionSvc.send('delete', `negocio/eliminar/${ id }`);
   }
 
+  updateDay(day: string): Promise<any>{
+    return this.connectionSvc.send('put', `sorteo/update/loteria?dia=${ day }`);
+  }
+
 }

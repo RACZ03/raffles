@@ -114,6 +114,34 @@ export class BusinessSetupComponent implements OnInit {
     }
   }
 
+  async onUpdateDay() {
+    let day = document.getElementById('inputDay') as HTMLInputElement;
+    // validate day is not empty, not null and not undefined
+    if ( day === undefined || day === null || day.value === '') {
+      this.alertSvc.showAlert(3, 'Info', 'Debe ingresar el día a actualizar');
+      return;
+    }
+
+    // show alert comfirm update day
+    let res = await this.alertSvc.showConfirmLimit( '¿Está seguro de actualizar el día de lotería?', '', 'Si');
+    if ( res ) {
+
+      let resp = await this.businessService.updateDay(day.value as string);
+      if ( resp !== undefined ) {
+        let { status, comment } = resp;
+        if ( status && status == 200) {
+          this.alertSvc.showAlert(1, 'Success', comment);
+        } else {
+          this.alertSvc.showAlert(3, 'Info', 'No se pudo actualizar el día');
+        }
+      } else {
+        this.alertSvc.showAlert(3, 'Info', 'No se pudo actualizar el día');
+      }
+      // clear input
+      day.value = '';
+    }
+  }
+
 
   async exportToExcel() {
     let data: any = [];

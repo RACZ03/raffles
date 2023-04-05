@@ -34,6 +34,7 @@ export class AddUserComponent implements OnInit {
     if (value != null) {
       this.userForm = this.initForm();
       this.loadForm(value);
+      // console.log(value);
     }
   }
 
@@ -182,6 +183,8 @@ export class AddUserComponent implements OnInit {
       password: '123456',
       confirm_password: '123456',
       idNegocio: data?.negocioAndRuta?.idNegocio,
+      imprimeTicket: (data?.imprimeTicket != undefined) ? data?.imprimeTicket : false,
+      tablaEspecial: (data?.tablaEspecial != undefined) ? data?.tablaEspecial : false,
       // idRuta: data?.negocioAndRuta?.idRuta,
     });
     this.getRoutesByIdBusiness(data?.negocioAndRuta?.idNegocio);
@@ -227,6 +230,7 @@ export class AddUserComponent implements OnInit {
       role: ['', Validators.required],
       limit: [0],
       imprimeTicket: [false],
+      tablaEspecial: [false],
     });
   }
 

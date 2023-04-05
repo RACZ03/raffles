@@ -17,10 +17,10 @@
           <i class="ni ni-bell-55"></i>
         </a>
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
-          <a class="dropdown-item" href="javascript:void(0)">Action</a>
+          <!-- <a class="dropdown-item" href="javascript:void(0)">Action</a>
           <a class="dropdown-item" href="javascript:void(0)">Another action</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
+          <a class="dropdown-item" href="javascript:void(0)">Something else here</a> -->
         </div>
       </li>
       <li class="nav-item" ngbDropdown placement="bottom-right">
@@ -35,14 +35,14 @@
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0">Bienvenido!</h6>
           </div>
-          <a routerLinkActive="active" [routerLink]="['user-profile']" class="dropdown-item">
+          <!-- <a routerLinkActive="active" [routerLink]="['user-profile']" class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>Mi Perfil</span>
           </a>
           <a routerLinkActive="active" [routerLink]="['support']" class="dropdown-item">
             <i class="ni ni-support-16"></i>
             <span>Soporte</span>
-          </a>
+          </a> -->
           <div class="dropdown-divider"></div>
           <button class="dropdown-item" (click)="logout()">
             <i class="ni ni-user-run"></i>
@@ -70,7 +70,7 @@
         </div>
       </div>
       <!-- Form -->
-      <form class="mt-4 mb-3 d-md-none">
+      <!-- <form class="mt-4 mb-3 d-md-none">
         <div class="input-group input-group-rounded input-group-merge">
           <input type="search" class="form-control form-control-rounded form-control-prepended" placeholder="Search" aria-label="Search">
           <div class="input-group-prepend">
@@ -79,7 +79,7 @@
             </div>
           </div>
         </div>
-      </form>
+      </form> -->
       <!-- Navigation -->
       <ul class="navbar-nav" id="navbar">
           <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
