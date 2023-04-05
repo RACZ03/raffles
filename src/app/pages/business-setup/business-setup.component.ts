@@ -154,7 +154,7 @@ export class BusinessSetupComponent implements OnInit {
         'Nombre': item?.sorteo?.nombre,
         'Hora Inicio': item?.sorteo?.horaInicio,
         'Hora Fin': item?.sorteo?.horaFin,
-        'Limite': item?.limitado ? 'Limitado' : 'No Limitado',
+        'Estado': item?.limitado ? 'Limitado' : 'No Limitado',
       }
     });
     this.exportSvc.exportToExcel(json, 'ConfiguracionNegocios');
@@ -171,7 +171,7 @@ export class BusinessSetupComponent implements OnInit {
         'Nombre': item?.sorteo?.nombre,
         'Hora Inicio': item?.sorteo?.horaInicio,
         'Hora Fin': item?.sorteo?.horaFin,
-        'Limite': item?.limitado ? 'Limitado' : 'No Limitado',
+        'Estado': item?.limitado ? 'Limitado' : 'No Limitado',
       }
     });
 
