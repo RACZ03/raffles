@@ -22,6 +22,8 @@ export class DetalleRutasComponent implements OnInit {
 
 
 public data: any = [];
+public mostrar: boolean = false;
+public dataIdentity: any = null;
 public search: string = '';
 public dataSorteo: any = [];
 fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
@@ -38,6 +40,12 @@ selected = new FormControl('',[Validators.required]);
   }
   ngOnInit(): void {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.dataIdentity= JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of this.dataIdentity) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.mostrar = true;
+      }
+    }
     this.loadData(null);
     this.loadDataSorteo();
   }

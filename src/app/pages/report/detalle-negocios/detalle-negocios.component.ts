@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import * as moment from 'moment';
-import { Subject } from 'rxjs';
+import { Subject, identity } from 'rxjs';
 import { ReportService } from 'src/app/@core/services/report.service';
 import { WinnerService } from 'src/app/@core/services/winner.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
@@ -22,6 +22,8 @@ export class DetalleNegociosComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
 public data: any = [];
+public mostrar: boolean = false;
+public dataIdentity: any = null;
 public search: string = '';
 public dataSorteo: any = [];
 fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
@@ -40,6 +42,12 @@ selected = new FormControl('',[Validators.required]);
 
   ngOnInit(): void {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.dataIdentity= JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of this.dataIdentity) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.mostrar = true;
+      }
+    }
     this.loadData(null);
     this.loadDataSorteo();
   }
