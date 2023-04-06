@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PrintService } from 'src/app/@core/utils/print.service';
+import { HomeService } from 'src/app/@core/services/home.service';
+import { UsersService } from 'src/app/@core/services/users.service';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,44 +16,131 @@ export class DashboardComponent implements OnInit {
   public clicked: boolean = true;
   public clicked1: boolean = false;
 
+  public isSuperAdmin: boolean = false;
+  public isAdmin: boolean = false;
+  public isSupervisor: boolean = false;
+
+  public totalSuperAdmin: number = 0;
+  public totalAdmin: number = 0;
+  public totalSupervisores: number = 0;
+  public totalVendedores: number = 0;
+
+  public chartLabels: any[] = [];
+  public ventasTotalesData: any[] = [];
+  public premioTotalData: any[] = [];
+  public utilidadData: any[] = [];
+
   constructor(
-    private printSvc: PrintService,
-  ) { }
+    private userSvc: UsersService,
+    private homeSvc: HomeService
+  ) {
+    this.isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN') as boolean;
+    this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
+    this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
+  }
 
   ngOnInit() {
-
-    this.datasets = [
-      [0, 20, 10, 30, 15, 40, 20, 60, 60],
-      [0, 20, 5, 25, 10, 30, 15, 40, 40]
-    ];
-    this.data = this.datasets[0];
-
-
-    var chartOrders = document.getElementById('chart-orders');
-
-  //   var ordersChart = new Chart(chartOrders, {
-  //     type: 'bar',
-  //     options: chartExample2.options,
-  //     data: chartExample2.data
-  //   });
-
-  //   var chartSales = document.getElementById('chart-sales');
-
-  //   this.salesChart = new Chart(chartSales, {
-	// 		type: 'line',
-	// 		options: chartExample1.options,
-	// 		data: chartExample1.data
-	// 	});
+    this.getDataTotalUsers();
+    this.getSales();
   }
 
-  print() {
-    // this.printSvc.printTicket('QJ4ERM36');
+  async getDataTotalUsers() {
+    let resp = await this.homeSvc.getCountUsers();
+    if (resp ) {
+      let { status, data } = resp;
+      if (status == 200 ) {
+        for (const item of data) {
+          if ( item.nombre === 'ROLE_SUPER_ADMIN' )
+            this.totalSuperAdmin = item.cantidad;
+          else if ( item.nombre === 'ROLE_ADMIN' )
+            this.totalAdmin = item.cantidad;
+          else if ( item.nombre === 'ROLE_SUPERVISOR' )
+            this.totalSupervisores = item.cantidad;
+          else if ( item.nombre === 'ROLE_VENDEDOR' )
+            this.totalVendedores = item.cantidad;
+        }
+      }
+    }
   }
 
-  // public updateOptions() {
-  //   this.salesChart.data.datasets[0].data = this.data;
-  //   this.salesChart.update();
-  // }
+
+  async getSales() {
+    let resp = await this.homeSvc.getGraficoVentas(10);
+    if (resp ) {
+      let { status, data } = resp;
+      if (status == 200 ) {
+        console.log(data);
+        this.chartLabels = data.map((d: any) => d.fecha);
+        this.ventasTotalesData = data.map((d: any) => d.ventas_totales);
+        this.premioTotalData = data.map((d: any) => d.premio_total);
+        this.utilidadData = data.map((d: any) => d.utilidad);
+        this.createGraph();
+      }
+    }
+  }
+
+  createGraph() {
+
+    let options = {
+      legend: {
+        display: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          tickets: {
+            // mostrar las etiquetas en diagonal
+            autoSkip: false,
+            maxRotation: 45,
+            minRotation: 45
+          }
+        }],
+        yAxes: [{
+          display: true
+        }]
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    };
+
+    const lineChart = new Chart('lineSales', {
+      type: 'line',
+      data: {
+        labels: this.chartLabels,
+        datasets: [
+          {
+            label: 'Ventas Totales',
+            data: this.ventasTotalesData,
+            borderColor: '#3cba9f',
+            fill: false
+          },
+          {
+            label: 'Premio Total',
+            data: this.premioTotalData,
+            borderColor: '#172b4d',
+            fill: false
+          },
+        ]
+      },
+      options
+    });
+
+    const lineChart2 = new Chart('lineUtilities', {
+      type: 'line',
+      data: {
+        labels: this.chartLabels,
+        datasets: [
+          {
+            label: 'Utilidad',
+            data: this.utilidadData,
+            borderColor: '#e84a3c',
+            fill: false
+          }
+        ]
+      },
+      options
+    });
+  }
 
 }
 

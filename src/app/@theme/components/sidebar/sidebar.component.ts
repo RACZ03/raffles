@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/@core/services/auth.service';
 import { UsersService } from 'src/app/@core/services/users.service';
@@ -76,9 +76,10 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = this.menuItems.filter(menuItem => menuItem);
-    this.router.events.subscribe((event) => {
-      this.isCollapsed = true;
-   });
+  }
+
+  showMenu() {
+    this.isCollapsed = false;
   }
 
   changeRoute() {
@@ -88,4 +89,14 @@ export class SidebarComponent implements OnInit {
   logout() {
     this.authService.logout('');
   }
+
+  // detectar el click fuera del sidebar
+  @HostListener('document:click', ['$event'])
+  clickout(event: any) {
+    // detectar si el click se realizo por una etiqueta a
+    if (event.target.tagName === 'A') {
+      this.isCollapsed = true;
+    }
+  }
+
 }

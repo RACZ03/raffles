@@ -80,16 +80,16 @@
             <!-- Business & Routes -->
             <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="!isEdit">
-                  <!-- Role -->
-                  <div class="form-group">
-                    <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>
-                    <select class="form-control" formControlName="role" style="padding: 6px 12px !important;" (click)="onChangeRole()">
-                        <option value="0">Seleccione</option>
-                        <option *ngFor="let route of roles" [value]="route.ref">{{ route.nombre }}</option>
-                    </select>
-                    <span *ngIf="validInput('role')" class="text-danger mt-1">
-                        {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
-                    </span>
+                <!-- Role -->
+                <div class="form-group">
+                  <label for="" class="form-label">{{ 'MODULES.USER.ROLE' | translate }} <span class="text-danger">*</span></label>
+                  <select class="form-control" formControlName="role" style="padding: 6px 12px !important;" (click)="onChangeRole()">
+                      <option value="0">Seleccione</option>
+                      <option *ngFor="let route of roles" [value]="route.ref">{{ route.nombre }}</option>
+                  </select>
+                  <span *ngIf="validInput('role')" class="text-danger mt-1">
+                      {{ 'VALIDATIONS.REQUIRED_FIELD' | translate }}
+                  </span>
                 </div>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="!activeFromBusinessUser">
@@ -142,6 +142,14 @@
                   <i [ngClass]="(userForm.get('imprimeTicket')?.value == true) ? 'bi bi-printer-fill text-success' : 'bi bi-printer-fill text-danger'"
                     style="margin-left: 10px; margin-top: 5px;"></i>
                 </div>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="tablaEspecial">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Permisos Tabla Especial
+                  </label>
+                  <i [ngClass]="(userForm.get('tablaEspecial')?.value == true) ? 'bi bi-card-list text-success' : 'bi bi-card-list text-danger'"
+                    style="margin-left: 10px; margin-top: 5px;"></i>
+                </div>
               </div>
             </div>
             <!--  -->
@@ -152,5 +160,8 @@
                 </button>
             </div>
         </form>
+
+
+        </div>
     </div>
 </div>
