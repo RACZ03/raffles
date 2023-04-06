@@ -77,8 +77,6 @@ getConsolidadoRangoByBusinessFiltrado(fechaInicio: string, fechaFin: string): Pr
 ///venta/rpt-lista/fecha/2023-02-07/sorteo/1/vendedor/9
 getRPTLista(_fecha: any, idSorteo: number, idVendedor: number): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
-  let resp = this.connectionSvc.send(`get`,`venta/rpt-lista/fecha/${fecha}/sorteo/${idSorteo}/vendedor/${idVendedor}`);
-  console.log(resp);
   return this.connectionSvc.send('get', `venta/rpt-lista/fecha/${fecha}/sorteo/${idSorteo}/vendedor/${idVendedor}`);
 
 }
