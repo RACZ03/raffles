@@ -24,10 +24,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   public showForm: boolean = false;
 
   public UserSelected: any = null;
+  public UserSelectedChangePass: any = null;
+  public UserSelectedModalRoles: any = null;
   public isAdmin: boolean|string = false;
 
   public modalChangePassword: any;
   public modalHistory: any;
+  public modalRoles: any;
+
   public search: string = '';
   public identity: any = null;
   constructor(
@@ -40,6 +44,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
     this.identity = localStorage.getItem('identity') || '';
     this.identity = JSON.parse(this.identity);
+    console.log('Hi')
     this.loadData();
   }
 
@@ -49,6 +54,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     );
     this.modalHistory = new window.bootstrap.Modal(
       document.getElementById('historyLimitUser')
+    );
+
+    this.modalRoles = new window.bootstrap.Modal(
+      document.getElementById('rolesUser')
     );
   }
 
@@ -61,12 +70,13 @@ export class UsersComponent implements OnInit, OnDestroy {
       let { id, code } = this.usersSvc.getBusinessIdAndRoleCodeByAuth();
       resp = await this.usersSvc.getUsersByBusinessAndRole(id, code);
     }
+
     if ( resp !== undefined ) {
       let { status, data } = resp;
       if ( status && status == 200) {
         let { content } = data;
         this.data = content;
-        // console.log(this.data)
+        console.log('data', this.data)
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
@@ -103,6 +113,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   async changeStatusPrinter(item: any) {
     // modal confirm
     let resp = await this.alertSvc.showConfirmLimit('Estado de Impresiòn', '¿Está seguro de cambiar el estado de impresión?', 'Cambiar');
@@ -114,13 +125,46 @@ export class UsersComponent implements OnInit, OnDestroy {
       let { status } = resp2;
       if ( status && status == 200) {
         this.alertSvc.showAlert(1, '', 'Se le han otorgado los permisos de impresión');
+
+        // update item
+        item.imprimeTicket = !item.imprimeTicket;
       } else {
         this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
       }
-      this.renderer();
     } else {
       this.alertSvc.showAlert(4, '', 'No se pudo otorgar los permisos de impresión');
     }
+  }
+
+  async changeStatus(item: any) {
+    // modal confirm
+    let message = item.habilitado ? '¿Está seguro de Inhabilitar el usuario?' : '¿Está seguro de habilitar el usuario?';
+    let btn = item.habilitado ? 'Inhabilitar' : 'Habilitar';
+    let resp = await this.alertSvc.showConfirmLimit('Estado de Usuario', message, btn);
+    if ( resp ) {
+      let resp2 = await this.usersSvc.enableOrDisabledUser(item.id);
+      if ( resp2 ) {
+        let { status } = resp2;
+        if ( status && status == 200) {
+          this.alertSvc.showAlert(1, '', 'Se ha cambiado el estado del usuario');
+
+          // update item
+          item.habilitado = !item?.habilitado
+        } else {
+          this.alertSvc.showAlert(4, '', 'No se pudo cambiar el estado del usuario');
+        }
+      } else {
+        this.alertSvc.showAlert(4, '', 'No se pudo cambiar el estado del usuario');
+      }
+    } else {
+      return;
+    }
+  }
+
+  onEditRoles(item: any) {
+    this.dataTableSvc.dtElements = this.dtElement;
+    this.UserSelectedModalRoles = item;
+    this.modalRoles.show();
   }
 
   // Actions
@@ -136,7 +180,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   onChangePassword(item: any) {
-    this.UserSelected = item;
+    this.UserSelectedChangePass = item;
     this.modalChangePassword.show();
   }
 
@@ -149,6 +193,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.showForm = false;
     // refresh data
     this.UserSelected = null;
+    this.UserSelectedChangePass = null;
+    this.UserSelectedModalRoles = null;
     this.renderer();
   }
 
@@ -159,7 +205,15 @@ export class UsersComponent implements OnInit, OnDestroy {
       return;
     } else {
       this.modalChangePassword.hide();
-      this.renderer();
+      // this.renderer();
+    }
+  }
+
+  closeModalRoles(e: any) {
+    this.UserSelectedModalRoles = null;
+    this.modalRoles.hide();
+    if ( e ) {
+      window.location.reload();
     }
   }
 
@@ -201,10 +255,13 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
     // destroy the table
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      this.data = [];
       dtInstance.destroy();
       // new observable
       this.dtTrigger = new Subject();
-      this.loadData();
+      setTimeout(() => {
+        this.loadData();
+      }, 500);
     });
   }
 

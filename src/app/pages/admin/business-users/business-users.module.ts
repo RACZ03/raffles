@@ -7,6 +7,10 @@ import { BusinessUsersComponent } from './business-users.component';
 import { RouterModule } from '@angular/router';
 import { BusinessUsersRoutingModule } from './business-users-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThemeModule } from 'src/app/@theme/theme.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskModule } from 'ngx-mask';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -20,7 +24,11 @@ import { TranslateModule } from '@ngx-translate/core';
     BusinessUsersRoutingModule,
     DataTablesModule,
     TranslateModule,
-    UsersModule
+    UsersModule,
+    ThemeModule,
+    ReactiveFormsModule,
+    NgxMaskModule,
+    NgbModule
   ]
 })
 export class BusinessUsersModule { }

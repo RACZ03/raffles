@@ -70,15 +70,25 @@
                             <td>{{ item?.negocioAndRuta?.ruta }}</td>
                             <td>
                               <span *ngFor="let role of item?.roles">
-                                <span class="badge badge-pill badge-primary mt-2" style="font-size: 11px;">{{ role?.nombre }}</span><br>
+                                <span class="badge badge-pill badge-primary mt-2"
+                                style="font-size: 11px;">{{ role?.nombre }}</span><br *ngIf="item?.roles.length > 1">
                               </span>
+                              <button class="btn btn-sm text-default" (click)="onEditRoles(item)">
+                                <i class="bi bi-pencil"></i>
+                              </button>
                             </td>
                             <td class="text-right">
-                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)">
+                              <button [ngClass]="item?.imprimeTicket ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatusPrinter(item)"
+                                  placement="left" ngbTooltip="Permisos de Impresión">
                                 <i class="bi bi-printer-fill"></i>
                               </button>
                               <button class="btn btn-sm text-info" placement="left" ngbTooltip="Historial de Limites" (click)="onViewLimits(item)">
                                 <i class="bi bi-list-stars"></i>
+                              </button>
+                              <button [ngClass]="item?.habilitado ? 'btn btn-sm text-success' : 'btn btn-sm text-danger'" (click)="changeStatus(item)"
+                                placement="left" [ngbTooltip]="item?.habilitado ? 'Inhabilitar Usuario' : 'Habilitar Usuario'">
+                                <i class="bi bi-person-check" *ngIf="item?.habilitado == true"></i>
+                                <i class="bi bi-person-x" *ngIf="item?.habilitado == false"></i>
                               </button>
                               <button class="btn btn-sm text-orange"  placement="left" ngbTooltip="Editar" (click)="onEdit(item)">
                                 <i class="bi bi-pencil-square"></i>
@@ -86,6 +96,10 @@
                               <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Cambiar contraseña" (click)="onChangePassword(item)">
                                 <i class="bi bi-key"></i>
                               </button>
+                              <!-- <button *ngIf="identity.id !== item.id"
+                                class="btn btn-sm text-default" placement="left" ngbTooltip="Cerrar Sesión" (click)="onCloseSession(item)">
+                                <i class="bi bi-box-arrow-in-left"></i>
+                              </button> -->
                               <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="onDelete(item)">
                                 <i class="bi bi-x-circle"></i>
                               </button>
@@ -105,11 +119,16 @@
 </div>
 
 <!-- Change Password -->
-<div class="modal fade" id="changePasswordUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <app-change-password [setUser]="UserSelected" (goBack)="closeModal($event)"></app-change-password>
+<div class="modal fade" id="changePasswordUserAdmin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <app-change-password [setUser]="UserSelectedChangePass" (goBack)="closeModal($event)"></app-change-password>
 </div>
 
 <!-- View Limits -->
-<div class="modal fade" id="historyLimitUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="historyLimitUserAdmin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <app-limit-history [setUser]="UserSelected" (goBack)="closeModalHistory($event)"></app-limit-history>
+</div>
+
+<!-- Modal Roles -->
+<div class="modal fade" id="rolesUserAdmin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <app-modal-roles [setUser]="UserSelectedModalRoles" (goBack)="closeModalRoles($event)"></app-modal-roles>
 </div>
