@@ -79,28 +79,25 @@
                           <th scope="col" class="text-center">Fecha Inicio</th>
                           <th scope="col" class="text-center">Fecha Fin</th>
                           <th scope="col" class="text-center">Inversion</th>
+                          <th scope="col" class="text-center" *ngIf="mostrar">Negocio</th>
                           <th scope="col" class="text-center">Negocio</th>
                           <th scope="col" class="text-center">Nombre</th>
                           <th scope="col" class="text-center">Premio</th>
                           <th scope="col" class="text-center">Ruta</th>
                           <th scope="col" class="text-center">Utilidad</th>
                           <th scope="col" class="text-center">Ventas</th>
-                          <th scope="col" class="text-center">
-                            Acciones
-                          </th>
                         </tr>
                         <tr>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fechaInicio"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fechaFin"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-inversion"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-negocio"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-nombre"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ruta"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utilidad"/></th>
-                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ventas"/></th>
-                          <th scope="col" class="text-center">
-                          </th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fechaInicio" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fechaFin" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-inversion" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center" *ngIf="mostrar"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-negocio" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-negocio" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-nombre" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ruta" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utilidad" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ventas" (keyup)="searchData($event)"/></th>
                         </tr>
                       </thead>
                       <tbody id="tbody-table">
@@ -108,17 +105,13 @@
                             <td class="text-center">{{ item?.fecha_inicio |  date:'dd/MM/yyyy' }}</td>
                             <td class="text-center">{{ item?.fecha_fin |  date:'dd/MM/yyyy' }}</td>
                             <td class="text-center">{{ item?.inversion }}</td>
+                            <td class="text-center" *ngIf="mostrar">{{ item?.negocio }}</td>
                             <td class="text-center">{{ item?.negocio }}</td>
                             <td class="text-center">{{ item?.nombre }}</td>
                             <td class="text-center">{{ item?.premio }}</td>
                             <td class="text-center">{{ item?.ruta }}</td>
                             <td class="text-center">{{ item?.utilidad }}</td>
                             <td class="text-center">{{ item?.ventas }}</td>
-                            <td class="text-right">
-                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar">
-                                <i class="bi bi-x-circle"></i>
-                              </button>
-                            </td>
                         </tr>
                       </tbody>
                     </table>

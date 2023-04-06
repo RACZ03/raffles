@@ -23,6 +23,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxTagsInputBoxModule } from 'ngx-tags-input-box';
 import { TagInputModule } from 'ngx-chips';
+import { RptListaModalComponent } from './rpt-lista-modal/rpt-lista-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { TagInputModule } from 'ngx-chips';
     DetalleVendedoresComponent,
     DetalleRutasComponent,
     ResumenVendedorFechaComponent,
-    DetalleNegociosComponent
+    DetalleNegociosComponent,
+    RptListaModalComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +59,8 @@ import { TagInputModule } from 'ngx-chips';
     MatFormFieldModule,
     MatNativeDateModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
   ]
 })
 export class ReportModule { }

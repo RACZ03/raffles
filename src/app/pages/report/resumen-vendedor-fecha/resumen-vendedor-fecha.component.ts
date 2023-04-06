@@ -24,6 +24,8 @@ export class ResumenVendedorFechaComponent implements OnInit {
 public data: any = [];
 public search: string = '';
 public dataSorteo: any = [];
+public mostrar: boolean = false;
+public dataIdentity: any = null;
 fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
 fechaFin = new FormControl('',[Validators.required, this.fechaFinValida]);
 selected = new FormControl('',[Validators.required]);
@@ -39,6 +41,13 @@ selected = new FormControl('',[Validators.required]);
 
   ngOnInit(): void {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.dataIdentity= JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of this.dataIdentity) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.mostrar = true;
+      }
+    }
+
     this.loadData(null);
   }
 
@@ -64,7 +73,7 @@ selected = new FormControl('',[Validators.required]);
     if(_data == null){
      let resp = await  this.reportSvr.getConsolidadoRango();
      let {data , comment, status} = resp;
-     //console.log(resp);
+     console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -107,6 +116,13 @@ selected = new FormControl('',[Validators.required]);
       this.clean();
   }
 
+       /* Search */
+       searchData(e: any) {
+         this.search = e.target.value;
+         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+           dtInstance.search(this.search).draw();
+         });
+       }
     /* Section Render & Destoy */
     renderer(_data:any) {
       this.data = _data;

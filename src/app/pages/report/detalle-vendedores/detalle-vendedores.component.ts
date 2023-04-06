@@ -8,6 +8,8 @@ import { Subject } from 'rxjs';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 import * as moment from 'moment';
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
+import { MatDialog } from '@angular/material/dialog';
+import { RptListaModalComponent } from '../rpt-lista-modal/rpt-lista-modal.component';
 
 @Component({
   selector: 'app-detalle-vendedores',
@@ -20,10 +22,11 @@ export class DetalleVendedoresComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-
+public mostrar: boolean = false;
 public data: any = [];
 public search: string = '';
 public dataSorteo: any = [];
+public dataIdentity: any = null;
 fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
 fechaFin = new FormControl('',[Validators.required, this.fechaFinValida]);
 selected = new FormControl('',[Validators.required]);
@@ -33,12 +36,20 @@ selected = new FormControl('',[Validators.required]);
     private winnerSvc: WinnerService,
     private dataTableSvc: DataTableServiceService,
     private exportSvc: ExporterDataService,
+    public dialog: MatDialog,
   ) {
 
   }
 
   ngOnInit(): void {
     this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.dataIdentity= JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of this.dataIdentity) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.mostrar = true;
+      }
+    }
+
     this.loadData(null);
     this.loadDataSorteo();
   }
@@ -77,7 +88,7 @@ selected = new FormControl('',[Validators.required]);
     if(_data == null){
      let resp = await  this.reportSvr.getDetailSellerAllBusiness();
      let {data , comment, status} = resp;
-     //console.log(resp);
+      console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -90,6 +101,7 @@ selected = new FormControl('',[Validators.required]);
       this.data = _data;
       this.dtTrigger.next(this.dtOptions);
     }
+    this.dataTableSvc.dtElements = this.dtElement;
   }
 
  async report(){
@@ -113,11 +125,23 @@ selected = new FormControl('',[Validators.required]);
           this.fechaFin.setValue('');
           this.selected.setValue('')
         }
-      //  this.dataTableSvc.dtElements = this.dtElement;
+      //this.dataTableSvc.dtElements = this.dtElement;
+      //this.dtElement = this.dataTableSvc.dtElements;
         this.renderer(this.data);
       }
 
       this.clean();
+  }
+
+  detalleRPT(item:any){
+    const dialogRef = this.dialog.open(RptListaModalComponent,{
+      data : item
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+     // window.location.reload();
+     this.AlertSvc.showAlert(1,'CIERRE VENDEDORES','se ha cerrado el modal');
+    });
   }
 
     /* Section Render & Destoy */
@@ -148,6 +172,14 @@ selected = new FormControl('',[Validators.required]);
       this.selected.setValue('');
       //this.renderer();
     }
+
+        /* Search */
+        searchData(e: any) {
+          this.search = e.target.value;
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.search(this.search).draw();
+          });
+        }
 
     getFilteredData(): Promise<any[]> {
       return new Promise((resolve, _reject) => {
