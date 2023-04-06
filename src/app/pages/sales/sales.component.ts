@@ -75,6 +75,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
     this.identity = JSON.parse(user);
   }
 
+  //detalle de ticket
+  detalleTicketVentas() {
+    console.log('detalleTicketVentas');
+  }
+
+  //fin de detalle de ticket
+
   async getCurrentRaflle() {
     let currentRaffle = await this.salesSvc.getCurrentRaffle();
     if (currentRaffle) {
