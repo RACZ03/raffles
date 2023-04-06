@@ -36,17 +36,17 @@ export class RptListaModalComponent implements OnInit {
   }
 
  async  loadData(_data: any) {
-  console.log(_data);
+  // console.log(_data);
     let resp = await this.reporSvr.getRPTLista(_data.fecha,_data.idsorteo,_data.idvendedor)
-    let {data_, status} = resp;
+    let {data, status} = resp;
     if(status == 200){
-      this.data = data_;
+      this.data = data;
     }else{
       //this.data = [];
       this.alerSvr.showAlert(1, 'Error', 'No se encontraron datos');
     }
     this.dtTrigger.next(this.dtOptions);
-    console.log(resp);
+    // console.log(resp);
 
   }
 
