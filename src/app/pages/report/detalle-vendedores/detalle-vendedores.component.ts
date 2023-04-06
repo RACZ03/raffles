@@ -99,26 +99,28 @@ selected = new FormControl('',[Validators.required]);
       this.dtTrigger.next(this.dtOptions);
     }else{
       this.data = _data;
+      // construir nuevamente el datatable
       this.dtTrigger.next(this.dtOptions);
+
     }
-    this.dataTableSvc.dtElements = this.dtElement;
+    // this.dataTableSvc.dtElements = this.dtElement;
   }
 
- async report(){
-   let fechaInicio = moment(this.fechaInicio.value).format('YYYY-MM-DD');
+  async report(){
+    let fechaInicio = moment(this.fechaInicio.value).format('YYYY-MM-DD');
     let fechaFin = moment(this.fechaFin.value).format('YYYY-MM-DD');
     let idSorteo = this.selected.value;
 
-  let resp = await this.reportSvr.getDetailSellerByBusinessFiltrado(fechaInicio=="Invalid date"? '': fechaInicio,
-  fechaFin=="Invalid date"?'': fechaFin,idSorteo==null?'':idSorteo);
-   let {data , comment, status} = resp;
-    if(status == 200){
-      if(data != null){
-        this.data = data;
-        this.fechaInicio.setValue('');
-        this.fechaFin.setValue('');
-        this.selected.setValue('')
-      }else{
+    let resp = await this.reportSvr.getDetailSellerByBusinessFiltrado(fechaInicio=="Invalid date"? '': fechaInicio,
+    fechaFin=="Invalid date"?'': fechaFin,idSorteo==null?'':idSorteo);
+    let {data , comment, status} = resp;
+      if(status == 200){
+        if(data != null){
+          this.data = data;
+          this.fechaInicio.setValue('');
+          this.fechaFin.setValue('');
+          this.selected.setValue('')
+        }else{
           this.AlertSvc.showAlert(3,'REPORTES VENDEDORES',comment);
           this.data=data;
           this.fechaInicio.setValue('');
@@ -144,113 +146,115 @@ selected = new FormControl('',[Validators.required]);
     });
   }
 
-    /* Section Render & Destoy */
-    renderer(_data:any) {
-      this.data = _data;
-      this.dtElement = this.dataTableSvc.dtElements;
-      // unsubscribe the event
-      this.dtTrigger.unsubscribe();
-      // destroy the table
+  /* Section Render & Destoy */
+  async renderer(_data:any) {
+    this.data = [];
+
+    await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.clear();
+      dtInstance.draw();
+      dtInstance.destroy();
+      this.loadData(_data);
+    });
+  }
+
+  /* Destroy components */
+  ngOnDestroy(): void {
+    // this.renderer
+    this.dtTrigger.unsubscribe();
+  }
+
+  limpiarFiltro(){
+    this.clean();
+    this.renderer(null);
+  }
+
+  //limpiar campos
+  clean(){
+    this.fechaInicio.setValue('');
+    this.fechaFin.setValue('');
+    this.selected.setValue('');
+    //this.renderer();
+  }
+
+  /* Search */
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
+
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, _reject) => {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        // new observable
-        this.dtTrigger = new Subject();
-        this.loadData(this.data);
-      });
-    }
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'fecha': item[0],
+            'inversionAlGanador': item[1],
+            'numeroGanador': item[2],
+            'premioTotal': item[3],
+            'ruta' : item[4],
+            'sorteo': item[5],
+            'utilidad': item[6],
+            'vendedor': item[7],
+            'ventasTotales': item[8],
 
-    /* Destroy components */
-    ngOnDestroy(): void {
-      // this.renderer
-      this.dtTrigger.unsubscribe();
-    }
-
-    //limpiar campos
-    clean(){
-      this.fechaInicio.setValue('');
-      this.fechaFin.setValue('');
-      this.selected.setValue('');
-      //this.renderer();
-    }
-
-        /* Search */
-        searchData(e: any) {
-          this.search = e.target.value;
-          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            dtInstance.search(this.search).draw();
-          });
-        }
-
-    getFilteredData(): Promise<any[]> {
-      return new Promise((resolve, _reject) => {
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-            return {
-              'fecha': item[0],
-              'inversionAlGanador': item[1],
-              'numeroGanador': item[2],
-              'premioTotal': item[3],
-              'ruta' : item[4],
-              'sorteo': item[5],
-              'utilidad': item[6],
-              'vendedor': item[7],
-              'ventasTotales': item[8],
-
-            }
-          });
-          resolve(filteredData);
+          }
         });
+        resolve(filteredData);
       });
-    }
+    });
+  }
 
   async  exportToExcel() {
-      let data : any = [];
-      if(this.search === ''){
-        data = this.data;
-      }else{
-        data= await this.getFilteredData();
-      }
-      let json = data.map((item: any) => {
-        return {
-          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Numero Ganador': item?.numeroganador,
-          'Premio Total': item?.premiototal,
-          'Ruta': item?.ruta,
-          'Sorteo': item?.sorteo,
-          'Utilidad': item?.utilidad,
-          'Vendedor': item?.vendedor,
-          'Ventas Totales': item?.ventastotales
-        }
-      });
-      this.exportSvc.exportToExcel(json, 'detalle de vendedores');
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data= await this.getFilteredData();
     }
-
-   async exportToPDF() {
-      let data : any = [];
-      if(this.search === ''){
-        data = this.data;
-      }else{
-        data = await this.getFilteredData();
+    let json = data.map((item: any) => {
+      return {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Inversion Al Ganador': item?.inversionalganador,
+        'Numero Ganador': item?.numeroganador,
+        'Premio Total': item?.premiototal,
+        'Ruta': item?.ruta,
+        'Sorteo': item?.sorteo,
+        'Utilidad': item?.utilidad,
+        'Vendedor': item?.vendedor,
+        'Ventas Totales': item?.ventastotales
       }
-      console.log(data);
-      let json = data.map((item: any) => {
+    });
+    this.exportSvc.exportToExcel(json, 'detalle de vendedores');
+  }
 
-        return {
-          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Numero Ganador': item?.numeroganador,
-          'Premio Total': item?.premiototal,
-          'Ruta': item?.ruta,
-          'Sorteo': item?.sorteo,
-          'Utilidad': item?.utilidad,
-          'Vendedor': item?.vendedor,
-          'Ventas Totales': item?.ventastotales
-
-        }
-      });
-      this.exportSvc.exportPdf(json, 'detalle vendedores',9,true);
+  async exportToPDF() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data = await this.getFilteredData();
     }
+    console.log(data);
+    let json = data.map((item: any) => {
+
+      return {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Inversion Al Ganador': item?.inversionalganador,
+        'Numero Ganador': item?.numeroganador,
+        'Premio Total': item?.premiototal,
+        'Ruta': item?.ruta,
+        'Sorteo': item?.sorteo,
+        'Utilidad': item?.utilidad,
+        'Vendedor': item?.vendedor,
+        'Ventas Totales': item?.ventastotales
+
+      }
+    });
+    this.exportSvc.exportPdf(json, 'detalle vendedores',9,true);
+  }
 
 
 }
