@@ -9,11 +9,13 @@ import * as moment from 'moment';
 export class ReportService {
   private dataIdentity: any = null;
   private roles: any = null;
+  private currentRaffle: any = null;
 
   constructor(
     private connectionSvc: ConnectionService
   ) {
     this.dataIdentity= JSON.parse(localStorage.getItem('business') || '{}');
+    this.currentRaffle = JSON.parse(localStorage.getItem('currentRaffle') || '{}');
     this.roles= JSON.parse(localStorage.getItem('roles') || '{}');
   }
 
@@ -79,6 +81,26 @@ getRPTLista(_fecha: any, idSorteo: number, idVendedor: number): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
   return this.connectionSvc.send('get', `venta/rpt-lista/fecha/${fecha}/sorteo/${idSorteo}/vendedor/${idVendedor}`);
 
+}
+
+//listar recibos
+//venta/recibos/negocio/1/fecha/2023-03-27/sorteo/3
+getRecibosActuales(){
+  let today = new Date();
+  let dd = parseInt(String(today.getDate()).padStart(2, '0'));
+  let mm = parseInt(String(today.getMonth()).padStart(2, '0')); //January is 0!
+  let yyyy = today.getFullYear();
+  today = new Date(yyyy, mm, dd);
+let hoy = moment(today).format('YYYY-MM-DD');
+console.log(hoy);
+
+  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}}/sorteo/${this.currentRaffle.id}`);
+}
+
+
+getRecibos(idNegocio: number, _fecha: any, idSorteo: number): Promise<any> {
+  let fecha = moment(_fecha).format('YYYY-MM-DD');
+  return this.connectionSvc.send('get', `venta/recibos/negocio/${idNegocio}/fecha/${fecha}/sorteo/${idSorteo}`);
 }
 
 }

@@ -9,6 +9,8 @@ import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
+import { ModalVentasComponent } from './modal-ventas/modal-ventas.component';
+import { MatDialog } from '@angular/material/dialog';
 
 declare const navigator: any;
 
@@ -54,7 +56,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private salesSvc: SalesService,
     private authSvc: AuthService,
     private printSvc: PrintService,
-    private userSvc: UsersService
+    private userSvc: UsersService,
+    public dialog: MatDialog,
   ) {
     // get business from localstorage
     this.business = JSON.parse(localStorage.getItem('business') || '{}');
@@ -77,7 +80,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   //detalle de ticket
   detalleTicketVentas() {
-    console.log('detalleTicketVentas');
+    const dialogRef = this.dialog.open(ModalVentasComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+     // window.location.reload();
+     this.alertSvc.showAlert(1,'CIERRE VENDEDORES','se ha cerrado el modal');
+    });
   }
 
   //fin de detalle de ticket
