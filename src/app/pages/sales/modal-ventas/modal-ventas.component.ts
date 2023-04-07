@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ReportService } from 'src/app/@core/services/report.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
+import { ModalVentasDetallesComponent } from '../modal-ventas-detalles/modal-ventas-detalles.component';
+import { WinnerService } from 'src/app/@core/services/winner.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-modal-ventas',
@@ -41,21 +44,78 @@ selected = new FormControl('',[Validators.required]);
     public dialogRef: MatDialogRef<ModalVentasComponent>,
     public reporSvr: ReportService,
     private dataTableSvc: DataTableServiceService,
-    private alerSvr : AlertService
+    private alerSvr : AlertService,
+    private dialog : MatDialog,
+    public winnerSvc : WinnerService
   ) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.dtOptions = this.dataTableSvc.dtOptions || {};
+    this.loadData(null);
+    this.loadDataSorteo();
   }
 
-  async loadData(){
-    let resp = await this.reporSvr.getRecibosActuales();
-    console.log(resp);
-      let { data } = resp;
+  async loadData(_data:any){
+     if(_data!=null){
+       this.data = _data;
+     }else{
+      let resp = await this.reporSvr.getRecibosActuales();
+      console.log(resp);
+        let { data,status, comment  } = resp;
+        if(status==200){
+          this.data = data;
+          this.dtTrigger.next(this.dtOptions);
+        }
+        else{
+         this.data = _data;
+
+        }
+
+     }
   }
 
-  report(){
-    console.log('report');
+ async report(){
+    let fechaInicio = moment(this.fechaInicio.value).format('YYYY-MM-DD');
+    let idSorteo = this.selected.value;
+     let resp = await this.reporSvr.getRecibos(fechaInicio,idSorteo);
+     let { data,status, comment  } = resp;
+     console.log(resp);
+      if(status==200){
+        this.data = data;
+        this.renderer(this.data);
+      }
+      else{
+        this.data = [];
+        }
+
+  }
+
+  async loadDataSorteo(){
+    this.dataSorteo = [];
+    let resp = await this.winnerSvc.getSorteo();
+     let { data,status,message,comment } = resp;
+     console.log(resp);
+    if(status==200){
+       this.dataSorteo = data;
+     }else{
+       this.alerSvr.showAlert(4,comment,message);
+     }
+   }
+
+  detalle(_item:any){
+    const dialogRef2 = this.dialog.open(ModalVentasDetallesComponent, {
+      width: '700px',
+      data: _item
+    });
+
+    dialogRef2.afterClosed().subscribe(result => {
+     // window.location.reload();
+     this.alerSvr.showAlert(1,'CIERRE DETALLE','se ha cerrado el modal de detalle');
+    });
+  }
+
+  closeModal(){
+    this.dialogRef.close();
   }
 
   limpiarFiltro(){
@@ -69,5 +129,17 @@ selected = new FormControl('',[Validators.required]);
         dtInstance.search(this.search).draw();
       });
     }
+
+     /* Section Render & Destoy */
+  async renderer(_data:any) {
+    this.data = [];
+
+    await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.clear();
+      dtInstance.draw();
+      dtInstance.destroy();
+      this.loadData(_data);
+    });
+  }
 
 }

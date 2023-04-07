@@ -94,12 +94,13 @@ getRecibosActuales(){
 let hoy = moment(today).format('YYYY-MM-DD');
 console.log(hoy);
 
-  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}}/sorteo/${this.currentRaffle.id}`);
+  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffle.id}`);
 }
 
 
-getRecibos(idNegocio: number, _fecha: any, idSorteo: number): Promise<any> {
+getRecibos(_fecha: any, idSorteo: any): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
+  let idNegocio = this.dataIdentity.idNegocio;
   return this.connectionSvc.send('get', `venta/recibos/negocio/${idNegocio}/fecha/${fecha}/sorteo/${idSorteo}`);
 }
 

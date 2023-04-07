@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { ModalVentasDetallesComponent } from './modal-ventas-detalles/modal-ventas-detalles.component';
 
 
 
@@ -26,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
   declarations: [
     SalesComponent,
     ModalVentasComponent,
+    ModalVentasDetallesComponent,
   ],
   imports: [
     CommonModule,
