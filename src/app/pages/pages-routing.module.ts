@@ -73,6 +73,10 @@ const routes: Routes = [
         canLoad: [ AdminGuard ]
       },
       {
+        path: 'recibos', loadChildren: () => import('./recibos/recibos.module').then(m => m.RecibosModule),
+        canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

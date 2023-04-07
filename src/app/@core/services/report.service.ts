@@ -101,7 +101,18 @@ console.log(hoy);
 getRecibos(_fecha: any, idSorteo: any): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
   let idNegocio = this.dataIdentity.idNegocio;
+  console.log(fecha, idSorteo, idNegocio);
   return this.connectionSvc.send('get', `venta/recibos/negocio/${idNegocio}/fecha/${fecha}/sorteo/${idSorteo}`);
+}
+
+///elomiar venta venta/eliminar
+deleteVenta(idVenta: number, idvendedor:number): Promise<any> {
+  let data = {
+    id: idVenta,
+    idVendedor: idvendedor,
+    idNegocio: this.dataIdentity.idNegocio
+  }
+  return this.connectionSvc.send('post', `venta/eliminar`, data);
 }
 
 }
