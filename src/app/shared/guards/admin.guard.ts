@@ -2,45 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, CanLoad, Route, Router, UrlSegment } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UsersService } from 'src/app/@core/services/users.service';
-
-
-declare interface RouteInfo {
-  path: string;
-}
-
-const ROUTES_SUPER_ADMIN: RouteInfo[] = [
-  { path: 'dashboard' },
-  { path: 'business' },
-  { path: 'business-setup' },
-  { path: 'route' },
-  { path: 'users' },
-  { path: 'award-catalog' },
-  { path: 'limit' } ,
-  { path: 'winner' } ,
-  {  path: 'report' }
-];
-
-const ROUTES_ADMIN: RouteInfo[] = [
-  { path: 'dashboard' },
-  { path: 'business-profile' },
-  { path: 'business-setup' },
-  { path: 'route' },
-  { path: 'business-users' },
-  { path: 'award-catalog' },
-  { path: 'limit' } ,
-  { path: 'winner' } ,
-  { path: 'report' }
-];
-
-const ROUTES_SUPERVISOR: RouteInfo[] = [
-  { path: 'dashboard' },
-];
-
-const ROUTES_SALES: RouteInfo[] = [
-  { path: 'dashboard' },
-  { path: 'sales' } ,
-  { path: 'extraordinary-sales' }
-];
+import { ROUTES_ADMIN, ROUTES_SALES, ROUTES_SUPERVISOR, ROUTES_SUPER_ADMIN } from 'src/app/@theme/components/sidebar/sidebar.component';
 
 @Injectable({
   providedIn: 'root'
