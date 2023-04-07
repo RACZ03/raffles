@@ -1,3 +1,4 @@
+import { identity } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ConnectionService } from '../utils/connection.service';
 
@@ -8,7 +9,9 @@ export class WinnerService {
 
   constructor(
     private connectionSvc: ConnectionService,
-  ) { }
+  ) {
+
+  }
 
   getIdentity(): any {
     let identity = localStorage.getItem('identity');
@@ -18,10 +21,27 @@ export class WinnerService {
       return null;
     }
   }
-  
+
   getwinners(): Promise<any> {
-    return this.connectionSvc.send('get', `ganador/todos`);
+    //ganador/porNegocio/4
+    let identity = this.getIdentity();
+    //varaible booleana
+    let isSuperAdmin = false;
+
+  for (const item of identity.roles) {
+   if(item.nombre == 'ROLE_SUPER_ADMIN'){
+    isSuperAdmin = true;
+   }
   }
+   if(!isSuperAdmin){
+    return this.connectionSvc.send('get', `ganador/porNegocio/${identity.idNegocio}`);
+   }
+   else{
+    return this.connectionSvc.send('get', `ganador/todos`);
+   }
+
+}
+
 
   getSorteo(): Promise<any> {
     return this.connectionSvc.send('get', `sorteo/obtener`);

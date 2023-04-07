@@ -1,22 +1,22 @@
-import { ResumenVendedorFechaComponent } from './../../report/resumen-vendedor-fecha/resumen-vendedor-fecha.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
+import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { ReportService } from 'src/app/@core/services/report.service';
+import { WinnerService } from 'src/app/@core/services/winner.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
-import { ModalVentasDetallesComponent } from '../modal-ventas-detalles/modal-ventas-detalles.component';
-import { WinnerService } from 'src/app/@core/services/winner.service';
-import * as moment from 'moment';
+import { ModalDetalleComponent } from '../modal-detalle/modal-detalle.component';
 
 @Component({
-  selector: 'app-modal-ventas',
-  templateUrl: './modal-ventas.component.html',
-  styleUrls: ['./modal-ventas.component.scss']
+  selector: 'app-list-recibos',
+  templateUrl: './list-recibos.component.html',
+  styleUrls: ['./list-recibos.component.scss']
 })
-export class ModalVentasComponent implements OnInit {
+export class ListRecibosComponent implements OnInit {
+
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -42,7 +42,6 @@ selected = new FormControl('',[Validators.required]);
   }
 
   constructor(
-    public dialogRef: MatDialogRef<ModalVentasComponent>,
     public reporSvr: ReportService,
     private dataTableSvc: DataTableServiceService,
     private alerSvr : AlertService,
@@ -115,20 +114,17 @@ selected = new FormControl('',[Validators.required]);
    }
 
   detalle(_item:any){
-    const dialogRef2 = this.dialog.open(ModalVentasDetallesComponent, {
+    const dialogRef = this.dialog.open(ModalDetalleComponent, {
       width: '700px',
       data: _item
     });
 
-    dialogRef2.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
      // window.location.reload();
      this.alerSvr.showAlert(1,'CIERRE DETALLE','se ha cerrado el modal de detalle');
     });
   }
 
-  closeModal(){
-    this.dialogRef.close();
-  }
 
   limpiarFiltro(){
     console.log('limpiarFiltro');
