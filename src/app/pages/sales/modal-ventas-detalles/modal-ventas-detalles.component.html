@@ -1,0 +1,36 @@
+<div class="card-body" >
+  <div class="row">
+    <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+      <h2>
+        <span>Detalle de Numeros vendidos</span>
+      </h2>
+    </div>
+    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="text-align: right;">
+      <button (click)="closeModal()" class="btn btn-danger btn-sm mb-3 mt-1">X</button>
+    </div>
+  </div>
+
+  <div class="table-responsive mt-2">
+      <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead class="thead-light" id="thead-table">
+          <tr>
+            <th scope="col" class="text-center">Numero</th>
+            <th scope="col" class="text-center">Monto</th>
+            <th scope="col" class="text-center">Premio</th>
+          </tr>
+          <tr>
+            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-numero" (keyup)="searchData($event)"/></th>
+            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-monto" (keyup)="searchData($event)"/></th>
+            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio" (keyup)="searchData($event)"/></th>
+         </tr>
+        </thead>
+        <tbody id="tbody-table">
+          <tr *ngFor="let item of data">
+            <td class="text-center">{{ item?.numero }}</td>
+              <td class="text-center">{{ item?.monto }}</td>
+              <td class="text-center">{{ item?.premio }}</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
