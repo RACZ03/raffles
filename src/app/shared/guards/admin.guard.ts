@@ -62,7 +62,7 @@ export class AdminGuard implements CanLoad {
       if ( !this.isAdmin ) {
         this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
         if ( !this.isSupervisor ) {
-          this.isSales = this.userSvc.verifyRole('ROLE_SALES') as boolean;
+          this.isSales = this.userSvc.verifyRole('ROLE_VENDEDOR') as boolean;
         }
       }
     }
@@ -82,6 +82,8 @@ export class AdminGuard implements CanLoad {
     } else if ( this.isSales ) {
       routeExists = ROUTES_SALES.find( route => route.path === routeToLoad ) !== undefined ? true : false;
     }
+
+    console.log('routeExists', routeExists);
 
     if ( !routeExists ) {
       // redirect to dashboard
