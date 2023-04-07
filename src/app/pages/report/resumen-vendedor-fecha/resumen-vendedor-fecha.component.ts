@@ -124,17 +124,14 @@ selected = new FormControl('',[Validators.required]);
          });
        }
     /* Section Render & Destoy */
-    renderer(_data:any) {
-      this.data = _data;
-      this.dtElement = this.dataTableSvc.dtElements;
-      // unsubscribe the event
-      this.dtTrigger.unsubscribe();
-      // destroy the table
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+   async renderer(_data:any) {
+      this.data = [];
+
+      await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.clear();
+        dtInstance.draw();
         dtInstance.destroy();
-        // new observable
-        this.dtTrigger = new Subject();
-        this.loadData(this.data);
+        this.loadData(_data);
       });
     }
 
@@ -150,6 +147,11 @@ selected = new FormControl('',[Validators.required]);
       this.fechaFin.setValue('');
       this.selected.setValue('');
       //this.renderer();
+    }
+
+    limpiarFiltro(){
+      this.clean();
+      this.renderer(null);
     }
 
     getFilteredData(): Promise<any[]> {
