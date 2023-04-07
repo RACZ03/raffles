@@ -59,6 +59,7 @@ selected = new FormControl('',[Validators.required]);
   async loadData(_data:any){
      if(_data!=null){
        this.data = _data;
+       this.dtTrigger.next(this.dtOptions);
      }else{
       let resp = await this.reporSvr.getRecibosActuales();
       console.log(resp);
@@ -69,7 +70,7 @@ selected = new FormControl('',[Validators.required]);
         }
         else{
          this.data = _data;
-
+         this.dtTrigger.next(this.dtOptions);
         }
 
      }
@@ -90,7 +91,7 @@ selected = new FormControl('',[Validators.required]);
       if(status==200){
         if(data!=null){
           this.data = data;
-          this.renderer(this.data);
+          this.renderer(data);
         }else{
           this.alerSvr.showAlert(4,'Sin Datos',comment);
         }
@@ -144,7 +145,6 @@ selected = new FormControl('',[Validators.required]);
      /* Section Render & Destoy */
   async renderer(_data:any) {
     this.data = [];
-
     await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.clear();
       dtInstance.draw();
