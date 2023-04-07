@@ -1,3 +1,4 @@
+import { ResumenVendedorFechaComponent } from './../../report/resumen-vendedor-fecha/resumen-vendedor-fecha.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -21,7 +22,7 @@ export class ModalVentasComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-
+public currentRaffle: any = null;
 
 public data: any = [];
 public search: string = '';
@@ -77,12 +78,22 @@ selected = new FormControl('',[Validators.required]);
  async report(){
     let fechaInicio = moment(this.fechaInicio.value).format('YYYY-MM-DD');
     let idSorteo = this.selected.value;
+    if(fechaInicio == 'Invalid date'){
+      return this.alerSvr.showAlert(4,'Error','Debe ingresar una fecha valida');
+    }
+    if(idSorteo == ''){
+      return this.alerSvr.showAlert(4,'Error','Debe seleccionar un sorteo');
+    }
      let resp = await this.reporSvr.getRecibos(fechaInicio,idSorteo);
-     let { data,status, comment  } = resp;
-     console.log(resp);
+     let { data,status, comment,  } = resp;
+    // console.log(resp);
       if(status==200){
-        this.data = data;
-        this.renderer(this.data);
+        if(data!=null){
+          this.data = data;
+          this.renderer(this.data);
+        }else{
+          this.alerSvr.showAlert(4,'Sin Datos',comment);
+        }
       }
       else{
         this.data = [];
@@ -94,7 +105,7 @@ selected = new FormControl('',[Validators.required]);
     this.dataSorteo = [];
     let resp = await this.winnerSvc.getSorteo();
      let { data,status,message,comment } = resp;
-     console.log(resp);
+     //console.log(resp);
     if(status==200){
        this.dataSorteo = data;
      }else{
@@ -141,5 +152,38 @@ selected = new FormControl('',[Validators.required]);
       this.loadData(_data);
     });
   }
+
+  //eliminar
+ async deleteVenta(_item:any){
+    this.currentRaffle = JSON.parse(localStorage.getItem('currentRaffle') || '{}');
+    let id = _item.id;
+    let idvendedor = _item.vendedor.id;
+    let idsorteo = _item.sorteo.id;
+    let fecha = _item.fecha;
+    let pasivo = _item.pasivo;
+    ///fecha today
+    let fechaActual = moment().format('YYYY-MM-DD');
+    console.log(fechaActual);
+
+    if(pasivo){
+      return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que ya se encuentra eliminado');
+    }
+    if(fechaActual != fecha){
+      return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no es del dia de hoy');
+    }
+    if(this.currentRaffle.id != idsorteo){
+      return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
+    }
+
+    let resp = await this.reporSvr.deleteVenta(id,idvendedor);
+         let { data,status, comment,  } = resp;
+
+          if(status==200){
+            this.alerSvr.showAlert(1,'Eliminado',comment);
+            this.renderer(null);
+          }
+
+  }
+
 
 }
