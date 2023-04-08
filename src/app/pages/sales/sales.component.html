@@ -21,16 +21,16 @@
       <div ngxSlickItem>
         <div class="card">
           <div class="card-header text-center">
-            <h3 class="mb-0">Formulario de Ventas</h3>
+            <h2 class="mb-0">TICKETS</h2>
             <h2 class="mt-2">{{ currentRaffle?.nombre }}</h2>
           </div>
           <div class="card-body" style="padding-top: 0px;">
             <div class="row mt-2">
-              <div class="col-6">
-                Limite: <strong class="text-bold">{{ limit }}</strong>
+              <div class="col-6 text-center">
+                Limite: <strong class="text-bold"  style="font-size: 16px !important;">{{ limit }}</strong>
               </div>
-              <div class="col-6">
-                Vendidos: <strong class="text-bold"> {{ amount_sold }}</strong>
+              <div class="col-6 text-center">
+                Vendidos: <strong class="text-bold"  style="font-size: 16px !important;"> {{ amount_sold }}</strong>
               </div>
             </div>
             <!-- FORMULARIO -->
@@ -38,27 +38,27 @@
               <div class="row mt-4">
                 <div class="col-6">
                   <!-- Form control numero -->
-                  <div class="form-group">
-                    <label for="exampleFormControlInput1">Número</label>
-                    <input type="number" class="form-control" style="height: 38px !important;"
+                  <div class="form-group text-center">
+                    <label for="exampleFormControlInput1" style="font-size: 16px !important;">Número</label>
+                    <input type="number" class="form-control" style="height: 38px !important; font-size: 16px !important;"
                         formControlName="number" #InputNumber (change)="onChange()" (keyup)="onChangeFocus($event)" (focus)="isInputFocused=true">
                   </div>
                 </div>
                 <div class="col-6">
                   <!-- Form control monto -->
-                  <div class="form-group">
-                    <label for="exampleFormControlInput1">Monto</label>
-                    <input type="number" class="form-control" #InputAmount style="height: 38px !important;"
+                  <div class="form-group text-center">
+                    <label for="exampleFormControlInput1"  style="font-size: 16px !important;">Monto</label>
+                    <input type="number" class="form-control" #InputAmount style="height: 38px !important; font-size: 16px !important;"
                           formControlName="amount" (focus)="isInputFocused = true">
                   </div>
                 </div>
               </div>
               <!-- Btn Agregar -->
               <div class="text-right mt-2">
-                <button type="submit" class="btn btn-sm btn-primary">
+                <button type="submit" class="btn btn-sm btn-primary" style="font-size: 16px !important;">
                   Agregar
                 </button>
-                <button  class="btn btn-sm btn-success" (click)="detalleTicketVentas()">
+                <button  class="btn btn-sm btn-success" (click)="detalleTicketVentas()" style="font-size: 16px !important;">
                   Detalle de Ventas
                 </button>
               </div>
@@ -71,24 +71,24 @@
       <div ngxSlickItem >
         <div class="card">
           <div class="card-body" style="padding-top: 20px;">
-            <h3 class="text-center">{{ business?.negocio }}</h3>
-            <h5 class="text-center">{{ identity?.nombre }}</h5>
+            <h2 class="text-center">{{ business?.negocio }}</h2>
+            <h3 class="text-center">{{ identity?.nombre }}</h3>
             <!-- Integrate table -->
             <table class="table">
               <caption></caption>
               <thead>
                 <tr>
-                  <th scope="col" class="text-center">Número</th>
-                  <th scope="col" class="text-center">Monto</th>
-                  <th scope="col" class="text-center">Premio</th>
-                  <th scope="col" class="text-center">Acciones</th>
+                  <th scope="col" class="text-center" style="font-size: 16px !important;">Número</th>
+                  <th scope="col" class="text-center" style="font-size: 16px !important;">Monto</th>
+                  <th scope="col" class="text-center" style="font-size: 16px !important;">Premio</th>
+                  <th scope="col" class="text-center" style="font-size: 16px !important;">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of listSales; let i = index">
-                  <td class="align-middle text-center">{{ item?.number }}</td>
-                  <td class="align-middle text-center">{{ item?.amount }}</td>
-                  <td class="align-middle text-center">{{ item?.prize }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.number }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.amount }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.prize }}</td>
                   <td class="align-middle text-center">
                     <button class="btn btn-sm text-danger" (click)="onRemove(item, i)">
                       <i class="bi bi-trash"></i>

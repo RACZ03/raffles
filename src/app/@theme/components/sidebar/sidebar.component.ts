@@ -65,14 +65,40 @@ export class SidebarComponent implements OnInit {
     let isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
     let isAdmin = this.userSvc.verifyRole('ROLE_ADMIN');
     let isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR');
-
+    let isSales = this.userSvc.verifyRole('ROLE_VENDEDOR');
+    // console.log(isSuperAdmin, isAdmin, isSupervisor, isSales);
     if ( isSuperAdmin ) {
       this.menuItems = ROUTES_SUPER_ADMIN;
-    } else if ( isAdmin ) {
-      this.menuItems = ROUTES_ADMIN;
+    } else if ( isSupervisor && isSales ) {
+      this.menuItems = ROUTES_SALES.concat(ROUTES_SUPERVISOR);
+      // eliminar rutas duplicadas
+      this.menuItems = this.menuItems.filter((item, index, self) =>
+        index === self.findIndex((t) => (
+          t.path === item.path
+        ))
+      );
+    } else if ( isAdmin && isSales ) {
+      this.menuItems = ROUTES_ADMIN.concat(ROUTES_SALES);
+      // eliminar rutas duplicadas
+      this.menuItems = this.menuItems.filter((item, index, self) =>
+        index === self.findIndex((t) => (
+          t.path === item.path
+        ))
+      );
+    } else if ( isAdmin && isSupervisor &&isSales ) {
+      this.menuItems = ROUTES_ADMIN.concat(ROUTES_SUPERVISOR.concat(ROUTES_SALES))
+      // eliminar rutas duplicadas
+      this.menuItems = this.menuItems.filter((item, index, self) =>
+        index === self.findIndex((t) => (
+          t.path === item.path
+        ))
+      );
     } else if ( isSupervisor ) {
       this.menuItems = ROUTES_SUPERVISOR;
-    } else {
+    } else if ( isAdmin ) {
+      this.menuItems = ROUTES_ADMIN;
+    }
+    else {
       this.menuItems = ROUTES_SALES;
     }
     // console.log('hi');
