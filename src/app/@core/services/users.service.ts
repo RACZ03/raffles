@@ -76,8 +76,8 @@ export class UsersService {
 
     let obj = {
       nombre: data.nombre,
-      telefono: (data.telefono == '') ? null : data.telefono,
-      email: data.email,
+      telefono: (data.telefono == '' || data.telefono == null || data.telefono == undefined ) ? null : data.telefono,
+      email: (data.email == '' || data.email == null || data.email == undefined) ? null : data.email,
       password: data.password,
       idNegocio: parseInt(data.idNegocio),
       idRuta: (data.idRuta !==  0 ) ? data.idRuta : null,
