@@ -262,8 +262,7 @@ export class ExtraordinarySalesComponent implements OnInit {
   }
 
   async onSaveAll() {
-    // change focus to number
-    this.inputNumber.nativeElement.focus();
+
     // validate if listSales is empty
     if (this.listSales.length == 0) {
       this.alertSvc.showAlert(3, '', 'No hay ventas para registrar');
