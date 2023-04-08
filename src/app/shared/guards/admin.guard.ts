@@ -19,15 +19,15 @@ export class AdminGuard implements CanLoad {
     private route: Router
   ){
     this.isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN') as boolean;
-    if ( !this.isSuperAdmin ) {
-      this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
-      if ( !this.isAdmin ) {
-        this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
-        if ( !this.isSupervisor ) {
-          this.isSales = this.userSvc.verifyRole('ROLE_VENDEDOR') as boolean;
-        }
-      }
-    }
+    this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
+    this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
+    this.isSales = this.userSvc.verifyRole('ROLE_VENDEDOR') as boolean;
+    // if ( !this.isSuperAdmin ) {
+    //   if ( !this.isAdmin ) {
+    //     if ( !this.isSupervisor ) {
+    //     }
+    //   }
+    // }
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
@@ -37,15 +37,20 @@ export class AdminGuard implements CanLoad {
     if ( this.isSuperAdmin ) {
       // validate route to load if exists in const ROUTES_SUPER_ADMIN
       routeExists = ROUTES_SUPER_ADMIN.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isAdmin ) {
+    }
+    if ( this.isAdmin ) {
       routeExists = ROUTES_ADMIN.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isSupervisor ) {
+    }
+
+    if ( this.isSupervisor ) {
       routeExists = ROUTES_SUPERVISOR.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isSales ) {
+    }
+
+    if ( this.isSales ) {
       routeExists = ROUTES_SALES.find( route => route.path === routeToLoad ) !== undefined ? true : false;
     }
 
-    console.log('routeExists', routeExists);
+    // console.log('routeExists', routeExists);
 
     if ( !routeExists ) {
       // redirect to dashboard

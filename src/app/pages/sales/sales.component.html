@@ -86,9 +86,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of listSales; let i = index">
-                  <td class="align-middle text-center" font-size: 14px !important;>{{ item?.number }}</td>
-                  <td class="align-middle text-center" font-size: 14px !important;>{{ item?.amount }}</td>
-                  <td class="align-middle text-center" font-size: 14px !important;>{{ item?.prize }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.number }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.amount }}</td>
+                  <td class="align-middle text-center" style="font-size: 14px !important;">{{ item?.prize }}</td>
                   <td class="align-middle text-center">
                     <button class="btn btn-sm text-danger" (click)="onRemove(item, i)">
                       <i class="bi bi-trash"></i>
