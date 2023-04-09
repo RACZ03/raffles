@@ -54,24 +54,24 @@ selected = new FormControl('',[Validators.required]);
     this.loadDataSorteo();
   }
 
-  fechaInicioValida(control: FormControl): { [s: string]: boolean } {
-    const fechaInicioIngresada = new Date(control.value);
-    const fechaActual = new Date();
-    if (fechaInicioIngresada > fechaActual) {
-      return { fechaInicioValida: true };
-    }
-    return {};
-  }
+   fechaInicioValida(control: FormControl): { [s: string]: boolean } {
+     const fechaInicioIngresada = new Date(control.value);
+     const fechaActual = new Date();
+     if (fechaInicioIngresada > fechaActual) {
+       return { fechaInicioValida: true };
+     }
+     return {};
+   }
 
-  fechaFinValida(control: FormControl): { [s: string]: boolean } {
-    const fechaFinIngresada = new Date(control.value);
+   fechaFinValida(control: FormControl): { [s: string]: boolean } {
+     const fechaFinIngresada = new Date(control.value);
 
-    const fechaActual = new Date();
-    if (fechaFinIngresada > fechaActual) {
-      return { fechaFinInvalida: true };
-    }
-    return {};
-  }
+     const fechaActual = new Date();
+     if (fechaFinIngresada > fechaActual) {
+       return { fechaFinInvalida: true };
+     }
+     return {};
+   }
 
   async loadDataSorteo(){
     this.dataSorteo = [];
@@ -117,22 +117,14 @@ selected = new FormControl('',[Validators.required]);
       if(status == 200){
         if(data != null){
           this.data = data;
-          this.fechaInicio.setValue('');
-          this.fechaFin.setValue('');
-          this.selected.setValue('')
         }else{
           this.AlertSvc.showAlert(3,'REPORTES VENDEDORES',comment);
           this.data=data;
-          this.fechaInicio.setValue('');
-          this.fechaFin.setValue('');
-          this.selected.setValue('')
         }
       //this.dataTableSvc.dtElements = this.dtElement;
       //this.dtElement = this.dataTableSvc.dtElements;
         this.renderer(this.data);
       }
-
-      this.clean();
   }
 
   detalleRPT(item:any){

@@ -16,6 +16,7 @@ export class LimitComponent implements OnInit {
   public modalFreeNumberToRoute: any;
   public modalFreeNumberToBisness: any;
   public modalFreeLimitWitOutLimit: any;
+  public mostrar = false;
 
   constructor() {   }
 
@@ -47,6 +48,17 @@ export class LimitComponent implements OnInit {
       document.getElementById('modalFreeLimitWitOutLimit')
     );
 
+   this.validaRole();
+
+  }
+
+  validaRole() {
+    let Roles = JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of Roles) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.mostrar = true;
+      }
+    }
   }
 
   /// Modal Change Limit x Ruta
