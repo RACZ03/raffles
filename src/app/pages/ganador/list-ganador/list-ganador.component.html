@@ -26,10 +26,27 @@
                 <!-- TABLE -->
                 <div class="card-body" *ngIf="!showFormAddWinner">
                   <div class="row">
-                    <div class="col-6">
-                      <button class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
+                    <div class="col-xxl-10 col-xl-10 col-lg-10 col-sm-6 col-12" >
+                      <button *ngIf="mostrar" class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
+                      <button *ngIf="mostrar" class="btn btn-warning btn-sm" (click)="verDetalleNegocio()">Ver Detalle por Negocio</button>
+                      <div class="row">
+                          <div class="col-xl-2 col-lg-2 col-sm-4 col-4 ">
+                            <button *ngIf="mostrarInChange" class="btn btn-warning btn-sm float-right mt-1" (click)="regresaPrincipal()">Regresar</button>
+                          </div>
+                           <div class="col-xl-8 col-lg-8 col-sm-4 col-4">
+                            <div class="mb-3" tyle="font-size: small;" *ngIf="mostrarInChange">
+                              <ng-select #rutasSelect [items]="dataNegocio" [selectOnTab]="true" name="Negocio"
+                                  bindValue="id" bindLabel="nombre" placeholder="Seleccione Negocio"
+                                  [selectableGroup]="true" (change)="onNegocioSeleccionado($event)">
+                              </ng-select>
+                          </div>
+                           </div>
+                          <div class="col-xl-2 col-lg-2 col-sm-4 col-4">
+                            <button *ngIf="mostrarInChange" class="btn btn-primary btn-sm float-left mt-1" (click)="buscarNegocio()"><i class="fab fa-sistrix"></i> Buscar</button>
+                          </div>
+                      </div>
                     </div>
-                    <div class="col-6 text-right">
+                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-sm-6 col-12 text-right">
                       <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
                         <i class="bi bi-filetype-pdf"></i>
                       </button>
@@ -44,24 +61,24 @@
                           <tr>
                             <th scope="col" class="text-center">Fecha</th>
                             <th scope="col" class="text-center">Sorteo</th>
-                            <th scope="col" class="text-center">Ventas Totales</th>
-                            <th scope="col" class="text-center">N° Ganador</th>
-                            <th scope="col" class="text-center">Inversion al ganador</th>
-                            <th scope="col" class="text-center">Premio a pagar</th>
+                            <th scope="col" class="text-center">Ganador</th>
+                            <th scope="col" class="text-center">Inversion</th>
+                            <th scope="col" class="text-center">Venta Total</th>
+                            <th scope="col" class="text-center">Premio</th>
                             <th scope="col" class="text-center">Utilidad</th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center" >
                               Acciones
                             </th>
                           </tr>
                           <tr>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-winner" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sale" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-investment" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-award" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utility" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-date" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-lottery" (keyup)="searchData($event)"/></th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fecha" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sorteo" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-ganador" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-inversion" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-venta" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-utilidad" (keyup)="searchData($event)"/></th>
+                            <th scope="col" class="text-center" >
                             </th>
                           </tr>
                         </thead>
@@ -69,14 +86,20 @@
                           <tr *ngFor="let item of data">
                               <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
                               <td class="text-center">{{ item?.sorteo?.nombre }}</td>
-                              <td class="text-center">{{ item?.ventasTotales }}</td>
                               <td class="text-center">{{ item?.numeroGanador }}</td>
-                              <td class="text-center">{{ item?.inversionAlGanador }}</td>
-                              <td class="text-center">{{ item?.premioTotal }}</td>
-                              <td class="text-center">{{ item?.utilidad }}</td>
-                              <td class="text-right">
-                                <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="deleteWinner(item.id)" >
+                              <td class="text-center">{{ item?.inversionAlGanador | currency:'C$' }}</td>
+                              <td class="text-center">{{ item?.ventasTotales | currency:'C$' }}</td>
+                              <td class="text-center">{{ item?.premioTotal | currency:'C$' }}</td>
+                              <td class="text-center">{{ item?.utilidad | currency:'C$' }}</td>
+                              <td class="text-right" >
+                                <button *ngIf="mostrar"  class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="deleteWinner(item.id)" >
                                   <i class="bi bi-x-circle"></i>
+                                </button>
+                                 <button *ngIf="mostrarAdmin" class="btn btn-sm text-primary" placement="left" ngbTooltip="Detalle Vendedor" (click)="detalleVendedor(item)">
+                                  <i class="fa fa-user-tie"></i>
+                                </button>
+                                <button *ngIf="mostrarAdmin" class="btn btn-sm text-danger" placement="left" ngbTooltip="Detalle Rutas" (click)="detalleRutas(item)">
+                                  <i class="fa fa-route"></i>
                                 </button>
                               </td>
                           </tr>
@@ -87,9 +110,8 @@
                 <!-- FORM-->
                 <div *ngIf="showFormAddWinner">
                   <app-addwinner (goBack)="close($event)"></app-addwinner>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
 </div>
-  
