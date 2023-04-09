@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/@core/services/auth.service';
@@ -14,6 +15,8 @@ import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
   styleUrls: ['./business-setup.component.scss']
 })
 export class BusinessSetupComponent implements OnInit {
+
+  @ViewChild('selector') selector!: NgSelectComponent;
 
 
   public data: any[] = [];
@@ -76,7 +79,10 @@ export class BusinessSetupComponent implements OnInit {
       let { status, data } = resp;
       if ( status && status == 200) {
         this.dataBusiness = data;
-        // console.log(this.data)
+        if ( this.dataBusiness.length > 0 ) {
+          // select first option in select
+          this.selector.select({ value: this.dataBusiness[0].id, label: this.dataBusiness[0].nombre });
+        }
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }

@@ -30,7 +30,7 @@ export class PrintService {
     private http: HttpClient,
     private storage: AngularFireStorage
   ) {
-    console.log('PrintService');
+    // console.log('PrintService');
   }
 
   async printTicket(ticket: any): Promise<any> {

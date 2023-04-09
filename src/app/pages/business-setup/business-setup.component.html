@@ -30,7 +30,7 @@
               <!-- SELECT 2 -->
               <div class="form-group" *ngIf="isAdmin">
                 <label class="form-label" for="business">Negocio</label>
-                <ng-select (change)="onSelectedBusiness($event)">
+                <ng-select (change)="onSelectedBusiness($event)" #selector>
                   <ng-option *ngFor="let item of dataBusiness" [value]="item.id">{{item.nombre}}</ng-option>
                </ng-select>
               </div>
