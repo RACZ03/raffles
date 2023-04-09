@@ -18,6 +18,11 @@ export class RptListaModalComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   public search: string = '';
+  public sorteo: string = '';
+  public vendedor: string = '';
+  public fecha: string = '';
+  public ruta: string = '';
+  public negocio: string = '';
   public data: any = [];
 
   constructor(
@@ -37,6 +42,11 @@ export class RptListaModalComponent implements OnInit {
 
  async  loadData(_data: any) {
   // console.log(_data);
+  this.sorteo=_data.sorteo;
+  this.vendedor=_data.vendedor;
+  this.fecha=_data.fecha;
+  this.ruta=_data.ruta;
+  this.negocio=_data.negocio;
     let resp = await this.reporSvr.getRPTLista(_data.fecha,_data.idsorteo,_data.idvendedor)
     let {data, status} = resp;
     if(status == 200){
@@ -57,5 +67,10 @@ export class RptListaModalComponent implements OnInit {
       dtInstance.search(this.search).draw();
     });
   }
+
+  closeModal() {
+    this.dialogRef.close();
+  }
+
 
 }

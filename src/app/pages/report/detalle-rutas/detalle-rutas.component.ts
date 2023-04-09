@@ -108,21 +108,13 @@ selected = new FormControl('',[Validators.required]);
     if(status == 200){
       if(data != null){
         this.data = data;
-        this.fechaInicio.setValue('');
-        this.fechaFin.setValue('');
-        this.selected.setValue('')
       }else{
           this.AlertSvc.showAlert(3,'REPORTES VENDEDORES',comment);
           this.data=data;
-          this.fechaInicio.setValue('');
-          this.fechaFin.setValue('');
-          this.selected.setValue('')
         }
       //  this.dataTableSvc.dtElements = this.dtElement;
         this.renderer(this.data);
       }
-
-      this.clean();
   }
 
   async renderer(_data:any) {
@@ -156,14 +148,13 @@ selected = new FormControl('',[Validators.required]);
           const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
             return {
               'fecha': item[0],
-              'inversionAlGanador': item[1],
-              'numeroGanador': item[2],
-              'premioTotal': item[3],
-              'ruta' : item[4],
-              'sorteo': item[5],
-              'utilidad': item[6],
-              'ventasTotales': item[7],
-
+              'sorteo': item[1],
+              'ruta': item[2],
+              'numeroganador': item[3],
+              'inversionalganador': item[4],
+              'ventastotales': item[5],
+              'premiototal': item[6],
+              'utilidad': item[7],
             }
           });
           resolve(filteredData);
@@ -181,13 +172,13 @@ selected = new FormControl('',[Validators.required]);
       let json = data.map((item: any) => {
         return {
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Numero Ganador': item?.numeroganador,
-          'Premio Total': item?.premiototal,
-          'Ruta': item?.ruta,
           'Sorteo': item?.sorteo,
+          'Ruta': item?.ruta,
+          'Numero Ganador': item?.numeroganador,
+          'Inversion Al Ganador': item?.inversionalganador,
+          'Ventas Totales': item?.ventastotales,
+          'Premio Total': item?.premiototal,
           'Utilidad': item?.utilidad,
-          'Ventas Totales': item?.ventastotales
         }
       });
       this.exportSvc.exportToExcel(json, 'detalle de vendedores');
@@ -205,14 +196,13 @@ selected = new FormControl('',[Validators.required]);
 
         return {
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Numero Ganador': item?.numeroganador,
-          'Premio Total': item?.premiototal,
-          'Ruta': item?.ruta,
           'Sorteo': item?.sorteo,
+          'Ruta': item?.ruta,
+          'Numero Ganador': item?.numeroganador,
+          'Inversion Al Ganador': item?.inversionalganador,
+          'Ventas Totales': item?.ventastotales,
+          'Premio Total': item?.premiototal,
           'Utilidad': item?.utilidad,
-          'Ventas Totales': item?.ventastotales
-
         }
       });
       this.exportSvc.exportPdf(json, 'detalle vendedores',7,true);

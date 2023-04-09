@@ -73,7 +73,7 @@ selected = new FormControl('',[Validators.required]);
     if(_data == null){
      let resp = await  this.reportSvr.getConsolidadoRango();
      let {data , comment, status} = resp;
-     console.log(resp);
+     //console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -99,21 +99,13 @@ selected = new FormControl('',[Validators.required]);
     if(status == 200){
       if(data != null){
         this.data = data;
-        this.fechaInicio.setValue('');
-        this.fechaFin.setValue('');
-        this.selected.setValue('')
       }else{
           this.AlertSvc.showAlert(3,'REPORTES VENDEDORES',comment);
           this.data=data;
-          this.fechaInicio.setValue('');
-          this.fechaFin.setValue('');
-          this.selected.setValue('')
         }
       //  this.dataTableSvc.dtElements = this.dtElement;
         this.renderer(this.data);
       }
-
-      this.clean();
   }
 
        /* Search */
@@ -161,13 +153,12 @@ selected = new FormControl('',[Validators.required]);
             return {
               'fecha_inicio': item[0],
               'fecha_fin': item[1],
-              'inversion': item[2],
-              'negocio': item[3],
-              'nombre': item[4],
-              'premio': item[5],
-              'ruta': item[6],
-              'utilidad': item[7],
-              'ventas': item[8],
+              'negocio': item[2],
+              'ruta': item[3],
+              'vendedor': item[4],
+              'ventas': item[5],
+              'premio': item[6],
+              'utilidad': item[7]
             }
           });
           resolve(filteredData);
@@ -186,16 +177,15 @@ selected = new FormControl('',[Validators.required]);
         return {
           'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion': item?.inversion,
           'Negocio': item?.negocio,
-          'Nombre': item?.nombre,
-          'Premio': item?.premio,
           'Ruta': item?.ruta,
-          'Utilidad': item?.utilidad,
+          'Vendedor': item?.nombre,
           'Ventas': item?.ventas,
+          'Premio': item?.premio,
+          'Utilidad': item?.utilidad,
         }
       });
-      this.exportSvc.exportToExcel(json, 'detalle de vendedores');
+      this.exportSvc.exportToExcel(json, 'detalle de vendedores por fecha');
     }
 
    async exportToPDF() {
@@ -211,16 +201,15 @@ selected = new FormControl('',[Validators.required]);
         return {
           'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Inversion': item?.inversion,
           'Negocio': item?.negocio,
-          'Nombre': item?.nombre,
-          'Premio': item?.premio,
           'Ruta': item?.ruta,
-          'Utilidad': item?.utilidad,
+          'Vendedor': item?.nombre,
           'Ventas': item?.ventas,
+          'Premio': item?.premio,
+          'Utilidad': item?.utilidad,
         }
       });
-      this.exportSvc.exportPdf(json, 'detalle vendedores',9,true);
+      this.exportSvc.exportPdf(json, 'detalle vendedores por fecha',8,true);
     }
 
 }

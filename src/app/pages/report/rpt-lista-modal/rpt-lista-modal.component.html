@@ -1,6 +1,16 @@
-<div >
-  <h1 mat-dialog-title>Detalle de Monto numero y premios
-  </h1>
+<div class="m-2">
+  <h1 style="text-align: center;">Lista</h1>
+  <button class="btn btn-sm btn-danger" title="Cerrar" (click)="closeModal()" style="float: right;">
+    <i class="bi bi-x"></i>
+  </button>
+  <div class="row m-2">
+     <div class="col">
+      <span>Fecha: {{fecha}}</span><br>
+      <span>Vendedor: {{vendedor}}</span><br>
+      <span>Ruta: {{ruta}}</span><br>
+      <span>Negocio: {{negocio}}</span>
+     </div>
+  </div>
 <div mat-dialog-content>
     <div class="table-responsive mt-2">
   <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
@@ -20,4 +30,5 @@
     </tbody>
   </table>
     </div>
+</div>
 </div>

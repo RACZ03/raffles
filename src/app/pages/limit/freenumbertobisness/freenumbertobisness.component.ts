@@ -52,10 +52,7 @@ export class FreenumbertobisnessComponent implements OnInit {
       if(item.nombre == 'ROLE_SUPER_ADMIN'){
         this.loadDataBusiness();
       }
-
     }
-
-
   }
 
  async loadDataBusiness() {
