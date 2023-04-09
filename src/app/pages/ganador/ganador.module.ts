@@ -19,12 +19,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { ModalListRutasComponent } from './modal-list-rutas/modal-list-rutas.component';
+import { ModalListVendedoresComponent } from './modal-list-vendedores/modal-list-vendedores.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
     ListGanadorComponent,
-    AddwinnerComponent
+    AddwinnerComponent,
+    ModalListRutasComponent,
+    ModalListVendedoresComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +43,7 @@ import {MatSelectModule} from '@angular/material/select';
     TagInputModule,
     NgxTagsInputBoxModule,
     FormsModule,
+    NgbTooltip,
     NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
@@ -44,7 +51,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatFormFieldModule,
     MatNativeDateModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule,
 
   ]
 })

@@ -19,14 +19,14 @@ export class ChangelimitonesellerComponent implements OnInit {
   VendedorData: any[] = [];
   items: any[]= [];
   inputText = 'text';
-  
+
     ///constructor
   constructor(
     private fb: FormBuilder,
     private routeSvc: RouteService,
     private limitSvc: LimitService,
     private alertSvc: AlertService,
-    private userSvc: UsersService) { 
+    private userSvc: UsersService) {
     }
 
     public insertInputTag(): void {
@@ -38,7 +38,7 @@ export class ChangelimitonesellerComponent implements OnInit {
   }
 
     //whitdefault
-    displayTags(event : any) { 
+    displayTags(event : any) {
       console.log(event);
       this.itemsAsObjects = event;
     }
@@ -46,9 +46,9 @@ export class ChangelimitonesellerComponent implements OnInit {
 
  //OnInit
    ngOnInit(): void {
-    this.formChangeLimitoneSeller = this.initForms(); 
+    this.formChangeLimitoneSeller = this.initForms();
     this.loadDataSeller();
-    
+
   }
 
  async loadDataSeller() {
@@ -61,15 +61,15 @@ export class ChangelimitonesellerComponent implements OnInit {
       return;
     }
     let listVendedorSelected = this.formChangeLimitoneSeller.value.vendedor;
-  
+
     let obj ={
       vendedor: listVendedorSelected,
       limite: this.formChangeLimitoneSeller.value.limite
     }
 
-    
+
     let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite al vendedor seleccionado?', 'Confirmar');
-    
+
     if(await Confirmar){
       let resp = await this.limitSvc.changelimitoneseller(obj);
       let { status, message,comment } = resp;
@@ -84,7 +84,7 @@ export class ChangelimitonesellerComponent implements OnInit {
       this.onClose.emit(true);
     }
 
- 
+
   }
 
   closeModal(band: boolean) {
@@ -106,7 +106,7 @@ export class ChangelimitonesellerComponent implements OnInit {
 
   loadDataform(){
     this.formChangeLimitoneSeller.reset();
-  } 
+  }
 
 
 }
