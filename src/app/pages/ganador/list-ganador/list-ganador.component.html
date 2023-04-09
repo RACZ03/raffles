@@ -30,10 +30,10 @@
                       <button *ngIf="mostrar" class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
                       <button *ngIf="mostrar" class="btn btn-warning btn-sm" (click)="verDetalleNegocio()">Ver Detalle por Negocio</button>
                       <div class="row">
-                          <div class="col-xl-2 col-lg-2 col-sm-4 col-4 ">
-                            <button *ngIf="mostrarInChange" class="btn btn-warning btn-sm float-right mt-1" (click)="regresaPrincipal()">Regresar</button>
+                          <div class="col-xl-2 col-lg-2 col-sm-12 col-12 ">
+                            <button *ngIf="mostrarInChange" class="btn btn-warning btn-sm float-left mt-1 mb-2" (click)="regresaPrincipal()">Regresar</button>
                           </div>
-                           <div class="col-xl-8 col-lg-8 col-sm-4 col-4">
+                           <div class="col-xl-8 col-lg-8 col-sm-8 col-8">
                             <div class="mb-3" tyle="font-size: small;" *ngIf="mostrarInChange">
                               <ng-select #rutasSelect [items]="dataNegocio" [selectOnTab]="true" name="negocios"
                                   bindValue="id" bindLabel="nombre" placeholder="Seleccione Negocio"
@@ -47,7 +47,7 @@
                           </div>
                       </div>
                     </div>
-                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-sm-6 col-12 text-right">
+                    <div class="col-xxl-2 col-xl-2 col-lg-2 col-sm-6 col-12 text-right mt-2">
                       <button class="btn btn-sm btn-warning" title="Exporta a PDF" (click)="exportToPDF()">
                         <i class="bi bi-filetype-pdf"></i>
                       </button>
@@ -67,7 +67,7 @@
                             <th scope="col" class="text-center">Venta Total</th>
                             <th scope="col" class="text-center">Premio</th>
                             <th scope="col" class="text-center">Utilidad</th>
-                            <th scope="col" class="text-center" >
+                            <th scope="col" class="text-center">
                               Acciones
                             </th>
                           </tr>
@@ -92,7 +92,7 @@
                               <td class="text-center">{{ item?.ventasTotales | currency:'C$' }}</td>
                               <td class="text-center">{{ item?.premioTotal | currency:'C$' }}</td>
                               <td class="text-center">{{ item?.utilidad | currency:'C$' }}</td>
-                              <td class="text-right" >
+                              <td class="text-center" >
                                 <button *ngIf="mostrar"  class="btn btn-sm text-danger" placement="left" ngbTooltip="Eliminar" (click)="deleteWinner(item.id)" >
                                   <i class="bi bi-x-circle"></i>
                                 </button>
