@@ -11,7 +11,7 @@ import { AlertService } from 'src/app/@core/utils/alert.service';
 })
 export class FreenumbertobisnessComponent implements OnInit {
 
- 
+
   @Output() onClose = new EventEmitter<boolean>();
 
   formfreeNumberToBusiness!: FormGroup;
@@ -19,7 +19,7 @@ export class FreenumbertobisnessComponent implements OnInit {
   BusinessData: any[] = [];
   items: any[]= [];
   inputText = 'text';
-  
+
     ///constructor
   constructor(
     private fb: FormBuilder,
@@ -27,7 +27,7 @@ export class FreenumbertobisnessComponent implements OnInit {
     private alertSvc: AlertService,
     private businessSvc: BusinessService,
     private el: ElementRef)
-     { 
+     {
     }
 
     public insertInputTag(): void {
@@ -38,7 +38,7 @@ export class FreenumbertobisnessComponent implements OnInit {
   }
 
     //whitdefault
-    displayTags(event : any) { 
+    displayTags(event : any) {
       console.log(event);
       this.itemsAsObjects = event;
     }
@@ -46,15 +46,22 @@ export class FreenumbertobisnessComponent implements OnInit {
 
  //OnInit
    ngOnInit(): void {
-    this.formfreeNumberToBusiness = this.initForms(); 
-    this.loadDataBusiness();
-    
+    this.formfreeNumberToBusiness = this.initForms();
+    let Roles = JSON.parse(localStorage.getItem('roles') || '{}');
+    for (const item of Roles) {
+      if(item.nombre == 'ROLE_SUPER_ADMIN'){
+        this.loadDataBusiness();
+      }
+
+    }
+
+
   }
 
  async loadDataBusiness() {
 
      let resp = await this.businessSvc.getBusiness();
-     if(resp == undefined) 
+     if(resp == undefined)
      return;
     this.BusinessData = resp?.data;
   }
@@ -79,7 +86,7 @@ export class FreenumbertobisnessComponent implements OnInit {
         numeros.push(item.value);
       }
     }
-  
+
     let obj ={
       vendedoresOrRutaOrNegocio: business,
       numeros: numeros,
@@ -102,8 +109,8 @@ export class FreenumbertobisnessComponent implements OnInit {
       this.loadDataform();
       this.onClose.emit(true);
   }
-    
-    
+
+
   }
 
   closeModal(band: boolean) {
@@ -131,8 +138,8 @@ export class FreenumbertobisnessComponent implements OnInit {
     const input = event.key;
     const inputValue = this.el.nativeElement.value;
     // Solo permitir dígitos numéricos, retroceso, borrar y flechas
-    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' || 
-    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' 
+    if (event.key === '8' || event.key === '46' || event.key === '37' || event.key === '39' ||
+    event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'
     ||/^\d+$/.test(input)) {
       // Permitir que el evento se propague y actualizar el valor del control
       setTimeout(() => {

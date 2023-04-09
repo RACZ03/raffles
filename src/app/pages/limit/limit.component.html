@@ -181,7 +181,7 @@
                             </div>
                           </div>
                         </div>
-                        <div style="cursor: pointer;" class="mt-4" (click)="openModalFreeNumberToBisness()">
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalFreeNumberToBisness()" *ngIf="mostrar">
                           <div class="card card-stats mb-4 mb-lg-0">
                             <div class="card-body">
                               <div class="row">
@@ -209,54 +209,54 @@
         </div>
     </div>
   </div>
-    
-  
+
+
   <!-- Modal Cambiar limite de numeros por ruta -->
-<div class="modal fade" id="modalchangelimitxruta" data-backdrop="static" tabindex="-1" role="dialog" 
+<div class="modal fade" id="modalchangelimitxruta" data-backdrop="static" tabindex="-1" role="dialog"
 aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
   <app-changelimitxruta (onClose)="closemodalchangelimitxruta($event)"></app-changelimitxruta>
 </div>
 
   <!-- Modal Cambiar limite de numeros por vendedor -->
-  <div class="modal fade" id="modalchangelimitxvendedor" data-backdrop="static" tabindex="-1" role="dialog" 
+  <div class="modal fade" id="modalchangelimitxvendedor" data-backdrop="static" tabindex="-1" role="dialog"
   aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
     <app-changelimitxseller (onClose)="closeModalChangeLimitexVendedor($event)"></app-changelimitxseller>
   </div>
 
     <!-- Modal Cambiar un limite de un limite-->
-    <div class="modal fade" id="modalChangeOneLimit" data-backdrop="static" tabindex="-1" role="dialog" 
+    <div class="modal fade" id="modalChangeOneLimit" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
       <app-changeonelimits (onClose)="closeModalChangeOneLimit($event)"></app-changeonelimits>
     </div>
-  
+
       <!-- Modal Cambiar limite deun vendedor-->
-      <div class="modal fade" id="modalChangeLimitoneVendedor" data-backdrop="static" tabindex="-1" role="dialog" 
+      <div class="modal fade" id="modalChangeLimitoneVendedor" data-backdrop="static" tabindex="-1" role="dialog"
       aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
         <app-changelimitoneseller (onClose)="closeModalChangeLimitoneVendedor($event)"></app-changelimitoneseller>
       </div>
 
           <!-- Modal liberar numero de vendedores-->
-          <div class="modal fade" id="modalFreeNumberToSeller" data-backdrop="static" tabindex="-1" role="dialog" 
+          <div class="modal fade" id="modalFreeNumberToSeller" data-backdrop="static" tabindex="-1" role="dialog"
           aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
             <app-freenumbertoseller (onClose)="closefreeNumberToSeller($event)"></app-freenumbertoseller>
           </div>
 
              <!-- Modal liberar numero de rutas-->
-             <div class="modal fade" id="modalFreeNumberToRoute" data-backdrop="static" tabindex="-1" role="dialog" 
+             <div class="modal fade" id="modalFreeNumberToRoute" data-backdrop="static" tabindex="-1" role="dialog"
              aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
                <app-freenumbertoroute (onClose)="closefreeNumberToRoute($event)"></app-freenumbertoroute>
              </div>
 
              <!-- Modal liberar numero de rutas-->
-             <div class="modal fade" id="modalFreeNumberToBisness" data-backdrop="static" tabindex="-1" role="dialog" 
+             <div class="modal fade" id="modalFreeNumberToBisness" data-backdrop="static" tabindex="-1" role="dialog"
              aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
                <app-freenumbertobisness (onClose)="closefreeNumberToBisness($event)"></app-freenumbertobisness>
              </div>
 
              <!-- Modal cambiar limite sin afectar limitados-->
-             <div class="modal fade" id="modalFreeLimitWitOutLimit" data-backdrop="static" tabindex="-1" role="dialog" 
+             <div class="modal fade" id="modalFreeLimitWitOutLimit" data-backdrop="static" tabindex="-1" role="dialog"
              aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
                <app-changelimitoutlimits (onClose)="closeModalChangeLimitWithoutAffectLimited($event)"></app-changelimitoutlimits>
              </div>
-    
+
 
