@@ -31,6 +31,7 @@ export class ModalDetalleComponent implements OnInit {
     this.data = _data;
     this.dtTrigger.next(this.dtOptions);
   }
+
   closeModal(){
     this.dialogRef.close();
   }
