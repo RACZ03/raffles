@@ -7,6 +7,15 @@ import { ConnectionService } from '../utils/connection.service';
 
 const URL: string = environment.APIUrl;
 
+declare interface RouteInfo {
+  path: string;
+  title: string;
+  icon: string;
+  class: string;
+  role: string;
+  order: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +24,7 @@ export class AuthService {
   public token: any = null;
   public identity: any = '';
   public headers!: HttpHeaders;
+  public menuOptions: RouteInfo[] = [];
 
   constructor(
     private http: HttpClient,
