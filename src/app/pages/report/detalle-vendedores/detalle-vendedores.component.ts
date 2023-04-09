@@ -129,12 +129,13 @@ selected = new FormControl('',[Validators.required]);
 
   detalleRPT(item:any){
     const dialogRef = this.dialog.open(RptListaModalComponent,{
+      width: '500px',
       data : item
     });
 
     dialogRef.afterClosed().subscribe(result => {
      // window.location.reload();
-     this.AlertSvc.showAlert(1,'CIERRE VENDEDORES','se ha cerrado el modal');
+     //this.AlertSvc.showAlert(1,'CIERRE VENDEDORES','se ha cerrado el modal');
     });
   }
 
