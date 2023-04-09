@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormControlName, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DataTableDirective } from 'angular-datatables';
 import * as moment from 'moment';
@@ -31,6 +31,8 @@ export class ListGanadorComponent implements OnInit {
   public mostrarInChange: boolean = false;
   public ultimonegocio: any = null;
   public negocioSelected: any = null;
+  public mostrarNegocio: boolean = false;
+  public negocioSeleccionado: any = null;
 
   public data: any[] = [];
   public dataNegocio: any[] = [];
@@ -69,6 +71,7 @@ export class ListGanadorComponent implements OnInit {
       this.dataNegocio = data;
       //console.log(this.dataNegocio);
        this.ultimonegocio = data[data.length-1];
+      this.negocioSeleccionado=this.ultimonegocio;
     }
   }
 
@@ -107,6 +110,7 @@ export class ListGanadorComponent implements OnInit {
     }else{
       this.data = _data;
       this.dtTrigger.next(this.dtOptions);
+
     }}}
 
   onNegocioSeleccionado(e:any){
@@ -114,7 +118,7 @@ export class ListGanadorComponent implements OnInit {
   }
 
   detalleVendedor(item:any){
-    console.log(item);
+    //console.log(item);
     const dialogRef = this.dialog.open(ModalListVendedoresComponent,{
       data : item
     });
@@ -126,7 +130,7 @@ export class ListGanadorComponent implements OnInit {
   }
 
   detalleRutas(item:any){
-    console.log(item);
+    //console.log(item);
     const dialogRef = this.dialog.open(ModalListRutasComponent,{
       data : item
     });
@@ -195,6 +199,7 @@ async verDetalleNegocio(){
     this.mostrarInChange = true;
     this.mostrar= false;
     this.mostrarAdmin= true;
+    this.mostrarNegocio = true;
     let resp = await this.winnerSvc.getwinnersByBusiness(this.ultimonegocio.id);
     let { data,status,message,comment } = resp;
     if(status==200){
@@ -210,6 +215,7 @@ async verDetalleNegocio(){
     this.mostrarInChange = false;
     this.mostrar= true;
     this.mostrarAdmin= false;
+    this.mostrarNegocio = false;
     this.renderer(null);
   }
 

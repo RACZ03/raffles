@@ -35,9 +35,10 @@
                           </div>
                            <div class="col-xl-8 col-lg-8 col-sm-4 col-4">
                             <div class="mb-3" tyle="font-size: small;" *ngIf="mostrarInChange">
-                              <ng-select #rutasSelect [items]="dataNegocio" [selectOnTab]="true" name="Negocio"
+                              <ng-select #rutasSelect [items]="dataNegocio" [selectOnTab]="true" name="negocios"
                                   bindValue="id" bindLabel="nombre" placeholder="Seleccione Negocio"
-                                  [selectableGroup]="true" (change)="onNegocioSeleccionado($event)">
+                                  [selectableGroup]="true" (change)="onNegocioSeleccionado($event)"
+                                  [(ngModel)]="negocioSeleccionado">
                               </ng-select>
                           </div>
                            </div>
