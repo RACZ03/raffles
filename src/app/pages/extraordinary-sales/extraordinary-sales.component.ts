@@ -340,9 +340,9 @@ export class ExtraordinarySalesComponent implements OnInit {
                 hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
 
                 let arrayPrint: string[] = [
+                  negocio,
                   'RECIBO ' + codigo,
-                  'NEGOCIO: ' + negocio,
-                  'RUTA: ' + ruta?.nombre,
+                  'RUTA ' + ruta?.nombre,
                   fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
                   '',
                   '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
@@ -354,7 +354,7 @@ export class ExtraordinarySalesComponent implements OnInit {
                 arrayPrint.push('');
                 // ADD TOTAL TO PRINT
                 arrayPrint.push(cantidadNumeros + ' NUMEROS VENDIDOS');
-                arrayPrint.push('TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+                arrayPrint.push(montoTotal + ' CORDOBAS');
                 arrayPrint.push(vendedor);
                 arrayPrint.push('');
                 arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
