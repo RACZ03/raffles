@@ -44,7 +44,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.isAdmin = this.usersSvc.verifyRole('ROLE_SUPER_ADMIN');
     this.identity = localStorage.getItem('identity') || '';
     this.identity = JSON.parse(this.identity);
-    console.log('Hi')
+    // console.log('Hi')
     this.loadData();
   }
 
@@ -76,7 +76,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       if ( status && status == 200) {
         let { content } = data;
         this.data = content;
-        console.log('data', this.data)
+        // console.log('data', this.data)
       } else {
         this.alertSvc.showAlert(3, 'Info', 'No se pudo cargar los datos');
       }
