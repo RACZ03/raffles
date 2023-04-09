@@ -1,59 +1,61 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, CanLoad, Route, Router, UrlSegment } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/@core/services/auth.service';
 import { UsersService } from 'src/app/@core/services/users.service';
-import { ROUTES_ADMIN, ROUTES_SALES, ROUTES_SUPERVISOR, ROUTES_SUPER_ADMIN } from 'src/app/@theme/components/sidebar/sidebar.component';
+import { ROUTE_LIST } from 'src/app/@theme/components/sidebar/sidebar.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminGuard implements CanLoad {
 
-  public isSuperAdmin: boolean = false;
-  public isAdmin: boolean = false;
-  public isSupervisor: boolean = false;
-  public isSales: boolean = false;
-
   constructor(
+    private route: Router,
+    private authSvc: AuthService,
     private userSvc: UsersService,
-    private route: Router
   ){
-    this.isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN') as boolean;
-    this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
-    this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
-    this.isSales = this.userSvc.verifyRole('ROLE_VENDEDOR') as boolean;
+    // console.log('AdminGuard');
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('canLoad');
     // get route to load
     const routeToLoad = segments.map(segment => segment.path).join('/');
     let routeExists: boolean = false;
-    if ( this.isSuperAdmin ) {
-      // validate route to load if exists in const ROUTES_SUPER_ADMIN
-      routeExists = ROUTES_SUPER_ADMIN.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isSupervisor && this.isSales ) {
-      // concat routes
-      const routes = ROUTES_SALES.concat(ROUTES_SUPERVISOR);
-      // validate route to load if exists in const ROUTES_SUPERVISOR
-      routeExists = routes.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isAdmin && this.isSales ) {
-      // concat routes
-      const routes = ROUTES_ADMIN.concat(ROUTES_SALES);
-      // validate route to load if exists in const ROUTES_ADMIN
-      routeExists = routes.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isAdmin && this.isSupervisor && this.isSales ) {
-      // concat routes
-      const routes = ROUTES_ADMIN.concat(ROUTES_SALES, ROUTES_SUPERVISOR);
-      // validate route to load if exists in const ROUTES_ADMIN
-      routeExists = routes.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isAdmin ) {
-      routeExists = ROUTES_ADMIN.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isSupervisor ) {
-      routeExists = ROUTES_SUPERVISOR.find( route => route.path === routeToLoad ) !== undefined ? true : false;
-    } else if ( this.isSales ) {
-      routeExists = ROUTES_SALES.find( route => route.path === routeToLoad ) !== undefined ? true : false;
+
+    let list: any[] = [];
+
+    let isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN');
+    let isAdmin = this.userSvc.verifyRole('ROLE_ADMIN');
+    let isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR');
+    let isSales = this.userSvc.verifyRole('ROLE_VENDEDOR');
+
+    if ( isSuperAdmin ) {
+      // filter routes by role ROLE_SUPER_ADMIN AND ALL
+      list = ROUTE_LIST.filter(item => item.role !== 'ROLE_VENDEDOR' && item.role !== 'ROLE_ADMIN' ).sort((a, b) => a.order - b.order);
+    } else if ( isSupervisor && isSales ) {
+      // filter routes by role ALL AND ROLE_VENDEDOR
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_VENDEDOR');
+    } else if ( isAdmin && isSales ) {
+      // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR');
+    } else if ( isAdmin && isSupervisor &&isSales ) {
+      // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR');
+    } else if ( isSupervisor ) {
+      // filter routes by role ROLE_SUPERVISOR AND ALL
+      list = ROUTE_LIST.filter(item => item.role === 'ROLE_SUPERVISOR' || item.role === 'ALL');
+    } else if ( isAdmin ) {
+      // filter routes by role ALL, SUPER&ADMIN AND ROLE_ADMIN
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_ADMIN');
     }
+    else {
+      // filter routes by role ROLE_VENDEDOR AND ALL
+      list = ROUTE_LIST.filter(item => item.role === 'ROLE_VENDEDOR' || item.role === 'ALL');
+    }
+
+    // check if route exists
+    routeExists = list.some(item => item.path === routeToLoad);
 
     if ( !routeExists ) {
       // redirect to dashboard
