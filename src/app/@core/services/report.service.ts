@@ -91,17 +91,16 @@ getRecibosActuales(){
   let mm = parseInt(String(today.getMonth()).padStart(2, '0')); //January is 0!
   let yyyy = today.getFullYear();
   today = new Date(yyyy, mm, dd);
-let hoy = moment(today).format('YYYY-MM-DD');
-console.log(hoy);
-
+  let hoy = moment(today).format('YYYY-MM-DD');
   return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffle.id}`);
+
 }
 
 
 getRecibos(_fecha: any, idSorteo: any): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
   let idNegocio = this.dataIdentity.idNegocio;
-  console.log(fecha, idSorteo, idNegocio);
+  //console.log(fecha, idSorteo, idNegocio);
   return this.connectionSvc.send('get', `venta/recibos/negocio/${idNegocio}/fecha/${fecha}/sorteo/${idSorteo}`);
 }
 

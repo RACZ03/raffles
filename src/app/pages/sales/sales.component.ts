@@ -78,15 +78,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
     this.identity = JSON.parse(user);
   }
 
-  //detalle de ticket
-  detalleTicketVentas() {
-    const dialogRef = this.dialog.open(ModalVentasComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-     // window.location.reload();
-     this.alertSvc.showAlert(1,'CIERRE VENDEDORES','se ha cerrado el modal');
-    });
-  }
 
   //fin de detalle de ticket
 
@@ -272,6 +263,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
     // send data
     let resp = await this.salesSvc.save(this.listSales);
+    console.log(resp);
     if (resp) {
       let { status, comment, data: dataTiket } = resp;
       if (status && status == 200) {
