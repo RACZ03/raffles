@@ -8,11 +8,11 @@ const routes: Routes = [
   { path: '', component: RecibosComponent,
   children: [
     {
-     path: 'recibos-normales',
+     path: 'recibos-normales/:venta',
      component: ListRecibosComponent
    },
    {
-     path: 'recibos-especiales',
+     path: 'recibos-especiales/:venta',
      component: ListRecibosEspecialesComponent
    }
   ]
