@@ -9,6 +9,7 @@ import { WinnerService } from 'src/app/@core/services/winner.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.service';
 import { ModalDetalleComponent } from '../modal-detalle/modal-detalle.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-recibos',
@@ -23,6 +24,7 @@ export class ListRecibosComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
 public currentRaffle: any = null;
+public previousRoute: string = '';
 
 public data: any = [];
 public search: string = '';
@@ -46,10 +48,17 @@ selected = new FormControl('',[Validators.required]);
     private dataTableSvc: DataTableServiceService,
     private alerSvr : AlertService,
     private dialog : MatDialog,
-    public winnerSvc : WinnerService
+    public winnerSvc : WinnerService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    const previousUrl = this.router.getCurrentNavigation()?.extras.state?.['previousUrl'];
+    if (previousUrl) {
+      this.previousRoute = previousUrl;
+    } else {
+      this.previousRoute = '/pages/sales';
+    }
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.loadData(null);
     this.loadDataSorteo();
@@ -61,7 +70,7 @@ selected = new FormControl('',[Validators.required]);
        this.dtTrigger.next(this.dtOptions);
      }else{
       let resp = await this.reporSvr.getRecibosActuales();
-      console.log(resp);
+      //console.log(resp);
         let { data,status, comment  } = resp;
         if(status==200){
           this.data = data;
@@ -125,9 +134,14 @@ selected = new FormControl('',[Validators.required]);
     });
   }
 
+  goBack() {
+    this.router.navigate([this.previousRoute as string]);
+  }
 
   limpiarFiltro(){
-    console.log('limpiarFiltro');
+    this.fechaInicio.setValue('');
+    this.selected.setValue('');
+    this.loadData(null);
   }
 
     /* Search */
@@ -159,7 +173,7 @@ selected = new FormControl('',[Validators.required]);
     let pasivo = _item.pasivo;
     ///fecha today
     let fechaActual = moment().format('YYYY-MM-DD');
-    console.log(fechaActual);
+    //console.log(fechaActual);
 
     if(pasivo){
       return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que ya se encuentra eliminado');
