@@ -23,6 +23,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalDetalleComponent } from './modal-detalle/modal-detalle.component';
 import { RecibosComponent } from './recibos/recibos.component';
 import { ListRecibosEspecialesComponent } from './list-recibos-especiales/list-recibos-especiales.component';
+import { ModalDetalleEspecialComponent } from './modal-detalle-especial/modal-detalle-especial.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ListRecibosEspecialesComponent } from './list-recibos-especiales/list-r
     ListRecibosComponent,
     ModalDetalleComponent,
     RecibosComponent,
-    ListRecibosEspecialesComponent
+    ListRecibosEspecialesComponent,
+    ModalDetalleEspecialComponent
   ],
   imports: [
     CommonModule,
