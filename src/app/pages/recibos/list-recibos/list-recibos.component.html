@@ -24,47 +24,89 @@
                   </div>
               </div>
               <!-- CARD -->
-              <div class="container mb-5">
+              <div class="card-body" >
+                <h3 class="mb-2">DETALLE DE VENTAS</h3>
+                <div class="row mt-2">
+                  <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                    <div class="row" style="display: flex;">
+                         <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-4 col-sm-5 col-12">
+                          <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput [matDatepicker]="pickerinicio" [formControl]="fechaInicio" placeholder="DD/MM/YYYY" >
+                            <mat-datepicker-toggle matIconSuffix [for]="pickerinicio"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerinicio></mat-datepicker>
+                              <mat-error *ngIf="fechaInicio.hasError('fechaInicioValida')">
+                                fecha no mayor a la actual
+                              </mat-error>
+                          </mat-form-field>
+                         </div>
+                         <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-10 col-sm-10 col-12">
+                          <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>Sorteo</mat-label>
+                            <mat-select [formControl]="selected" >
+                              <mat-option *ngFor="let item of dataSorteo" [value]="item.id">
+                                {{item.nombre}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                         </div>
+                         <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-2 col-sm-2 col-12">
+                          <button class="btn btn-primary mt-1" (click)="report()">
+                            <i class="fas fa-search"></i>
+                          </button>
+                          <button class="btn btn-success  mt-1" (click)="limpiarFiltro()">
+                            <i class="bi bi-arrow-clockwise"></i>
+                          </button>
+                         </div>
+                    </div>
+                  </div>
+                  <!--Boton regresar-->
+                  <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                    <button class="btn btn-primary float-right" (click)="goBack()">
+                      <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
                 <div class="table-responsive mt-2">
-                  <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                    <thead class="thead-light" id="thead-table">
-                      <tr>
-                        <th scope="col" class="text-center">Codigo Recibo</th>
-                        <th scope="col" class="text-center">Sorteo</th>
-                        <th scope="col" class="text-center">Fecha</th>
-                        <th scope="col" class="text-center">Hora</th>
-                        <th scope="col" class="text-center">
-                          Acciones
-                        </th>
-                      </tr>
-                      <tr>
-                        <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-codigo" (keyup)="searchData($event)"/></th>
-                        <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sorteo" (keyup)="searchData($event)"/></th>
-                        <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fecha" (keyup)="searchData($event)"/></th>
-                        <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-hora" (keyup)="searchData($event)"/></th>
-                        <th scope="col" class="text-center">
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody-table">
-                      <tr *ngFor="let item of data">
-                          <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.codigo}}</td>
-                          <td class="text-center">{{ item?.sorteo?.nombre }}</td>
-                          <td class="text-center">{{ item?.fecha |  date:'YYYY/MM/dd' }}</td>
-                          <td class="text-center">{{ item?.hora}}</td>
-                          <td class="text-right">
-                            <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Ver Detalle" (click)="detalle(item.ventaDetalles)">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Ver Detalle" (click)="deleteVenta(item)">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                    <table class="table align-items-center table-flush" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                      <thead class="thead-light" id="thead-table">
+                        <tr>
+                          <th scope="col" class="text-center">Codigo Recibo</th>
+                          <th scope="col" class="text-center">Sorteo</th>
+                          <th scope="col" class="text-center">Fecha</th>
+                          <th scope="col" class="text-center">Hora</th>
+                          <th scope="col" class="text-center">
+                            Acciones
+                          </th>
+                        </tr>
+                        <tr>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-codigo" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sorteo" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fecha" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-hora" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center">
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody-table">
+                        <tr *ngFor="let item of data">
+                            <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.codigo}}</td>
+                            <td class="text-center">{{ item?.sorteo?.nombre }}</td>
+                            <td class="text-center">{{ item?.fechaFormateada |  date:'YYYY/MM/dd' }}</td>
+                            <td class="text-center">{{ item?.horaFormateada}}</td>
+                            <td class="text-right">
+                              <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Ver Detalle" (click)="detalle(item.ventaDetalles)">
+                                <i class="fas fa-eye"></i>
+                              </button>
+                              <button class="btn btn-sm text-danger" placement="left" ngbTooltip="Ver Detalle" (click)="deleteVenta(item)">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
               </div>
-              </div>
+
           </div>
       </div>
   </div>
