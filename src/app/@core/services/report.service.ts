@@ -10,12 +10,14 @@ export class ReportService {
   private dataIdentity: any = null;
   private roles: any = null;
   private currentRaffle: any = null;
+  public currentRaffleExtra: any = null;
 
   constructor(
     private connectionSvc: ConnectionService
   ) {
     this.dataIdentity= JSON.parse(localStorage.getItem('business') || '{}');
     this.currentRaffle = JSON.parse(localStorage.getItem('currentRaffle') || '{}');
+    this.currentRaffleExtra = JSON.parse(localStorage.getItem('currentRaffleExtra') || '{}');
     this.roles= JSON.parse(localStorage.getItem('roles') || '{}');
   }
 
@@ -91,17 +93,27 @@ getRecibosActuales(){
   let mm = parseInt(String(today.getMonth()).padStart(2, '0')); //January is 0!
   let yyyy = today.getFullYear();
   today = new Date(yyyy, mm, dd);
-let hoy = moment(today).format('YYYY-MM-DD');
-console.log(hoy);
-
+  let hoy = moment(today).format('YYYY-MM-DD');
   return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffle.id}`);
+
 }
+
+getRecibosActualesExtra(){
+  let today = new Date();
+  let dd = parseInt(String(today.getDate()).padStart(2, '0'));
+  let mm = parseInt(String(today.getMonth()).padStart(2, '0')); //January is 0!
+  let yyyy = today.getFullYear();
+  today = new Date(yyyy, mm, dd);
+  let hoy = moment(today).format('YYYY-MM-DD');
+  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffleExtra.id}`);
+}
+
 
 
 getRecibos(_fecha: any, idSorteo: any): Promise<any> {
   let fecha = moment(_fecha).format('YYYY-MM-DD');
   let idNegocio = this.dataIdentity.idNegocio;
-  console.log(fecha, idSorteo, idNegocio);
+  //console.log(fecha, idSorteo, idNegocio);
   return this.connectionSvc.send('get', `venta/recibos/negocio/${idNegocio}/fecha/${fecha}/sorteo/${idSorteo}`);
 }
 
@@ -113,6 +125,15 @@ deleteVenta(idVenta: number, idvendedor:number): Promise<any> {
     idNegocio: this.dataIdentity.idNegocio
   }
   return this.connectionSvc.send('post', `venta/eliminar`, data);
+}
+
+eliminarventaExtra(idVenta: number, idvendedor:number): Promise<any> {
+  let data = {
+    id: idVenta,
+    idVendedor: idvendedor,
+    idNegocio: this.dataIdentity.idNegocio
+  }
+  return this.connectionSvc.send('post', `venta/eliminar/extra`, data);
 }
 
 }

@@ -64,11 +64,10 @@
                         formControlName="password" placeholder="{{ 'MODULES.LOGIN.PASSWORD-P' | translate }}">
                 </div>
               </div>
-              <div class="custom-control custom-control-alternative custom-checkbox">
-                <input class="custom-control-input" id="customCheckLogin" type="checkbox" (change)="rememberUser($event)">
-                <label class="custom-control-label" for=" customCheckLogin">
-                  <span class="text-muted">{{ 'MODULES.LOGIN.REMEMBER' | translate }}</span>
-                </label>
+              <div class="" >
+                <input class="" #customCheckLogin type="checkbox" 
+                      style="margin-right: 20px; height: 18px; width: 18px;" (change)="rememberUser($event)">
+                <span class="text-muted">{{ 'MODULES.LOGIN.REMEMBER' | translate }}</span>
               </div>
               <div class="text-center">
                 <button type="submit" class="btn btn-primary my-2">{{ 'MODULES.LOGIN.SUBMIT' | translate }}</button>
@@ -78,7 +77,7 @@
         </div>
         <div class="row mt-3">
           <div class="col-6">
-            <a href="javascript:void(0)" class="text-light"><small style="color: black;">{{ 'MODULES.LOGIN.FORGOT-PASS' | translate }}</small></a>
+            <!-- <a href="javascript:void(0)" class="text-light"><small style="color: black;">{{ 'MODULES.LOGIN.FORGOT-PASS' | translate }}</small></a> -->
           </div>
           <!-- <div class="col-6 text-right">
             <a href="javascript:void(0)" class="text-light"><small>Create new account</small></a>

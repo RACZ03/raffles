@@ -9,7 +9,6 @@ import { NgxMaskModule } from 'ngx-mask';
 import { SalesRoutingModule } from './sales-routing.module';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { ModalVentasComponent } from './modal-ventas/modal-ventas.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,15 +18,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { ModalVentasDetallesComponent } from './modal-ventas-detalles/modal-ventas-detalles.component';
 
 
 
 @NgModule({
   declarations: [
     SalesComponent,
-    ModalVentasComponent,
-    ModalVentasDetallesComponent,
+
   ],
   imports: [
     CommonModule,

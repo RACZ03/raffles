@@ -18,11 +18,6 @@
             <th scope="col" class="text-center">Monto</th>
             <th scope="col" class="text-center">Premio</th>
           </tr>
-          <tr>
-            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-numero" (keyup)="searchData($event)"/></th>
-            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-monto" (keyup)="searchData($event)"/></th>
-            <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-premio" (keyup)="searchData($event)"/></th>
-         </tr>
         </thead>
         <tbody id="tbody-table">
           <tr *ngFor="let item of data">
