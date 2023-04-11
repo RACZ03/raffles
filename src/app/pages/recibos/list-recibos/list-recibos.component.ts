@@ -30,6 +30,7 @@ export class ListRecibosComponent implements OnInit {
 public currentRaffle: any = null;
 public previousRouter: boolean = false;
 public previousRoute: string = '';
+public noMostrar: boolean = true;
 
 public data: any = [];
 public search: string = '';
@@ -66,11 +67,18 @@ selected = new FormControl('',[Validators.required]);
     //validar el paramtro dentro de la ruta
     this.previousUrl ='';
      this.previousUrl = this.route.snapshot.params;
-    if (this.previousUrl.venta=='false') {
-      this.previousRoute = '/pages/recibos';
-    } else {
+     console.log(this.previousUrl);
+    if (this.previousUrl.return==1) {
+      this.noMostrar = false;
+    }
+    if(this.previousUrl.return==2){
       this.previousRoute = '/pages/sales';
     }
+    if(this.previousUrl.return==3){
+      this.previousRoute = '/pages/extraordinary-sales';
+    }
+  console.log(this.previousRoute);
+
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.getCurrentRaflle();
     this.loadData(null);
@@ -87,17 +95,33 @@ selected = new FormControl('',[Validators.required]);
       if(this.currentRaffle==false){
         this.alerSvr.showAlert(3,'Sorteo Actual',`No hay sorteo actual`);
       }
-        let resp = await this.reporSvr.getRecibosActuales();
-      //console.log(resp);
-        let { data,status, comment  } = resp;
-        if(status==200){
-          this.data = data;
+   if(this.previousUrl.return==1 || this.previousUrl.return==2){
+    let resp = await this.reporSvr.getRecibosActuales();
+     //console.log(resp);
+         let { data,status, comment  } = resp;
+         if(status==200){
+           this.data = data;
+           this.dtTrigger.next(this.dtOptions);
+         }
+         else{
+          this.data = _data;
           this.dtTrigger.next(this.dtOptions);
-        }
-        else{
-         this.data = _data;
-         this.dtTrigger.next(this.dtOptions);
-        }
+         }
+   }else{
+    let resp = await this.reporSvr.getRecibosActualesExtra();
+     //console.log(resp);
+     let { data,status, comment  } = resp;
+     if(status==200){
+       this.data = data;
+       this.dtTrigger.next(this.dtOptions);
+     }
+     else{
+      this.data = _data;
+      this.dtTrigger.next(this.dtOptions);
+     }
+   }
+
+
      }
   }
 
@@ -119,6 +143,7 @@ selected = new FormControl('',[Validators.required]);
           this.renderer(data);
         }else{
           this.alerSvr.showAlert(4,'Sin Datos',comment);
+          this.data=data
         }
       }
       else{
@@ -195,9 +220,10 @@ selected = new FormControl('',[Validators.required]);
     let idsorteo = _item.sorteo.id;
     let fecha = _item.fechaFormateada;
     let pasivo = _item.pasivo;
+    let nombreSorteo = _item.sorteo.nombre;
     ///fecha today
     let fechaActual = moment().format('DD-MM-YYYY');
-
+   console.log(_item);
     if(pasivo){
       return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que ya se encuentra eliminado');
     }
@@ -210,13 +236,23 @@ selected = new FormControl('',[Validators.required]);
     let confirm = await this.alerSvr.showConfirm('Eliminar','¿Está seguro de eliminar el recibo?');
 
     if(confirm){
-    let resp = await this.reporSvr.deleteVenta(id,idvendedor);
-         let { data,status, comment,  } = resp;
+      if (nombreSorteo == 'MAÑANA'|| nombreSorteo =='TARDE' ||nombreSorteo =='NOCHE') {
+        let resp = await this.reporSvr.deleteVenta(id,idvendedor);
+        let { data,status, comment,  } = resp;
 
-          if(status==200){
-            this.alerSvr.showAlert(1,'Eliminado',comment);
-            this.renderer(null);
-          }
+         if(status==200){
+           this.alerSvr.showAlert(1,'Eliminado',comment);
+           this.renderer(null);
+         }
+      }else{
+        let resp = await this.reporSvr.eliminarventaExtra(id,idvendedor);
+        let { data,status, comment,  } = resp;
+
+         if(status==200){
+           this.alerSvr.showAlert(1,'Eliminado',comment);
+           this.renderer(null);
+         }
+      }
     }else{
       this.renderer(null);
     }

@@ -21,18 +21,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalDetalleComponent } from './modal-detalle/modal-detalle.component';
-import { RecibosComponent } from './recibos/recibos.component';
-import { ListRecibosEspecialesComponent } from './list-recibos-especiales/list-recibos-especiales.component';
-import { ModalDetalleEspecialComponent } from './modal-detalle-especial/modal-detalle-especial.component';
 
 
 @NgModule({
   declarations: [
     ListRecibosComponent,
     ModalDetalleComponent,
-    RecibosComponent,
-    ListRecibosEspecialesComponent,
-    ModalDetalleEspecialComponent
   ],
   imports: [
     CommonModule,

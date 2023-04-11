@@ -22,8 +22,8 @@ export const ROUTE_LIST: RouteInfo[] = [
   { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '', role: 'SUPER&ADMIN', order: 6 },
   { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: '', role: 'SUPER&ADMIN', order: 7 } ,
   { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: '', role: 'SUPER&ADMIN', order: 8 } ,
-  {  path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: '', role: 'SUPER&ADMIN', order: 9 },
-  { path: 'recibos', title: 'Recibos',  icon:'ni-tag text-primary', class: '', role: 'ALL', order: 10 },
+  { path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: '', role: 'SUPER&ADMIN', order: 9 },
+  { path: 'recibos/1', title: 'Recibos',  icon:'ni-tag text-primary', class: '', role: 'ALL', order: 10 },
   { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: '', role: 'ROLE_VENDEDOR', order: 11 } ,
   { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: '', role: 'ROLE_VENDEDOR', order: 12 },
 ];
