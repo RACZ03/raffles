@@ -28,31 +28,6 @@ export const ROUTE_LIST: RouteInfo[] = [
   { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: '', role: 'ROLE_VENDEDOR', order: 12 },
 ];
 
-export const ROUTES_ADMIN: RouteInfo[] = [
-    // { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
-    // { path: 'business-profile', title: 'Negocio',  icon:'ni-building text-orange', class: '' },
-    // { path: 'business-setup', title: 'Configuración Negocio',  icon:'ni-building text-info', class: '' },
-    // { path: 'route', title: 'Rutas',  icon:'ni-square-pin text-default', class: '' },
-    // { path: 'business-users', title: 'Usuarios',  icon:'ni-single-02 text-yellow', class: '' },
-    // { path: 'award-catalog', title: 'Catálogo premio',  icon:'ni-collection text-info', class: '' },
-    // { path: 'limit', title: 'Limite',  icon:'ni-ui-04 text-red', class: ''} ,
-    // { path: 'winner', title: 'Ganadores',  icon:'ni-money-coins text-danger', class: ''} ,
-    // { path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: ''},
-    // { path: 'recibos', title: 'Recibos',  icon:'ni-tag text-primary', class: ''}
-];
-
-export const ROUTES_SUPERVISOR: RouteInfo[] = [
-  // { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
-    // { path: 'recibos', title: 'Recibos',  icon:'ni-tag text-primary', class: ''}
-];
-
-export const ROUTES_SALES: RouteInfo[] = [
-  // { path: 'dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' },
-  // { path: 'sales', title: 'Ventas',  icon:'ni-bullet-list-67 text-orange', class: ''} ,
-  // { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: ''},
-  // { path: 'recibos', title: 'Recibos',  icon:'ni-tag text-primary', class: ''}
-];
-
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
