@@ -9,7 +9,6 @@ import { UsersService } from 'src/app/@core/services/users.service';
 import { AlertService } from 'src/app/@core/utils/alert.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
 import { SpinnerService } from 'src/app/@core/utils/spinner.service';
-import { ModalVentasComponent } from './modal-ventas/modal-ventas.component';
 import { MatDialog } from '@angular/material/dialog';
 
 declare const navigator: any;
