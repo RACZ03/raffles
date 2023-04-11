@@ -58,7 +58,9 @@ export class AdminGuard implements CanLoad {
     routeExists = list.some(item => item.path === routeToLoad);
 
     // veriry if exists recibos in list
-    let isRecibosOrReport = list.some( item => item.path === 'recibos' || item.path === 'report' ) ? true : false;
+    // let isRecibosOrReport = list.some( item => item.path === 'recibos' || item.path === 'report' ) ? true : false;
+    // verify if exists la palabra recibos in routeToLoad or report
+    let isRecibosOrReport = routeToLoad.includes('recibos') || routeToLoad.includes('report') ? true : false;
     if ( isRecibosOrReport ) {
       // verify id routeToLoas is igual a recibos or recibos/recibos-normales or recibos/recibos-especiales
       return true;
