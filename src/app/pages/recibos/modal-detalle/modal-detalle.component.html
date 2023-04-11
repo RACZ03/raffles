@@ -1,9 +1,15 @@
 <div class="card-body" >
   <div class="row">
     <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
-      <h2>
-        <span>Detalle de Numeros vendidos</span>
-      </h2>
+      <h4>
+        <span>{{ data?.fechaFormateada }} - {{ data?.horaFormateada }}</span>
+      </h4>
+      <h4>
+        <span>{{ data?.sorteo?.nombre }}</span>
+      </h4>
+      <h4>
+        <span>{{ data?.vendedor?.nombre }}</span>
+      </h4>
     </div>
     <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" style="text-align: right;">
       <button (click)="closeModal()" class="btn btn-danger btn-sm mb-3 mt-1">X</button>
@@ -20,7 +26,7 @@
           </tr>
         </thead>
         <tbody id="tbody-table">
-          <tr *ngFor="let item of data">
+          <tr *ngFor="let item of data?.ventaDetalles">
             <td class="text-center">{{ item?.numero }}</td>
               <td class="text-center">{{ item?.monto }}</td>
               <td class="text-center">{{ item?.premio }}</td>

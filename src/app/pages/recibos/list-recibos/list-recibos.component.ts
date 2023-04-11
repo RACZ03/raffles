@@ -27,18 +27,22 @@ export class ListRecibosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-public currentRaffle: any = null;
-public previousRouter: boolean = false;
-public previousRoute: string = '';
-public noMostrar: boolean = true;
+  public currentRaffle: any = null;
+  public previousRouter: boolean = false;
+  public previousRoute: string = '';
+  public noMostrar: boolean = true;
 
-public data: any = [];
-public search: string = '';
-public previousUrl: any;
-public dataSorteo: any = [];
-public dataIdentity: any = null;
-fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
-selected = new FormControl('',[Validators.required]);
+  public data: any = [];
+  public search: string = '';
+  public previousUrl: any;
+  public dataSorteo: any = [];
+  public dataIdentity: any = null;
+  fechaInicio = new FormControl('',[Validators.required, this.fechaInicioValida]);
+  selected = new FormControl('',[Validators.required]);
+
+  public isSuperAdmin: boolean = false;
+  public isAdmin: boolean = false;
+  public isSupervisor: boolean = false;
 
 
   fechaInicioValida(control: FormControl): { [s: string]: boolean } {
@@ -61,13 +65,17 @@ selected = new FormControl('',[Validators.required]);
     private salesSvc : SalesService,
     private userSvc: UsersService,
     private printSvc: PrintService,
-  ) { }
+  ) {
+    this.isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN') as boolean;
+    this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
+    this.isSupervisor = this.userSvc.verifyRole('ROLE_SUPERVISOR') as boolean;
+  }
 
   ngOnInit(): void {
     //validar el paramtro dentro de la ruta
     this.previousUrl ='';
      this.previousUrl = this.route.snapshot.params;
-     console.log(this.previousUrl);
+    //  console.log(this.previousUrl);
     if (this.previousUrl.return==1) {
       this.noMostrar = false;
     }
@@ -77,7 +85,7 @@ selected = new FormControl('',[Validators.required]);
     if(this.previousUrl.return==3){
       this.previousRoute = '/pages/extraordinary-sales';
     }
-  console.log(this.previousRoute);
+    // console.log(this.previousRoute);
 
     this.dtOptions = this.dataTableSvc.dtOptions || {};
     this.getCurrentRaflle();
@@ -87,39 +95,52 @@ selected = new FormControl('',[Validators.required]);
   }
 
   async loadData(_data:any){
-     if(_data!=null){
-       this.data = _data;
-       this.dtTrigger.next(this.dtOptions);
-     }else{
+    if(_data!=null){
+      this.data = _data;
+      this.dtTrigger.next(this.dtOptions);
+    }else{
       this.currentRaffle = JSON.parse(localStorage.getItem('currentRaffle') || '{}');
       if(this.currentRaffle==false){
         this.alerSvr.showAlert(3,'Sorteo Actual',`No hay sorteo actual`);
       }
-   if(this.previousUrl.return==1 || this.previousUrl.return==2){
-    let resp = await this.reporSvr.getRecibosActuales();
-     //console.log(resp);
-         let { data,status, comment  } = resp;
-         if(status==200){
-           this.data = data;
-           this.dtTrigger.next(this.dtOptions);
-         }
-         else{
+
+      // set value of date
+      this.fechaInicio.setValue(moment().format('YYYY-MM-DD'));
+
+      if(this.previousUrl.return==1 || this.previousUrl.return==2){
+        let resp = await this.reporSvr.getRecibosActuales();
+
+        // selected from value of select
+        this.selected.setValue(this.currentRaffle.id);
+
+        //console.log(resp);
+        let { data,status, comment  } = resp;
+        if(status==200){
+          this.data = data;
+          this.dtTrigger.next(this.dtOptions);
+        }
+        else{
+        this.data = _data;
+        this.dtTrigger.next(this.dtOptions);
+        }
+      }else{
+        let resp = await this.reporSvr.getRecibosActualesExtra();
+        // console.log(resp);
+        let { data,status, comment  } = resp;
+        if(status==200){
+          this.data = data;
+          this.dtTrigger.next(this.dtOptions);
+
+          // selected from value of select
+          if ( data.length > 0 ) {
+           this.selected.setValue(data[0].idSorteo);
+          }
+        }
+        else{
           this.data = _data;
           this.dtTrigger.next(this.dtOptions);
-         }
-   }else{
-    let resp = await this.reporSvr.getRecibosActualesExtra();
-     //console.log(resp);
-     let { data,status, comment  } = resp;
-     if(status==200){
-       this.data = data;
-       this.dtTrigger.next(this.dtOptions);
-     }
-     else{
-      this.data = _data;
-      this.dtTrigger.next(this.dtOptions);
-     }
-   }
+        }
+      }
 
 
      }
@@ -186,15 +207,15 @@ selected = new FormControl('',[Validators.required]);
     this.loadData(null);
   }
 
-    /* Search */
-    searchData(e: any) {
-      this.search = e.target.value;
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.search(this.search).draw();
-      });
-    }
+  /* Search */
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
 
-     /* Section Render & Destoy */
+  /* Section Render & Destoy */
   async renderer(_data:any) {
     this.data = [];
     await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -211,6 +232,7 @@ selected = new FormControl('',[Validators.required]);
       this.currentRaffle = currentRaffle;
     }
   }
+
   //eliminar
  async deleteVenta(_item:any){
     this.getCurrentRaflle();
@@ -223,15 +245,21 @@ selected = new FormControl('',[Validators.required]);
     let nombreSorteo = _item.sorteo.nombre;
     ///fecha today
     let fechaActual = moment().format('DD-MM-YYYY');
-   console.log(_item);
+  //  console.log(_item);
     if(pasivo){
       return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que ya se encuentra eliminado');
     }
     if(fechaActual != fecha){
       return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no es del dia de hoy');
     }
-    if(this.currentRaffle.id != idsorteo){
-      return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
+    if ( this.previousUrl.return== 1 || this.previousUrl.return== 2 ) {
+      if(this.currentRaffle.id != idsorteo){
+        return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
+      }
+    } else {
+      if ( this.reporSvr.currentRaffleExtra.id != idsorteo ) {
+        return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
+      }
     }
     let confirm = await this.alerSvr.showConfirm('Eliminar','¿Está seguro de eliminar el recibo?');
 
@@ -264,22 +292,22 @@ selected = new FormControl('',[Validators.required]);
     return this.alerSvr.showAlert(4,'Error','No se puede imprimir un recibo que ya se encuentra eliminado');
   }
 
- let confirm = await this.alerSvr.showConfirmLimit('Imprimir','¿Está seguro de imprimir el recibo?','Imprimir');
- if(confirm){
-  let respTicket = await this.userSvc.verifyPrint();
-  if (respTicket) {
-    let { status, data } = respTicket;
-    if (status == 200) {
-      if ( data ) {
-        this.getTickets(_item.codigo);
+  let confirm = await this.alerSvr.showConfirmLimit('Imprimir','¿Está seguro de imprimir el recibo?','Imprimir');
+  if(confirm){
+    let respTicket = await this.userSvc.verifyPrint();
+    if (respTicket) {
+      let { status, data } = respTicket;
+      if (status == 200) {
+        if ( data ) {
+          this.getTickets(_item.codigo);
+        }
       }
     }
+  }else{
+    this.alerSvr.showAlert(4,'Cancelado','Se cancelo la impresión');
   }
- }else{
-   this.alerSvr.showAlert(4,'Cancelado','Se cancelo la impresión');
- }
 
-  }
+}
 
  async getTickets(code: string) {
    if ( navigator.bluetooth ) {
@@ -345,7 +373,7 @@ selected = new FormControl('',[Validators.required]);
              }
            });
          }).catch((error: any) => {
-           console.log('INFO:', error);
+          //  console.log('INFO:', error);
            this.printSvc.device = null;
            this.getTickets(code);
          });
@@ -356,7 +384,7 @@ selected = new FormControl('',[Validators.required]);
            }]
          })
          .then((device: any) => {
-           console.log('Impresora encontrada:', device);
+          //  console.log('Impresora encontrada:', device);
            // set device in localstorage
            this.printSvc.device = device;
            return device.gatt.connect();
