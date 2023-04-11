@@ -31,6 +31,7 @@ export class ListRecibosComponent implements OnInit {
   public previousRouter: boolean = false;
   public previousRoute: string = '';
   public noMostrar: boolean = true;
+  public Totales: any = '';
 
   public data: any = [];
   public search: string = '';
@@ -115,6 +116,7 @@ export class ListRecibosComponent implements OnInit {
 
         //console.log(resp);
         let { data,status, comment  } = resp;
+        this.Totales = comment;
         if(status==200){
           this.data = data;
           this.dtTrigger.next(this.dtOptions);
@@ -125,8 +127,9 @@ export class ListRecibosComponent implements OnInit {
         }
       }else{
         let resp = await this.reporSvr.getRecibosActualesExtra();
-        // console.log(resp);
+        //console.log(resp);
         let { data,status, comment  } = resp;
+        this.Totales = comment;
         if(status==200){
           this.data = data;
           this.dtTrigger.next(this.dtOptions);
@@ -158,6 +161,7 @@ export class ListRecibosComponent implements OnInit {
      let resp = await this.reporSvr.getRecibos(fechaInicio,idSorteo);
      let { data,status, comment,  } = resp;
     // console.log(resp);
+    this.Totales = comment;
       if(status==200){
         if(data!=null){
           this.data = data;

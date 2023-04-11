@@ -67,7 +67,6 @@ export class ChangelimitonesellerComponent implements OnInit {
       limite: this.formChangeLimitoneSeller.value.limite
     }
 
-
     let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite al vendedor seleccionado?', 'Confirmar');
 
     if(await Confirmar){

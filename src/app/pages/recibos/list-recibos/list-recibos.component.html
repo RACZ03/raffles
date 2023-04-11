@@ -25,7 +25,7 @@
               </div>
               <!-- CARD -->
               <div class="card-body" >
-                <h3 class="mb-2">DETALLE DE VENTAS</h3>
+                <h3 class="mb-2">{{Totales}}</h3>
                 <div class="row mt-2">
                   <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
                     <div class="row" style="display: flex;">
@@ -77,6 +77,8 @@
                           <th scope="col" class="text-center">Sorteo</th>
                           <th scope="col" class="text-center">Fecha</th>
                           <th scope="col" class="text-center">Hora</th>
+                          <th scope="col" class="text-center">Monto Total</th>
+                          <th scope="col" class="text-center">Cantidad N°</th>
                           <th scope="col" class="text-center">Elimina</th>
                           <th scope="col" class="text-center">
                             Acciones
@@ -96,6 +98,8 @@
                           <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-sorteo" (keyup)="searchData($event)"/></th>
                           <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-fecha" (keyup)="searchData($event)"/></th>
                           <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-hora" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-monto" (keyup)="searchData($event)"/></th>
+                          <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-cantidad" (keyup)="searchData($event)"/></th>
                           <th scope="col" class="text-center"><input type="text" class="form-control form-control-placeholder" placeholder="Buscar" name="search-elimina" (keyup)="searchData($event)"/></th>
                           <th scope="col" class="text-center">
                           </th>
@@ -116,6 +120,8 @@
                             <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.sorteo?.nombre }}</td>
                             <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.fechaFormateada |  date:'YYYY/MM/dd' }}</td>
                             <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.horaFormateada}}</td>
+                            <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.montoTotal | currency:'C$' }}</td>
+                            <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.cantidadNumeros}}</td>
                             <td class="text-center" [style.color]="item.pasivo ? '#ff0000': ''">{{ item?.elimina}}</td>
                             <td class="text-right">
                               <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Ver Detalle" (click)="detalle(item)">

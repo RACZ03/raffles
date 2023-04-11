@@ -67,11 +67,13 @@ export class ChangelimitxrutaComponent implements OnInit {
     let listRutasSelected = this.formChangeLimiteXroute.value.rutas;
     let listNumeros = this.formChangeLimiteXroute.value.numeros;
 
+    //console.log(listRutasSelected);
+
     let rutas: any[]= [];
     let numeros: any[] = [];
     if(listRutasSelected!==null){
       for (const item of listRutasSelected) {
-        rutas.push(item.value);
+        rutas.push(item);
       }
     }
 
@@ -85,6 +87,7 @@ export class ChangelimitxrutaComponent implements OnInit {
       numeros: numeros,
       limite: this.formChangeLimiteXroute.value.limite
     }
+  
 
     let resp = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
    
