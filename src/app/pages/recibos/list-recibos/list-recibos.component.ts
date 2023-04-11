@@ -234,7 +234,8 @@ export class ListRecibosComponent implements OnInit {
   }
 
   //eliminar
- async deleteVenta(_item:any){
+  async deleteVenta(_item:any){
+    // console.log(_item);
     this.getCurrentRaflle();
     this.currentRaffle = JSON.parse(localStorage.getItem('currentRaffle') || '{}');
     let id = _item.id;
@@ -252,12 +253,19 @@ export class ListRecibosComponent implements OnInit {
     if(fechaActual != fecha){
       return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no es del dia de hoy');
     }
-    if ( this.previousUrl.return== 1 || this.previousUrl.return== 2 ) {
+
+    // get value of select sorteo
+    let idSorteo = this.selected.value;
+
+    let find = this.dataSorteo.find((item:any) => item.id == idSorteo);
+
+    if ( find.nombre == 'MAÑANA'|| find.nombre =='TARDE' ||find.nombre =='NOCHE' ) {
       if(this.currentRaffle.id != idsorteo){
         return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
       }
     } else {
-      if ( this.reporSvr.currentRaffleExtra.id != idsorteo ) {
+      let sorteoExtra = JSON.parse(localStorage.getItem('currentRaffleExtra') || '{}');
+      if ( sorteoExtra?.data?.id != idsorteo ) {
         return this.alerSvr.showAlert(4,'Error','No se puede eliminar un recibo que no pertenece al sorteo actual');
       }
     }
