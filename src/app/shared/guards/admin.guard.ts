@@ -61,14 +61,7 @@ export class AdminGuard implements CanLoad {
     let isRecibosOrReport = list.some( item => item.path === 'recibos' || item.path === 'report' ) ? true : false;
     if ( isRecibosOrReport ) {
       // verify id routeToLoas is igual a recibos or recibos/recibos-normales or recibos/recibos-especiales
-      if ( routeToLoad === 'recibos' || routeToLoad === 'recibos/recibos-normales' || routeToLoad === 'recibos/recibos-especiales' ) {
-        return true;
-      }
-
-      if ( routeToLoad === 'report' || routeToLoad === 'report/detalle-vendedores' || routeToLoad === 'report/detalle-rutas'
-        || routeToLoad === 'report/resumen-vendedores' || routeToLoad === 'report/detalle-negocio' ) {
-        return true;
-      }
+      return true;
     }
 
     if ( !routeExists ) {

@@ -58,6 +58,7 @@ export class PrintService {
       imageLogo = (imageLogo.includes('http') || imageLogo.includes('https')) ? imageLogo : this.imageBackup;
       let img = await this.getImageAsBase64(imageLogo);
 
+      let negocio = vendedor?.negocioAndRuta?.negocio.toUpperCase();
       // convertir nombre ruta a mayusculas
       ruta.nombre = ruta?.nombre.toUpperCase();
       // convertir nombre sorteo a mayusculas
@@ -79,22 +80,29 @@ export class PrintService {
             alignment: 'center',
           },
           {
-            text: `RECIBO ${ codigo }`,
+            text: negocio,
             bold: true,
             fontSize: 12,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
-            text: `RUTA: ${ ruta?.nombre }`,
+            text: `RECIBO ${ codigo }`,
+            bold: true,
+            fontSize: 12,
+            alignment: 'left',
+            margin: [0, 1],
+          },
+          {
+            text: `RUTA ${ ruta?.nombre }`,
             fontSize: 10,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
             text: `${ fecha } - ${ hora } - ${ sorteo?.nombre }`,
             fontSize: 10,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
@@ -113,26 +121,26 @@ export class PrintService {
           {
             text: `${ cantidadNumeros } NÚMEROS VENDIDOS`,
             fontSize: 9,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
-            text: `TOTAL RECIBO :: ${ montoTotal } CÓRDOBAS`,
+            text: `${ montoTotal } CÓRDOBAS`,
             fontSize: 9,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
             text: `${ vendedor }`,
             fontSize: 9,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 1],
           },
           {
             text: 'Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.',
             bold: true,
             fontSize: 8,
-            alignment: 'center',
+            alignment: 'left',
             margin: [0, 15],
           },
         ],
