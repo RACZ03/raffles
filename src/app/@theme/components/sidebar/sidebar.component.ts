@@ -26,6 +26,7 @@ export const ROUTE_LIST: RouteInfo[] = [
   { path: 'extraordinary-sales', title: 'Ventas Extraordinarias',  icon:'ni-bullet-list-67 text-default', class: '', role: 'ROLE_VENDEDOR', order: 10 },
   {  path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: '', role: 'SUPER&ADMIN', order: 11 },
   { path: 'business-setup', title: 'Configuración',  icon:'ni-building text-info', class: '', role: 'SUPER&ADMIN',  order: 12 },
+  { path: 'report/detalle-vendedores', title: 'Detalle Vendedores',  icon:'ni-chart-bar-32 text-info', class: '', role: 'VENDEDOR&SUPERVISOR',  order: 13 },
 ];
 
 @Component({
@@ -50,26 +51,26 @@ export class SidebarComponent implements OnInit {
 
     if ( isSuperAdmin ) {
       // filter routes by role ROLE_SUPER_ADMIN AND ALL , order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role !== 'ROLE_VENDEDOR' && item.role !== 'ROLE_ADMIN' ).sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role !== 'ROLE_VENDEDOR' && item.role !== 'ROLE_ADMIN' && item.role !== 'VENDEDOR&SUPERVISOR' ).sort((a, b) => a.order - b.order);
     } else if ( isSupervisor && isSales ) {
       // filter routes by role ALL AND ROLE_VENDEDOR, order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_VENDEDOR').sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' ).sort((a, b) => a.order - b.order);
     } else if ( isAdmin && isSales ) {
       // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR, order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR').sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' ).sort((a, b) => a.order - b.order);
     } else if ( isAdmin && isSupervisor &&isSales ) {
       // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR, order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR').sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' ).sort((a, b) => a.order - b.order);
     } else if ( isSupervisor ) {
       // filter routes by role ROLE_SUPERVISOR AND ALL , order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ROLE_SUPERVISOR' || item.role === 'ALL').sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ROLE_SUPERVISOR' || item.role === 'VENDEDOR&SUPERVISOR' || item.role === 'ALL').sort((a, b) => a.order - b.order);
     } else if ( isAdmin ) {
       // filter routes by role ALL, SUPER&ADMIN AND ROLE_ADMIN , order by order asc
       this.menuItems = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_ADMIN').sort((a, b) => a.order - b.order);
     }
     else {
       // filter routes by role ROLE_VENDEDOR AND ALL , order by order asc
-      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ROLE_VENDEDOR' || item.role === 'ALL').sort((a, b) => a.order - b.order);
+      this.menuItems = ROUTE_LIST.filter(item => item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' || item.role === 'ALL').sort((a, b) => a.order - b.order);
     }
 
     this.authService.menuOptions = this.menuItems;

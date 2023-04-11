@@ -32,26 +32,26 @@ export class AdminGuard implements CanLoad {
 
     if ( isSuperAdmin ) {
       // filter routes by role ROLE_SUPER_ADMIN AND ALL
-      list = ROUTE_LIST.filter(item => item.role !== 'ROLE_VENDEDOR' && item.role !== 'ROLE_ADMIN' ).sort((a, b) => a.order - b.order);
+      list = ROUTE_LIST.filter(item => item.role !== 'ROLE_VENDEDOR' && item.role !== 'ROLE_ADMIN' && item.role !== 'VENDEDOR&SUPERVISOR' ).sort((a, b) => a.order - b.order);
     } else if ( isSupervisor && isSales ) {
       // filter routes by role ALL AND ROLE_VENDEDOR
-      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_VENDEDOR');
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR');
     } else if ( isAdmin && isSales ) {
       // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR
-      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR');
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' );
     } else if ( isAdmin && isSupervisor &&isSales ) {
       // filter routes by role ALL, ROLE_ADMIN, SUPER&ADMIN, ROLE_VENDEDOR
-      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR');
+      list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'ROLE_ADMIN' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' );
     } else if ( isSupervisor ) {
       // filter routes by role ROLE_SUPERVISOR AND ALL
-      list = ROUTE_LIST.filter(item => item.role === 'ROLE_SUPERVISOR' || item.role === 'ALL');
+      list = ROUTE_LIST.filter(item => item.role === 'ROLE_SUPERVISOR' || item.role === 'VENDEDOR&SUPERVISOR' || item.role === 'ALL');
     } else if ( isAdmin ) {
       // filter routes by role ALL, SUPER&ADMIN AND ROLE_ADMIN
       list = ROUTE_LIST.filter(item => item.role === 'ALL' || item.role === 'SUPER&ADMIN' || item.role === 'ROLE_ADMIN');
     }
     else {
       // filter routes by role ROLE_VENDEDOR AND ALL
-      list = ROUTE_LIST.filter(item => item.role === 'ROLE_VENDEDOR' || item.role === 'ALL');
+      list = ROUTE_LIST.filter(item => item.role === 'ROLE_VENDEDOR' || item.role === 'VENDEDOR&SUPERVISOR' || item.role === 'ALL');
     }
 
     // check if route exists
