@@ -105,7 +105,7 @@ getRecibosActualesExtra(){
   let yyyy = today.getFullYear();
   today = new Date(yyyy, mm, dd);
   let hoy = moment(today).format('YYYY-MM-DD');
-  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffleExtra.id}`);
+  return this.connectionSvc.send('get', `venta/recibos/negocio/${this.dataIdentity.idNegocio}/fecha/${hoy}/sorteo/${this.currentRaffleExtra?.data?.id}`);
 }
 
 

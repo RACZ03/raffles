@@ -28,6 +28,7 @@ export class ModalDetalleComponent implements OnInit {
 
 
   loadData(_data:any){
+    // console.log(_data);
     this.data = _data;
     this.dtTrigger.next(this.dtOptions);
   }
@@ -36,13 +37,13 @@ export class ModalDetalleComponent implements OnInit {
     this.dialogRef.close();
   }
 
-      /* Search */
-      searchData(e: any) {
-        this.search = e.target.value;
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.search(this.search).draw();
-        });
-      }
+  /* Search */
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
 
 
 }
