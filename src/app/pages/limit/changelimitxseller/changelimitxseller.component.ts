@@ -69,7 +69,7 @@ export class ChangelimitxsellerComponent implements OnInit {
     let numeros: any[] = [];
     if(listVendedorSelected!==null){
       for (const item of listVendedorSelected) {
-        vendedor.push(item.value); 
+        vendedor.push(item); 
       }
     }
     if(listNumeros!==null){
@@ -83,6 +83,8 @@ export class ChangelimitxsellerComponent implements OnInit {
       numeros: numeros,
       limite: this.formChangeLimitexSeller.value.limite
     }
+
+    console.log(obj);
     
     let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite de los números seleccionados?', 'Confirmar');
     if(await Confirmar){

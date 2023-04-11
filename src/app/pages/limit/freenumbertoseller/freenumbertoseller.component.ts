@@ -67,7 +67,7 @@ export class FreenumbertosellerComponent implements OnInit {
     let vendedor: any[] = [];
     if(listVendedorSelected!==null){
       for (const item of listVendedorSelected) {
-        vendedor.push(item.value);
+        vendedor.push(item);
       }
     }
 
@@ -82,6 +82,7 @@ export class FreenumbertosellerComponent implements OnInit {
       numeros: numeros,
     }
     
+    console.log(obj);
     let Confirmar = this.alertSvc.showConfirmLimit('Liberar Numeros', '¿Está seguro de liberar los números seleccionados?', 'Confirmar');
     if(await Confirmar){
       let resp = await this.limitSvc.freeNumberToSeller(obj);

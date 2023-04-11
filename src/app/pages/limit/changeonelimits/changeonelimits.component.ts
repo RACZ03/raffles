@@ -76,6 +76,7 @@ export class ChangeonelimitsComponent implements OnInit {
       numero: numeros,
       limite: this.formChangeoneLimit.value.limite
     }
+//console.log(obj);
 
     let Confirmar = this.alertSvc.showConfirmLimit('Cambiar Limite', '¿Está seguro de cambiar el límite del número seleccionado?', 'Confirmar');
     if(await Confirmar){
