@@ -11,6 +11,7 @@ import { DataTableServiceService } from 'src/app/@core/utils/data-table-service.
 import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 import { ModalListVendedoresComponent } from '../modal-list-vendedores/modal-list-vendedores.component';
 import { ModalListRutasComponent } from '../modal-list-rutas/modal-list-rutas.component';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-list-ganador',
@@ -18,6 +19,8 @@ import { ModalListRutasComponent } from '../modal-list-rutas/modal-list-rutas.co
   styleUrls: ['./list-ganador.component.scss']
 })
 export class ListGanadorComponent implements OnInit {
+  @ViewChild('rutasSelect') selector!: NgSelectComponent;
+
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -113,8 +116,11 @@ export class ListGanadorComponent implements OnInit {
 
     }}}
 
-  onNegocioSeleccionado(e:any){
+  onNegocioSeleccionado(e:any) {
+    this.negocioSelected = null
     this.negocioSelected = e;
+
+    this.buscarNegocio();
   }
 
   detalleVendedor(item:any){
@@ -145,13 +151,14 @@ export class ListGanadorComponent implements OnInit {
  async buscarNegocio(){
     //
     let busenessSelected = this.negocioSelected;
-   // console.log(busenessSelected);
-    let resp = await this.winnerSvc.getwinnersByBusiness(busenessSelected.id);
+    // console.log(busenessSelected);
+    let resp = await this.winnerSvc.getwinnersByBusiness(( busenessSelected.id == undefined ) ? busenessSelected : busenessSelected.id);
     let { data,status,message,comment } = resp;
     if(status==200){
-      this.data = data;
-      this.renderer(this.data)
+      this.renderer2(data)
     }else{
+      this.data = [];
+      this.renderer2(null, false);
       this.alertSvc.showAlert(3,'GANADORES',comment);
     }
   }
@@ -187,24 +194,55 @@ export class ListGanadorComponent implements OnInit {
   /* Section Render & Destoy */
  async renderer(_data:any) {
     this.data = [];
+    this.dtElement = ( this.dtElement == undefined ) ? this.dataTableSvc.dtElements : this.dtElement;
+
+    // unsubscribe the event
+    this.dtTrigger.unsubscribe();
+
     await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.clear();
-      dtInstance.draw();
       dtInstance.destroy();
+      // new observable
+      this.dtTrigger = new Subject();
+      setTimeout(() => {
+        this.loadData(_data);
+      }, 200);
+    });
+  }
+
+  async renderer2(_data:any, load: boolean = true) {
+    
+    await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      
+      if ( this.data.length != 0 ) {
+        dtInstance.clear();
+        dtInstance.draw();
+        dtInstance.destroy();
+      }
+      
+      this.data = [];
+      if ( load )
       this.loadData(_data);
+      
     });
   }
 
 async verDetalleNegocio(){
+  // console.log(this.ultimonegocio);
     this.mostrarInChange = true;
     this.mostrar= false;
     this.mostrarAdmin= true;
     this.mostrarNegocio = true;
+    // select change
+    
     let resp = await this.winnerSvc.getwinnersByBusiness(this.ultimonegocio.id);
     let { data,status,message,comment } = resp;
     if(status==200){
       this.data = data;
-      this.renderer(this.data)
+      
+      // selected options for select
+      this.selector.select({ value: this.ultimonegocio.id, label: this.ultimonegocio.nombre });
+
+      // this.renderer2(this.data);
     }else{
       this.alertSvc.showAlert(3,'GANADORES',comment);
     }
@@ -216,7 +254,8 @@ async verDetalleNegocio(){
     this.mostrar= true;
     this.mostrarAdmin= false;
     this.mostrarNegocio = false;
-    this.renderer(null);
+
+    this.renderer2(null);
   }
 
   /* Destroy components */

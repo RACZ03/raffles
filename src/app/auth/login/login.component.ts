@@ -84,9 +84,9 @@ export class LoginComponent implements OnInit {
   }
 
   rememberUser(e: any) {
-    let status = e?.target?.checked;
-    if (status) {
-      localStorage.setItem('remeberUser', this.loginForm.get('email')?.value);
+    let checket = e?.target?.checked;
+    if (checket) {
+      localStorage.setItem('remeberUser', (this.loginForm.get('email')?.value || ''));
     } else {
       localStorage.removeItem('remeberUser');
     }
