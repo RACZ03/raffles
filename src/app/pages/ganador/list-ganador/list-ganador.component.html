@@ -30,10 +30,10 @@
                       <button *ngIf="mostrar" class="btn btn-primary btn-sm" (click)="addWinner()">{{ 'BUTTONS.ADD' | translate }}</button>
                       <button *ngIf="mostrar" class="btn btn-warning btn-sm" (click)="verDetalleNegocio()">Ver Detalle por Negocio</button>
                       <div class="row">
-                          <div class="col-xl-2 col-lg-2 col-sm-12 col-12 ">
+                          <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 colxs--12 ">
                             <button *ngIf="mostrarInChange" class="btn btn-warning btn-sm float-left mt-1 mb-2" (click)="regresaPrincipal()">Regresar</button>
                           </div>
-                           <div class="col-xl-8 col-lg-8 col-sm-8 col-8">
+                           <div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-xs-12">
                             <div class="mb-3" tyle="font-size: small;" *ngIf="mostrarInChange">
                               <ng-select #rutasSelect [items]="dataNegocio" [selectOnTab]="true" name="negocios"
                                   bindValue="id" bindLabel="nombre" placeholder="Seleccione Negocio"
@@ -42,9 +42,9 @@
                               </ng-select>
                           </div>
                            </div>
-                          <div class="col-xl-2 col-lg-2 col-sm-4 col-4">
+                          <!-- <div class="col-xl-2 col-lg-2 col-sm-4 col-4">
                             <button *ngIf="mostrarInChange" class="btn btn-primary btn-sm float-left mt-1" (click)="buscarNegocio()"><i class="fab fa-sistrix"></i> Buscar</button>
-                          </div>
+                          </div> -->
                       </div>
                     </div>
                     <div class="col-xxl-2 col-xl-2 col-lg-2 col-sm-6 col-12 text-right mt-2">
