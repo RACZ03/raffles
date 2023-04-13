@@ -54,9 +54,9 @@ selected = new FormControl('',[Validators.required]);
 
   async loadData(_data:any) {
     if(_data == null){
-     let resp = await  this.reportSvr.getDetailbusiness();
-     let {data , comment, status} = resp;
-     console.log(resp);
+      let resp = await  this.reportSvr.getDetailbusiness();
+      let {data , comment, status} = resp;
+
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -163,16 +163,30 @@ selected = new FormControl('',[Validators.required]);
        return new Promise((resolve, _reject) => {
          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
            const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-             return {
-               'fecha': item[0],
-               'inversionAlGanador': item[1],
-               'numeroGanador': item[2],
-               'premioTotal': item[3],
-               'sorteo': item[4],
-               'utilidad': item[5],
-               'ventasTotales': item[6],
+            if ( this.mostrar ) {
+              return {
+                'fecha': item[0],
+                'inversionAlGanador': item[1],
+                'negocio': item[7],
+                'numeroGanador': item[2],
+                'premioTotal': item[3],
+                'sorteo': item[4],
+                'utilidad': item[5],
+                'ventasTotales': item[6],
 
-             }
+              }
+            } else {
+              return {
+                'fecha': item[0],
+                'inversionAlGanador': item[1],
+                'numeroGanador': item[2],
+                'premioTotal': item[3],
+                'sorteo': item[4],
+                'utilidad': item[5],
+                'ventasTotales': item[6],
+                'vendedor': item[7],
+              }
+            }
            });
            resolve(filteredData);
          });
@@ -180,48 +194,54 @@ selected = new FormControl('',[Validators.required]);
      }
 
    async  exportToExcel() {
-       let data : any = [];
-       if(this.search === ''){
-         data = this.data;
-       }else{
-         data= await this.getFilteredData();
-       }
-       let json = data.map((item: any) => {
-         return {
-           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-           'Inversion Al Ganador': item?.inversionalganador,
-           'Numero Ganador': item?.numeroganador,
-           'Premio Total': item?.premiototal,
-           'Sorteo': item?.sorteo,
-           'Utilidad': item?.utilidad,
-           'Ventas Totales': item?.ventastotales
-         }
-       });
-       this.exportSvc.exportToExcel(json, 'detalle Negocio');
-     }
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data= await this.getFilteredData();
+    }
+    let json = data.map((item: any) => {
+      return this.createObjt(item);
+    });
+    this.exportSvc.exportToExcel(json, 'detalle Negocio');
+  }
 
-    async exportToPDF() {
-       let data : any = [];
-       if(this.search === ''){
-         data = this.data;
-       }else{
-         data = await this.getFilteredData();
-       }
-       console.log(data);
-       let json = data.map((item: any) => {
+async exportToPDF() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data = await this.getFilteredData();
+    }
+    let json = data.map((item: any) => {
+      return this.createObjt(item);
+    });
+    this.exportSvc.exportPdf(json, 'detalle Negocio',7,true);
+  }
 
-         return {
-           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-           'Inversion Al Ganador': item?.inversionalganador,
-           'Numero Ganador': item?.numeroganador,
-           'Premio Total': item?.premiototal,
-           'Sorteo': item?.sorteo,
-           'Utilidad': item?.utilidad,
-           'Ventas Totales': item?.ventastotales
-
-         }
-       });
-       this.exportSvc.exportPdf(json, 'detalle Negocio',7,true);
-     }
+  createObjt( item: any ) {
+    if ( this.mostrar ) {
+      return {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Inversion': item?.inversionalganador,
+        'Negocio': item?.negocio,
+        'Ganador': item?.numeroganador,
+        'Premio Total': item?.premiototal,
+        'Sorteo': item?.sorteo,
+        'Utilidad': item?.utilidad,
+        'Ventas Totales': item?.ventastotales
+      }
+    } else {
+      return {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Inversion': item?.inversionalganador,
+        'Ganador': item?.numeroganador,
+        'Premio Total': item?.premiototal,
+        'Sorteo': item?.sorteo,
+        'Utilidad': item?.utilidad,
+        'Ventas Totales': item?.ventastotales
+      }
+    }
+  }
 
 }

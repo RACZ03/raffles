@@ -73,7 +73,7 @@ selected = new FormControl('',[Validators.required]);
     if(_data == null){
      let resp = await  this.reportSvr.getConsolidadoRango();
      let {data , comment, status} = resp;
-     //console.log(resp);
+    //  console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -108,108 +108,126 @@ selected = new FormControl('',[Validators.required]);
       }
   }
 
-       /* Search */
-       searchData(e: any) {
-         this.search = e.target.value;
-         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-           dtInstance.search(this.search).draw();
-         });
-       }
-    /* Section Render & Destoy */
-   async renderer(_data:any) {
-      this.data = [];
+  /* Search */
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
+  /* Section Render & Destoy */
+  async renderer(_data:any) {
+    this.data = [];
 
-      await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.clear();
-        dtInstance.draw();
-        dtInstance.destroy();
-        this.loadData(_data);
-      });
-    }
+    await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.clear();
+      dtInstance.draw();
+      dtInstance.destroy();
+      this.loadData(_data);
+    });
+  }
 
-    /* Destroy components */
-    ngOnDestroy(): void {
-      // this.renderer
-      this.dtTrigger.unsubscribe();
-    }
+  /* Destroy components */
+  ngOnDestroy(): void {
+    // this.renderer
+    this.dtTrigger.unsubscribe();
+  }
 
-    //limpiar campos
-    clean(){
-      this.fechaInicio.setValue('');
-      this.fechaFin.setValue('');
-      this.selected.setValue('');
-      //this.renderer();
-    }
+  //limpiar campos
+  clean(){
+    this.fechaInicio.setValue('');
+    this.fechaFin.setValue('');
+    this.selected.setValue('');
+    //this.renderer();
+  }
 
-    limpiarFiltro(){
-      this.clean();
-      this.renderer(null);
-    }
+  limpiarFiltro(){
+    this.clean();
+    this.renderer(null);
+  }
 
-    getFilteredData(): Promise<any[]> {
-      return new Promise((resolve, _reject) => {
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, _reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          if ( this.mostrar ) {
             return {
-              'fecha_inicio': item[0],
-              'fecha_fin': item[1],
+              'fecha': item[0],
               'negocio': item[2],
               'ruta': item[3],
-              'vendedor': item[4],
+              'nombre': item[4],
               'ventas': item[5],
               'premio': item[6],
               'utilidad': item[7]
             }
-          });
-          resolve(filteredData);
+          } else {
+            return {
+              'fecha': item[0],
+              'ruta': item[2],
+              'nombre': item[3],
+              'ventas': item[4],
+              'premio': item[5],
+              'utilidad': item[6]
+            }
+          }
         });
+        resolve(filteredData);
       });
-    }
+    });
+  }
 
   async  exportToExcel() {
-      let data : any = [];
-      if(this.search === ''){
-        data = this.data;
-      }else{
-        data= await this.getFilteredData();
-      }
-      let json = data.map((item: any) => {
-        return {
-          'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Negocio': item?.negocio,
-          'Ruta': item?.ruta,
-          'Vendedor': item?.nombre,
-          'Ventas': item?.ventas,
-          'Premio': item?.premio,
-          'Utilidad': item?.utilidad,
-        }
-      });
-      this.exportSvc.exportToExcel(json, 'detalle de vendedores por fecha');
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data= await this.getFilteredData();
     }
+    let json = data.map((item: any) => {
+      return this.createObj(item);
+    });
+    this.exportSvc.exportToExcel(json, 'detalle de vendedores por fecha');
+  }
 
-   async exportToPDF() {
-      let data : any = [];
-      if(this.search === ''){
-        data = this.data;
-      }else{
-        data = await this.getFilteredData();
-      }
-      console.log(data);
-      let json = data.map((item: any) => {
-
-        return {
-          'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Negocio': item?.negocio,
-          'Ruta': item?.ruta,
-          'Vendedor': item?.nombre,
-          'Ventas': item?.ventas,
-          'Premio': item?.premio,
-          'Utilidad': item?.utilidad,
-        }
-      });
-      this.exportSvc.exportPdf(json, 'detalle vendedores por fecha',8,true);
+  async exportToPDF() {
+    let data : any = [];
+    if(this.search === ''){
+      data = this.data;
+    }else{
+      data = await this.getFilteredData();
     }
+    // console.log(data);
+    let json = data.map((item: any) => {
+      return this.createObj(item);
+    });
+    let count = this.mostrar ? 8 : 7;
+    this.exportSvc.exportPdf(json, 'detalle vendedores por fecha', count,true);
+  }
+
+  createObj( item: any ) {
+    let objTemp = {
+      'Ruta': item?.ruta,
+      'Vendedor': item?.nombre,
+      'Ventas': item?.ventas,
+      'Premio': item?.premio,
+      'Utilidad': item?.utilidad,
+    };
+    let obj: any = {};
+    if ( this.mostrar ) {
+      obj = {
+        'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Negocio': item?.negocio,
+        ...objTemp
+      }
+    } else {
+      obj = {
+        'Fecha Inicio': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Fecha Fin': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        ...objTemp
+    }
+    return obj;
+  }
+}
 
 }
