@@ -182,18 +182,32 @@ selected = new FormControl('',[Validators.required]);
     return new Promise((resolve, _reject) => {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-          return {
-            'fecha': item[0],
-            'inversionAlGanador': item[1],
-            'numeroGanador': item[2],
-            'premioTotal': item[3],
-            'ruta' : item[4],
-            'sorteo': item[5],
-            'utilidad': item[6],
-            'vendedor': item[7],
-            'ventasTotales': item[8],
-
+          let obj: any = {};
+          if ( this.mostrar) {
+            obj = {
+              fecha: item[0],
+              sorteo: item[1],
+              negocio: item[2],
+              ruta: item[3],
+              vendedor: item[4],
+              numeroganador: item[5],
+              ventastotales: item[6],
+              premiototal: item[7],
+              utilidad: item[8],
+            }
+          } else {
+            obj = {
+              fecha: item[0],
+              sorteo: item[1],
+              ruta: item[2],
+              vendedor: item[3],
+              numeroganador: item[4],
+              ventastotales: item[5],
+              premiototal: item[6],
+              utilidad: item[7],
+            }
           }
+          return obj;
         });
         resolve(filteredData);
       });
@@ -208,17 +222,7 @@ selected = new FormControl('',[Validators.required]);
       data= await this.getFilteredData();
     }
     let json = data.map((item: any) => {
-      return {
-        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-        'Inversion Al Ganador': item?.inversionalganador,
-        'Numero Ganador': item?.numeroganador,
-        'Premio Total': item?.premiototal,
-        'Ruta': item?.ruta,
-        'Sorteo': item?.sorteo,
-        'Utilidad': item?.utilidad,
-        'Vendedor': item?.vendedor,
-        'Ventas Totales': item?.ventastotales
-      }
+      return this.createObj(item);
     });
     this.exportSvc.exportToExcel(json, 'detalle de vendedores');
   }
@@ -230,23 +234,39 @@ selected = new FormControl('',[Validators.required]);
     }else{
       data = await this.getFilteredData();
     }
-    console.log(data);
+    // console.log(data);
     let json = data.map((item: any) => {
-
-      return {
-        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-        'Inversion Al Ganador': item?.inversionalganador,
-        'Numero Ganador': item?.numeroganador,
-        'Premio Total': item?.premiototal,
-        'Ruta': item?.ruta,
-        'Sorteo': item?.sorteo,
-        'Utilidad': item?.utilidad,
-        'Vendedor': item?.vendedor,
-        'Ventas Totales': item?.ventastotales
-
-      }
+      return this.createObj(item);
     });
-    this.exportSvc.exportPdf(json, 'detalle vendedores',9,true);
+    let count =  this.mostrar ? 9 : 8;
+    this.exportSvc.exportPdf(json, 'detalle vendedores', count,true);
+  }
+
+  createObj( item: any ) {
+    let objTemp = {
+      'Ruta': item?.ruta,
+      'Vendedor': item?.vendedor,
+      'Ganador': item?.numeroganador,
+      'Ventas Totales': item?.ventastotales,
+      'Premio Total': item?.premiototal,
+      'Utilidad': item?.utilidad,
+    };
+    let obj: any = {};
+    if ( this.mostrar ) {
+      obj = {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Sorteo': item?.sorteo,
+        'Negocio': item?.negocio,
+        ...objTemp
+      };
+    } else {
+      obj = {
+        'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+        'Sorteo': item?.sorteo,
+        ...objTemp
+      }
+    }
+    return obj;
   }
 
 

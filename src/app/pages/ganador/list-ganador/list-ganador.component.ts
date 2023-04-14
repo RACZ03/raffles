@@ -72,7 +72,6 @@ export class ListGanadorComponent implements OnInit {
     if(resp != undefined){
       let { data } = resp;
       this.dataNegocio = data;
-      //console.log(this.dataNegocio);
        this.ultimonegocio = data[data.length-1];
       this.negocioSeleccionado=this.ultimonegocio;
     }
@@ -82,7 +81,7 @@ export class ListGanadorComponent implements OnInit {
    if(_data==null){
     this.data = [];
     let resp = await this.winnerSvc.getwinners();
-    //console.log(resp);
+
     if(resp != undefined){
      let { data,status,message,comment } = resp;
      if(status==200){
@@ -98,7 +97,7 @@ export class ListGanadorComponent implements OnInit {
     if(_data==null){
       this.data = [];
       let resp = await this.winnerSvc.getwinnersByBusiness(this.ultimonegocio.id);
-      //console.log(resp);
+
       if(resp != undefined){
        let { data,status,message,comment } = resp;
        if(status==200){
@@ -124,7 +123,6 @@ export class ListGanadorComponent implements OnInit {
   }
 
   detalleVendedor(item:any){
-    //console.log(item);
     const dialogRef = this.dialog.open(ModalListVendedoresComponent,{
       data : item
     });
@@ -136,7 +134,6 @@ export class ListGanadorComponent implements OnInit {
   }
 
   detalleRutas(item:any){
-    //console.log(item);
     const dialogRef = this.dialog.open(ModalListRutasComponent,{
       data : item
     });
@@ -151,7 +148,7 @@ export class ListGanadorComponent implements OnInit {
  async buscarNegocio(){
     //
     let busenessSelected = this.negocioSelected;
-    // console.log(busenessSelected);
+
     let resp = await this.winnerSvc.getwinnersByBusiness(( busenessSelected.id == undefined ) ? busenessSelected : busenessSelected.id);
     let { data,status,message,comment } = resp;
     if(status==200){
@@ -210,44 +207,44 @@ export class ListGanadorComponent implements OnInit {
   }
 
   async renderer2(_data:any, load: boolean = true) {
-    
+
     await this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      
+
       if ( this.data.length != 0 ) {
         dtInstance.clear();
         dtInstance.draw();
         dtInstance.destroy();
       }
-      
+
       this.data = [];
       if ( load )
       this.loadData(_data);
-      
+
     });
   }
 
 async verDetalleNegocio(){
-  // console.log(this.ultimonegocio);
-    this.mostrarInChange = true;
-    this.mostrar= false;
-    this.mostrarAdmin= true;
-    this.mostrarNegocio = true;
-    // select change
-    
-    let resp = await this.winnerSvc.getwinnersByBusiness(this.ultimonegocio.id);
-    let { data,status,message,comment } = resp;
-    if(status==200){
-      this.data = data;
-      
-      // selected options for select
-      this.selector.select({ value: this.ultimonegocio.id, label: this.ultimonegocio.nombre });
 
-      // this.renderer2(this.data);
-    }else{
-      this.alertSvc.showAlert(3,'GANADORES',comment);
-    }
+  this.mostrarInChange = true;
+  this.mostrar= false;
+  this.mostrarAdmin= true;
+  this.mostrarNegocio = true;
+  // select change
 
+  let resp = await this.winnerSvc.getwinnersByBusiness(this.ultimonegocio.id);
+  let { data,status,message,comment } = resp;
+  if(status==200){
+    this.data = data;
+
+    // selected options for select
+    this.selector.select({ value: this.ultimonegocio.id, label: this.ultimonegocio.nombre });
+
+    // this.renderer2(this.data);
+  }else{
+    this.alertSvc.showAlert(3,'GANADORES',comment);
   }
+
+}
 
   regresaPrincipal(){
     this.mostrarInChange = false;
@@ -264,32 +261,32 @@ async verDetalleNegocio(){
     this.dtTrigger.unsubscribe();
   }
 
-    /* Search */
-    searchData(e: any) {
-      this.search = e.target.value;
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.search(this.search).draw();
-      });
-    }
+  /* Search */
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
 
-    getFilteredData(): Promise<any[]> {
-      return new Promise((resolve, reject) => {
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-            return {
-              'fecha': item[0],
-              'sorteo': item[1],
-              'ventasTotales': item[2],
-              'numeroGanador': item[3],
-              'inversionAlGanador': item[4],
-              'premioTotal': item[5],
-              'utilidad': item[6]
-            }
-          });
-          resolve(filteredData);
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          return {
+            'fecha': item[0],
+            'sorteo': item[1],
+            'numeroGanador': item[2],
+            'inversionAlGanador': item[3],
+            'ventasTotales': item[4],
+            'premioTotal': item[5],
+            'utilidad': item[6]
+          }
         });
+        resolve(filteredData);
       });
-    }
+    });
+  }
 
   async  exportToExcel() {
       let data : any = [];
@@ -302,10 +299,10 @@ async verDetalleNegocio(){
         return {
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Sorteo':item?.sorteo?.nombre == undefined ? item?.sorteo : item?.sorteo?.nombre,
-          'Ventas Totales':item?.ventasTotales,
-          'Numero Ganador':item?.numeroGanador,
-          'Inversion al Ganador':item?.inversionAlGanador,
-          'Premio Total':item?.premioTotal,
+          'Ganador': item?.numeroGanador,
+          'Inversion':item?.inversionAlGanador,
+          'Venta Total':item?.ventasTotales,
+          'Premio':item?.premioTotal,
           'Utilidad':item?.utilidad
         }
       });
@@ -319,20 +316,20 @@ async verDetalleNegocio(){
       }else{
         data = await this.getFilteredData();
       }
-      //console.log(data);
+
       let json = data.map((item: any) => {
 
         return {
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Sorteo':item?.sorteo?.nombre == undefined ? item?.sorteo : item?.sorteo?.nombre,
-          'Ventas Totales':item?.ventasTotales,
-          'Numero Ganador':item?.numeroGanador,
-          'Inversion al Ganador':item?.inversionAlGanador,
-          'Premio Total':item?.premioTotal,
+          'Ganador': item?.numeroGanador,
+          'Inversion':item?.inversionAlGanador,
+          'Venta Total':item?.ventasTotales,
+          'Premio':item?.premioTotal,
           'Utilidad':item?.utilidad
         }
       });
-      this.exportSvc.exportPdf(json, 'Numeos Ganadores',7,true);
+      this.exportSvc.exportPdf(json, 'Numeros Ganadores',7,true);
     }
 
 

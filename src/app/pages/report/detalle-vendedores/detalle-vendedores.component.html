@@ -91,12 +91,12 @@
                           <tr>
                             <th scope="col" class="text-center">Fecha</th>
                             <th scope="col" class="text-center">Sorteo</th>
-                            <th scope="col" class="text-center">Vendedor</th>
+                            <th scope="col" class="text-center" *ngIf="mostrar">Negocio</th>
                             <th scope="col" class="text-center">Ruta</th>
+                            <th scope="col" class="text-center">Vendedor</th>
                             <th scope="col" class="text-center">Ganador</th>
                             <th scope="col" class="text-center">Ventas Totales</th>
                             <th scope="col" class="text-center">Premio Total</th>
-                            <th scope="col" class="text-center" *ngIf="mostrar">Negocio</th>
                             <th scope="col" class="text-center">Utilidad</th>
                             <th scope="col" class="text-center">
                               Acciones
@@ -120,12 +120,12 @@
                           <tr *ngFor="let item of data">
                               <td class="text-center">{{ item?.fecha |  date:'dd/MM/yyyy' }}</td>
                               <td class="text-center">{{ item?.sorteo }}</td>
-                              <td class="text-center">{{ item?.vendedor }}</td>
+                              <td class="text-center" *ngIf="mostrar">{{ item?.negocio }}</td>
                               <td class="text-center">{{ item?.ruta }}</td>
+                              <td class="text-center">{{ item?.vendedor }}</td>
                               <td class="text-center">{{ item?.numeroganador }}</td>
                               <td class="text-center">{{ item?.ventastotales }}</td>
                               <td class="text-center">{{ item?.premiototal }}</td>
-                              <td class="text-center" *ngIf="mostrar">{{ item?.negocio }}</td>
                               <td class="text-center">{{ item?.utilidad }}</td>
                               <td class="text-right">
                                 <button class="btn btn-sm text-primary" placement="left" ngbTooltip="Ver Detalle" (click)="detalleRPT(item)">

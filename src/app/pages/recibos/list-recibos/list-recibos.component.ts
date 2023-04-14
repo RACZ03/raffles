@@ -14,6 +14,7 @@ import { __values } from 'tslib';
 import { SalesService } from 'src/app/@core/services/sales.service';
 import { UsersService } from 'src/app/@core/services/users.service';
 import { PrintService } from 'src/app/@core/utils/print.service';
+import { ExporterDataService } from 'src/app/@core/utils/exporter-data.service';
 
 @Component({
   selector: 'app-list-recibos',
@@ -66,6 +67,7 @@ export class ListRecibosComponent implements OnInit {
     private salesSvc : SalesService,
     private userSvc: UsersService,
     private printSvc: PrintService,
+    private exportSvc: ExporterDataService
   ) {
     this.isSuperAdmin = this.userSvc.verifyRole('ROLE_SUPER_ADMIN') as boolean;
     this.isAdmin = this.userSvc.verifyRole('ROLE_ADMIN') as boolean;
@@ -105,8 +107,11 @@ export class ListRecibosComponent implements OnInit {
         this.alerSvr.showAlert(3,'Sorteo Actual',`No hay sorteo actual`);
       }
 
-      // set value of date
-      this.fechaInicio.setValue(moment().format('YYYY-MM-DD'));
+      // set value of date + 1 day
+      let date = new Date();
+      date.setDate(date.getDate() + 1);
+      this.fechaInicio.setValue(moment(date).format('YYYY-MM-DD'));
+      // console.log(this.fechaInicio.value);
 
       if(this.previousUrl.return==1 || this.previousUrl.return==2){
         let resp = await this.reporSvr.getRecibosActuales();
@@ -321,191 +326,337 @@ export class ListRecibosComponent implements OnInit {
 
 }
 
- async getTickets(code: string) {
-   if ( navigator.bluetooth ) {
-     try {
-       if ( this.printSvc.device ) {
-         this.printSvc.device.gatt.connect().then((server: any) => {
-           return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-         })
-         .then((service: any) => {
-           service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
-             let resp = await this.salesSvc.getSaleByCode(code);
-             let { status, data } = resp;
-             if (status && status == 200) {
-               let { status, data } = resp;
-               let {
-                 codigo,
-                 vendedor,
-                 ruta,
-                 sorteo,
-                 cantidadNumeros,
-                 montoTotal,
-                 fecha,
-                 hora,
-                 ventaDetalles,
-               } = data;
-               // convertir nombre de negocio a mayusculas
-               let negocio = vendedor?.negocioAndRuta?.negocio.toUpperCase();
-               // convertir nombre ruta a mayusculas
-               ruta.nombre = ruta?.nombre.toUpperCase();
-               // convertir nombre sorteo a mayusculas
-               sorteo.nombre = sorteo?.nombre.toUpperCase();
-               // convertir nombre vendedor a mayusculas
-               vendedor = vendedor?.nombre.toUpperCase();
-               // cambiar formato fecha a dd/mm/yyyy
-               fecha = moment(fecha).format('DD/MM/YYYY');
-               // cambiar formato hora a hh:mm a
-               hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
-               let arrayPrint: string[] = [
-                 negocio,
-                 'RECIBO ' + codigo,
-                 'RUTA ' + ruta?.nombre,
-                 fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
-                 '',
-                 '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
-               ];
-               // ADD NUMBERS TO PRINT
-               ventaDetalles.forEach((element: any) => {
-                 arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
-               });
-               arrayPrint.push('');
-               // ADD TOTAL TO PRINT
-               arrayPrint.push(cantidadNumeros + ' NUMEROS VENDIDOS');
-               arrayPrint.push(montoTotal + ' CORDOBAS');
-               arrayPrint.push(vendedor);
-               arrayPrint.push('');
-               arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
-               for (const iterator of arrayPrint) {
-                 const element = iterator + '\n'; // Agregar un salto de línea al final
-                 const encoder = new TextEncoder();
-                 const data = encoder.encode(element);
-                 await characteristic.writeValue(data);
-               }
-             }
-           });
-         }).catch((error: any) => {
-          //  console.log('INFO:', error);
-           this.printSvc.device = null;
-           this.getTickets(code);
-         });
-       } else {
-         navigator.bluetooth.requestDevice({
-           filters: [{
-             services: ['000018f0-0000-1000-8000-00805f9b34fb']
-           }]
-         })
-         .then((device: any) => {
-          //  console.log('Impresora encontrada:', device);
-           // set device in localstorage
-           this.printSvc.device = device;
-           return device.gatt.connect();
-         })
-         .then((server: any) => {
-           return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-         })
-         .then((service: any) => {
-           service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
-             let resp = await this.salesSvc.getSaleByCode(code);
-             let { status, data } = resp;
-             let {
-               codigo,
-               vendedor,
-               ruta,
-               sorteo,
-               cantidadNumeros,
-               montoTotal,
-               fecha,
-               hora,
-               ventaDetalles,
-             } = data;
-             // convertir nombre ruta a mayusculas
-             ruta.nombre = ruta?.nombre.toUpperCase();
-             // convertir nombre sorteo a mayusculas
-             sorteo.nombre = sorteo?.nombre.toUpperCase();
-             // convertir nombre vendedor a mayusculas
-             vendedor = vendedor?.nombre.toUpperCase();
-             // cambiar formato fecha a dd/mm/yyyy
-             fecha = moment(fecha).format('DD/MM/YYYY');
-             // cambiar formato hora a hh:mm a
-             hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
-             let arrayPrint: string[] = [
-               '        RECIBO ' + codigo,
-               '   RUTA: ' + ruta?.nombre,
-               '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
-               '',
-               '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
-             ];
-             // ADD NUMBERS TO PRINT
-             ventaDetalles.forEach((element: any) => {
-               arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
-             });
-             arrayPrint.push('');
-             // ADD TOTAL TO PRINT
-             arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
-             arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
-             arrayPrint.push('    ' + vendedor);
-             arrayPrint.push('');
-             arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
-             for (const iterator of arrayPrint) {
-               const element = iterator + '\n'; // Agregar un salto de línea al final
-               const encoder = new TextEncoder();
-               const data = encoder.encode(element);
-               await characteristic.writeValue(data);
-             }
-           });
-         })
-         .catch((error: any) => {
-           // console.log('INFO:', error);
-           this.printSvc.device = null;
-           // this.getTickets(code);
-         });
-       }
-     } catch (error) {
-       this.printSvc.device = null;
-       // console.log('tri catch error', error);
-       // this.getTickets(code);
-     }
-   } else {
-     let resp = await this.salesSvc.getSaleByCode(code);
-     if (resp) {
-       let { status, data } = resp;
-       if (status && status == 200) {
-         await this.printSvc.printTicket(data);
-       }
-     }
-   }
- }
- connectBluetooth() {
-   if ( navigator.bluetooth ) {
-     if (this.printSvc.device) {
-       this.printSvc.device = null;
-     } else {
-       // verificar permisos de bluetooth
-       navigator.bluetooth.requestDevice({
-         filters: [{
-           services: ['000018f0-0000-1000-8000-00805f9b34fb']
-         }]
-       })
-       .then((device: any) => {
-         // console.log('Impresora encontrada:', device);
-         // set device in localstorage
-         this.printSvc.device = device;
-         return device.gatt.connect();
-       })
-       .then((server: any) => {
-         this.alerSvr.showAlert(1, 'Success', 'Impresora conectada');
-         return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-       })
-       .catch((error: any) => {
-         this.printSvc.device = null;
-         this.alerSvr.showAlert(3, 'Info', 'No se pudo conectar con la impresora');
-       });
-     }
-   } else {
-     this.alerSvr.showAlert(3, 'Info', 'Su navegador no soporta esta funcionalidad');
-   }
- }
+  async getTickets(code: string) {
+    if ( navigator.bluetooth ) {
+      try {
+        if ( this.printSvc.device ) {
+          this.printSvc.device.gatt.connect().then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+              let resp = await this.salesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              if (status && status == 200) {
+                let { status, data } = resp;
+                let {
+                  codigo,
+                  vendedor,
+                  ruta,
+                  sorteo,
+                  cantidadNumeros,
+                  montoTotal,
+                  fecha,
+                  hora,
+                  ventaDetalles,
+                } = data;
+                // convertir nombre de negocio a mayusculas
+                let negocio = vendedor?.negocioAndRuta?.negocio.toUpperCase();
+                // convertir nombre ruta a mayusculas
+                ruta.nombre = ruta?.nombre.toUpperCase();
+                // convertir nombre sorteo a mayusculas
+                sorteo.nombre = sorteo?.nombre.toUpperCase();
+                // convertir nombre vendedor a mayusculas
+                vendedor = vendedor?.nombre.toUpperCase();
+                // cambiar formato fecha a dd/mm/yyyy
+                fecha = moment(fecha).format('DD/MM/YYYY');
+                // cambiar formato hora a hh:mm a
+                hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+                let arrayPrint: string[] = [
+                  negocio,
+                  'RECIBO ' + codigo,
+                  'RUTA ' + ruta?.nombre,
+                  fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                  '',
+                  '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+                ];
+                // ADD NUMBERS TO PRINT
+                ventaDetalles.forEach((element: any) => {
+                  arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+                });
+                arrayPrint.push('');
+                // ADD TOTAL TO PRINT
+                arrayPrint.push(cantidadNumeros + ' NUMEROS VENDIDOS');
+                arrayPrint.push(montoTotal + ' CORDOBAS');
+                arrayPrint.push(vendedor);
+                arrayPrint.push('');
+                arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+                for (const iterator of arrayPrint) {
+                  const element = iterator + '\n'; // Agregar un salto de línea al final
+                  const encoder = new TextEncoder();
+                  const data = encoder.encode(element);
+                  await characteristic.writeValue(data);
+                }
+              }
+            });
+          }).catch((error: any) => {
+            //  console.log('INFO:', error);
+            this.printSvc.device = null;
+            this.getTickets(code);
+          });
+        } else {
+          navigator.bluetooth.requestDevice({
+            filters: [{
+              services: ['000018f0-0000-1000-8000-00805f9b34fb']
+            }]
+          })
+          .then((device: any) => {
+            //  console.log('Impresora encontrada:', device);
+            // set device in localstorage
+            this.printSvc.device = device;
+            return device.gatt.connect();
+          })
+          .then((server: any) => {
+            return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+          })
+          .then((service: any) => {
+            service.getCharacteristic('00002af1-0000-1000-8000-00805f9b34fb').then( async (characteristic: any) => {
+              let resp = await this.salesSvc.getSaleByCode(code);
+              let { status, data } = resp;
+              let {
+                codigo,
+                vendedor,
+                ruta,
+                sorteo,
+                cantidadNumeros,
+                montoTotal,
+                fecha,
+                hora,
+                ventaDetalles,
+              } = data;
+              // convertir nombre ruta a mayusculas
+              ruta.nombre = ruta?.nombre.toUpperCase();
+              // convertir nombre sorteo a mayusculas
+              sorteo.nombre = sorteo?.nombre.toUpperCase();
+              // convertir nombre vendedor a mayusculas
+              vendedor = vendedor?.nombre.toUpperCase();
+              // cambiar formato fecha a dd/mm/yyyy
+              fecha = moment(fecha).format('DD/MM/YYYY');
+              // cambiar formato hora a hh:mm a
+              hora = moment(hora, 'HH:mm:ss').format('hh:mm a');
+              let arrayPrint: string[] = [
+                '        RECIBO ' + codigo,
+                '   RUTA: ' + ruta?.nombre,
+                '' + fecha + ' - ' + hora + ' - ' + sorteo?.nombre,
+                '',
+                '    NUMERO' + '  ' + 'MONTO' + '  ' + 'PREMIO',
+              ];
+              // ADD NUMBERS TO PRINT
+              ventaDetalles.forEach((element: any) => {
+                arrayPrint.push('      ' + ( (element.numero <= 9)  ? element.numero + ' ' : element.numero ) + '      ' + ((element.monto <= 9 ) ? (element.monto + '      ') : ((element.monto <= 99) ? (element.monto + '     ') : (element.monto + '   ') )) + element.premio);
+              });
+              arrayPrint.push('');
+              // ADD TOTAL TO PRINT
+              arrayPrint.push('    ' + cantidadNumeros + ' NUMEROS VENDIDOS');
+              arrayPrint.push('  TOTAL RECIBO :: ' + montoTotal + ' CORDOBAS');
+              arrayPrint.push('    ' + vendedor);
+              arrayPrint.push('');
+              arrayPrint.push('Gracias por su compra. \nPor favor, conserve este recibo.\nNo se aceptan reclamos despues de 24 horas.\n\n');
+              for (const iterator of arrayPrint) {
+                const element = iterator + '\n'; // Agregar un salto de línea al final
+                const encoder = new TextEncoder();
+                const data = encoder.encode(element);
+                await characteristic.writeValue(data);
+              }
+            });
+          })
+          .catch((error: any) => {
+            // console.log('INFO:', error);
+            this.printSvc.device = null;
+            // this.getTickets(code);
+          });
+        }
+      } catch (error) {
+        this.printSvc.device = null;
+        // console.log('tri catch error', error);
+        // this.getTickets(code);
+      }
+    } else {
+      let resp = await this.salesSvc.getSaleByCode(code);
+      if (resp) {
+        let { status, data } = resp;
+        if (status && status == 200) {
+          await this.printSvc.printTicket(data);
+        }
+      }
+    }
+  }
+  connectBluetooth() {
+    if ( navigator.bluetooth ) {
+      if (this.printSvc.device) {
+        this.printSvc.device = null;
+      } else {
+        // verificar permisos de bluetooth
+        navigator.bluetooth.requestDevice({
+          filters: [{
+            services: ['000018f0-0000-1000-8000-00805f9b34fb']
+          }]
+        })
+        .then((device: any) => {
+          // console.log('Impresora encontrada:', device);
+          // set device in localstorage
+          this.printSvc.device = device;
+          return device.gatt.connect();
+        })
+        .then((server: any) => {
+          this.alerSvr.showAlert(1, 'Success', 'Impresora conectada');
+          return server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+        })
+        .catch((error: any) => {
+          this.printSvc.device = null;
+          this.alerSvr.showAlert(3, 'Info', 'No se pudo conectar con la impresora');
+        });
+      }
+    } else {
+      this.alerSvr.showAlert(3, 'Info', 'Su navegador no soporta esta funcionalidad');
+    }
+  }
 
+  getFilteredData(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
+          let obj: any = {};
+          if ( this.isSuperAdmin ) {
+            obj = {
+              codigo: item[0],
+              vendedor: {
+                negocioAndRuta: {
+                  negocio: item[1],
+                  ruta: item[2]
+                },
+                nombre: item[3]
+              },
+              sorteo: {
+                nombre: item[4]
+              },
+              fechaFormateada: item[5],
+              horaFormateada: item[6],
+              montoTotal: item[7],
+              cantidadNumeros: item[8],
+              elimina: item[9],
+            }
+          } else if ( this.isAdmin ) {
+            obj = {
+              codigo: item[0],
+              vendedor: {
+                negocioAndRuta: {
+                  ruta: item[1]
+                },
+                nombre: item[2]
+              },
+              sorteo: {
+                nombre: item[3]
+              },
+              fechaFormateada: item[4],
+              horaFormateada: item[5],
+              montoTotal: item[6],
+              cantidadNumeros: item[7],
+              elimina: item[8],
+            }
+          } else if ( this.isSupervisor ) {
+            obj = {
+              codigo: item[0],
+              vendedor: {
+                nombre: item[1]
+              },
+              sorteo: {
+                nombre: item[2]
+              },
+              fechaFormateada: item[3],
+              horaFormateada: item[4],
+              montoTotal: item[5],
+              cantidadNumeros: item[6],
+              elimina: item[7],
+            }
+          } else {
+            obj = {
+              codigo: item[0],
+              sorteo: {
+                nombre: item[1]
+              },
+              fechaFormateada: item[2],
+              horaFormateada: item[3],
+              montoTotal: item[4],
+              cantidadNumeros: item[5],
+              elimina: item[6],
+            }
+          }
+          return obj;
+        });
+        resolve(filteredData);
+      });
+    });
+  }
+
+  async  exportToExcel() {
+      let data : any = [];
+      if(this.search === ''){
+        data = this.data;
+      }else{
+        data= await this.getFilteredData();
+      }
+      let json = data.map((item: any) => {
+        return this.createObjectExcel(item);
+      });
+      this.exportSvc.exportToExcel(json, 'Ganadores');
+    }
+
+   async exportToPDF() {
+      let data : any = [];
+      if(this.search === ''){
+        data = this.data;
+      }else{
+        data = await this.getFilteredData();
+      }
+
+      let json = data.map((item: any) => {
+        return this.createObjectExcel(item);
+      });
+      let count = this.isSuperAdmin ? 10 : this.isAdmin ? 9 : this.isSupervisor ? 8 : 7;
+      this.exportSvc.exportPdf(json, 'Ganadores', count, true);
+    }
+
+    // constructor de objeto para exportar a excel
+    createObjectExcel(item: any) {
+      let objTemp = {
+        'Sorteo': item?.sorteo?.nombre == undefined ? item?.sorteo : item?.sorteo?.nombre,
+        'Fecha': item?.fechaFormateada,
+        'Hora': item?.horaFormateada,
+        'Monto Total': item?.montoTotal,
+        'Cantidad N': item?.cantidadNumeros,
+        'Elimina': item?.elimina,
+      }
+      let obj: any = {};
+
+      if ( this.isSuperAdmin ) {
+        obj = {
+          'Codigo': item?.codigo,
+          'Negocio': item?.vendedor?.negocioAndRuta?.negocio,
+          'Ruta': item?.vendedor?.negocioAndRuta?.ruta,
+          'Vendedor': item?.vendedor?.nombre,
+          ...objTemp,
+        };
+      } else if ( this.isAdmin ) {
+        obj = {
+          'Codigo': item?.codigo,
+          'Ruta': item?.vendedor?.negocioAndRuta?.ruta,
+          'Vendedor': item?.vendedor?.nombre,
+          ...objTemp,
+        };
+      } else if ( this.isSupervisor ) {
+        obj = {
+          'Codigo': item?.codigo,
+          'Vendedor': item?.vendedor?.nombre,
+          ...objTemp,
+        };
+      } else {
+        obj = {
+          'Codigo': item?.codigo,
+          ...objTemp,
+        };
+      }
+      return obj;
+    }
 
 }

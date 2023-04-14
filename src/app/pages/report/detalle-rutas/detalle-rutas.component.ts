@@ -82,7 +82,7 @@ selected = new FormControl('',[Validators.required]);
     if(_data == null){
      let resp = await  this.reportSvr.getDetailRoute();
      let {data , comment, status} = resp;
-     console.log(resp);
+    //  console.log(resp);
       if(status == 200){
        if(data != null){
          this.data = data;
@@ -128,33 +128,54 @@ selected = new FormControl('',[Validators.required]);
     });
   }
 
-    /* Destroy components */
-    ngOnDestroy(): void {
-      // this.renderer
-      this.dtTrigger.unsubscribe();
-    }
+  searchData(e: any) {
+    this.search = e.target.value;
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.search(this.search).draw();
+    });
+  }
 
-    //limpiar campos
-    clean(){
-      this.fechaInicio.setValue('');
-      this.fechaFin.setValue('');
-      this.selected.setValue('');
-      //this.renderer();
-    }
+  /* Destroy components */
+  ngOnDestroy(): void {
+    // this.renderer
+    this.dtTrigger.unsubscribe();
+  }
+
+  //limpiar campos
+  clean(){
+    this.fechaInicio.setValue('');
+    this.fechaFin.setValue('');
+    this.selected.setValue('');
+    //this.renderer();
+  }
 
     getFilteredData(): Promise<any[]> {
       return new Promise((resolve, _reject) => {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           const filteredData = dtInstance.rows({search:'applied'}).data().toArray().map((item: any) => {
-            return {
-              'fecha': item[0],
-              'sorteo': item[1],
-              'ruta': item[2],
-              'numeroganador': item[3],
-              'inversionalganador': item[4],
-              'ventastotales': item[5],
-              'premiototal': item[6],
-              'utilidad': item[7],
+            if ( this.mostrar )  {
+              return {
+                'fecha': item[0],
+                'sorteo': item[1],
+                'Negocio': item[2],
+                'ruta': item[3],
+                'numeroganador': item[4],
+                'inversionalganador': item[5],
+                'ventastotales': item[6],
+                'premiototal': item[7],
+                'utilidad': item[8],
+              }
+            } else {
+              return {
+                'fecha': item[0],
+                'sorteo': item[1],
+                'ruta': item[2],
+                'numeroganador': item[3],
+                'inversionalganador': item[4],
+                'ventastotales': item[5],
+                'premiototal': item[6],
+                'utilidad': item[7],
+              }
             }
           });
           resolve(filteredData);
@@ -170,18 +191,9 @@ selected = new FormControl('',[Validators.required]);
         data= await this.getFilteredData();
       }
       let json = data.map((item: any) => {
-        return {
-          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
-          'Sorteo': item?.sorteo,
-          'Ruta': item?.ruta,
-          'Numero Ganador': item?.numeroganador,
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Ventas Totales': item?.ventastotales,
-          'Premio Total': item?.premiototal,
-          'Utilidad': item?.utilidad,
-        }
+        return this.createObj(item);
       });
-      this.exportSvc.exportToExcel(json, 'detalle de vendedores');
+      this.exportSvc.exportToExcel(json, 'detalle de rutas');
     }
 
    async exportToPDF() {
@@ -191,22 +203,37 @@ selected = new FormControl('',[Validators.required]);
       }else{
         data = await this.getFilteredData();
       }
-      console.log(data);
+      // console.log(data);
       let json = data.map((item: any) => {
+        return this.createObj(item);
+      });
+      let count = this.mostrar ? 9 : 8;
+      this.exportSvc.exportPdf(json, 'detalle rutas', count, true);
+    }
 
+    createObj( item: any) {
+      let objTemp = {
+        'Ruta': item?.ruta,
+        'Ganador': item?.numeroganador,
+        'Inversion': item?.inversionalganador,
+        'Ventas Totales': item?.ventastotales,
+        'Premio Total': item?.premiototal,
+        'Utilidad': item?.utilidad,
+      };
+      if ( this.mostrar ) {
         return {
           'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
           'Sorteo': item?.sorteo,
-          'Ruta': item?.ruta,
-          'Numero Ganador': item?.numeroganador,
-          'Inversion Al Ganador': item?.inversionalganador,
-          'Ventas Totales': item?.ventastotales,
-          'Premio Total': item?.premiototal,
-          'Utilidad': item?.utilidad,
+          'Negocio': item?.negocio,
+          ...objTemp
         }
-      });
-      this.exportSvc.exportPdf(json, 'detalle vendedores',7,true);
+      } else {
+        return {
+          'Fecha': moment(item?.fecha).format('DD/MM/YYYY')== 'Invalid date' ? item?.fecha: moment(item?.fecha).format('DD/MM/YYYY'),
+          'Sorteo': item?.sorteo,
+          ...objTemp
+      }
     }
-
+  }
 
 }
