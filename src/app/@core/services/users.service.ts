@@ -134,11 +134,16 @@ export class UsersService {
   }
 
 
-     getSellerxNegocio(): Promise<any> {
-        let idNegocio =JSON.parse(localStorage.getItem('business') || '{}').idNegocio;
-        let rol='vendedor';
-       return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ idNegocio }/${ rol }`);
-     }
+  getSellerxNegocio(): Promise<any> {
+     let idNegocio =JSON.parse(localStorage.getItem('business') || '{}').idNegocio;
+     let rol='vendedor';
+    return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ idNegocio }/${ rol }`);
+  }
+
+  getSellerxNegocioSAD(idNegocio: any): Promise<any> {
+    let rol='vendedor';
+   return this.connectionSvc.send('get', `usuario/obtenerPorNegocioAndRol/${ idNegocio }/${ rol }`);
+ }
 
   getLimitsBySeller(id: number): Promise<any> {
     return this.connectionSvc.send('get', `limite/obtener/${ id }`);

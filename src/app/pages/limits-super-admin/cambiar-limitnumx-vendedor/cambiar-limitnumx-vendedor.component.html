@@ -1,0 +1,61 @@
+
+<div class="modal-dialog modal-m" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite de vendedores</h5>
+              <i class="bi bi-x-circle" (click)="closeModal(true)" style="cursor: pointer;"></i>
+        </div>
+        <div class="modal-body">
+            <form  [formGroup]="formChangeLimitexSeller">
+                   <!--negocio-->
+                   <div class="mb-3" tyle="font-size: small;">
+                    <label class="small mb-1"  for="inputBusiness">Negocio:<span class="text-danger">*</span></label>
+                    <ng-select #rutasSelect [items]="negocioData" [selectOnTab]="true" name="negocio"
+                        bindValue="id" bindLabel="nombre" placeholder="Seleccione negocio" formControlName="negocio"
+                        [selectableGroup]="true" (change)="cambiaNegocio()">
+                    </ng-select>
+                    <span *ngIf="validInput('negocio')" class="text-danger mt-2">
+                       este campo es requerido
+                    </span>
+                </div>
+                <!--numeros de la ruta-->
+                    <div class="mb-3">
+                    <label class="small mb-1"  for="inputBusiness">Numeros: <span class="text-danger">*</span></label>
+                        <div class="border" style="font-size: small;">
+                          <tag-input [(ngModel)]='items' secondaryPlaceholder="ingrese numeros"
+                          style="margin-left: 5px !important"
+                                    formControlName="numeros" theme='bootstrap'></tag-input>
+                           <span *ngIf="validInput('numeros')" class="text-danger mt-2">
+                            este campo es requerido
+                           </span>        
+                        </div>
+                    </div>
+                    <div class="mb-3" tyle="font-size: small;">
+                        <label class="small mb-1"  for="inputBusiness">Vendedores: <span class="text-danger">*</span></label>
+                        <ng-select #rutasSelect [items]="VendedorData" [selectOnTab]="true" [multiple] ="true" name="vendedor"
+                            bindValue="id" bindLabel="nombre" placeholder="Seleccione Vendedores" formControlName="vendedor"
+                            [selectableGroup]="true">
+                        </ng-select>
+                        <span *ngIf="validInput('vendedor')" class="text-danger mt-2">
+                           este campo es requerido
+                        </span>
+                    </div>
+                    <div class="mb-3" tyle="font-size: small;">
+                        <label class="small mb-1" for="inputlimite">Limite: <span class="text-danger">*</span></label>
+                        <input class="form-control mb-2" id="inputlimite" type="text" placeholder="Ingrese el limte"
+                            formControlName="limite" [class.is-invalid]="validInput('limite')" autocomplete="off"/>
+                        <span *ngIf="validInput('limite')" class="text-danger mt-2">
+                            este campo es requerido
+                        </span>
+                    </div>
+
+                
+                <div class="mt-4 mb-0 text-center">
+                    <button class="btn btn-danger" (click)="closeModal(true)">Cerrar</button>
+                    <button class="btn btn-primary" (click)="onSubmit()" [disabled]="formChangeLimitexSeller.invalid">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+  

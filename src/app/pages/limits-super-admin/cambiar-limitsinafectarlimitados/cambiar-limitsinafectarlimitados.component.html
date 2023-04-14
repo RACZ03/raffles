@@ -1,0 +1,96 @@
+
+<div class="modal-dialog modal-m" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Cambiar Limite sin Afectar Limitados</h5>
+                <i class="bi bi-x-circle" (click)="closeModal(true)" style="cursor: pointer;"></i>
+        </div>
+        <div class="modal-body">
+            <form  [formGroup]="formChangeLimitOutLimit">
+                   <!--negocio-->
+                   <div class="mb-3" tyle="font-size: small;">
+                    <label class="small mb-1"  for="inputBusiness">Negocio:<span class="text-danger">*</span></label>
+                    <ng-select #rutasSelect [items]="negocioData" [selectOnTab]="true" name="negocio"
+                        bindValue="id" bindLabel="nombre" placeholder="Seleccione negocio" formControlName="negocio"
+                        [selectableGroup]="true" (change)="cambiaNegocio()">
+                    </ng-select>
+                    <span *ngIf="validInput('negocio')" class="text-danger mt-2">
+                       este campo es requerido
+                    </span>
+                </div>
+                <!--Container of fomrgroup-->
+              <div>
+                            <div class="row">
+                                <div class="col-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="mb-3" tyle="font-size: small;">
+                                        <label class="small mb-1"  for="inputBusiness">Vendedor: <span class="text-danger">*</span></label>
+                                        <ng-select #rutasSelect [items]="SellerData" [selectOnTab]="true" name="vendedor"
+                                            bindValue="id" bindLabel="nombre" placeholder="Seleccione vendedor" formControlName="vendedor"
+                                            [selectableGroup]="true">
+                                        </ng-select>
+                                    </div>              
+                                    </div>
+                               <div class="col-12 col-lg-12 col-md-12 col-sm-12" style="display: flex;">
+                                  <div class="row">
+                                    <div class="col-8 col-lg-10 col-sm-8">
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputLastName">Premio Maximo: <span class="text-danger">*</span></label>
+                                            <input class="form-control mb-2" id="inputLastName" type="text" placeholder="Ingrese el Numero" type="number"
+                                                  formControlName="premioMaximmo" [class.is-invalid]="validInput('premioMaximmo')"
+                                                  autocomplete="off"/>
+                                            <span *ngIf="validInput('premioMaximmo')" class="text-danger mt-2">
+                                                Campo requerido.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-lg-2 col-sm-4 float-start">
+                                        <button class="btn btn-primary mt-4" type="button" 
+                                        style="background-color: #6C55A4; border-color: #6C55A4;"
+                                         (click)="addLimitOutLimit()">
+                                            Agregar
+                                        </button>
+                                   </div>
+                                   </div> 
+                               </div>
+                            </div> 
+              </div>
+                <!--Tabla-->
+                <div class="mt-4">
+                    <table class="table"><!--table de limites sin afectar -->
+                        <thead>
+                            <tr>
+                                <th>Vendedor</th>
+                                <th>Premio Maximo</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let items of limitList">
+                                <td class="align-middle">
+                                    {{items.seller.nombre}}
+                                </td>
+                                <td class="align-middle">
+                                    {{items.premioMaximmo}}
+                                </td>
+                                <td class="align-middle text-center">
+                                    <!-- DELETE -->
+                                    <button class="btn" (click)="eliminarRegistro(items)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4 text-center border-top ">
+                    <div class="mt-4">
+                        <button class="btn btn-danger" (click)="closeModal(true)">Cerrar</button>
+                        <button class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+  
