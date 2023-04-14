@@ -77,6 +77,10 @@ const routes: Routes = [
         canLoad: [ AdminGuard ]
       },
       {
+        path: 'LimiteSAD', loadChildren: () => import('./limits-super-admin/limits-super-admin.module').then(m=>m.LimitsSuperAdminModule),
+        canLoad: [ AdminGuard ]
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

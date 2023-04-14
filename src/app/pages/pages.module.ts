@@ -13,7 +13,6 @@ const maskConfig: Partial<IConfig> = {
 @NgModule({
   declarations: [
     PagesComponent,
-   
   ],
   imports: [
     CommonModule,

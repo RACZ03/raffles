@@ -27,6 +27,7 @@ export const ROUTE_LIST: RouteInfo[] = [
   {  path: 'report', title: 'Reportes', icon: 'ni-chart-bar-32 text-green', class: '', role: 'SUPER&ADMIN', order: 11 },
   { path: 'business-setup', title: 'Configuración',  icon:'ni-building text-info', class: '', role: 'SUPER&ADMIN',  order: 12 },
   { path: 'report/detalle-vendedores', title: 'Detalle Vendedores',  icon:'ni-chart-bar-32 text-info', class: '', role: 'VENDEDOR&SUPERVISOR',  order: 13 },
+  { path: 'LimiteSAD', title: 'LimitesSAD',  icon:'ni-ui-04 text-red', class: '', role: 'ROLE_SUPER_ADMIN', order: 13 }
 ];
 
 @Component({

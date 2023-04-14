@@ -1,0 +1,264 @@
+
+<!-- always keep -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+      <div class="header-body">
+      </div>
+    </div>
+  </div>
+  <!-- Contents -->
+  <div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col-12 mb-5 mb-xl-0">
+            <div class="card shadow" id="card-container-tables">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Switch background -->
+                            <label class="switch float-right">
+                                <input type="checkbox" id="toggleTable" appToggleTable>
+                                <span class="slider round"></span>
+                            </label>
+                            <h4 id="title-table" class="text-uppercase ls-1 mb-1">LIMITE SUPER ADMIN</h4>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- CARD -->
+                <div class="container mb-5">
+                     <div class="row">
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
+                        <div style="cursor: pointer;" (click)="openModalchangelimitxruta()">
+                          <div class="card card-stats mb-4 mb-lg-0" >
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar </h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                    <i class="bi bi-bar-chart-steps"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Numeros por Rutas</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalChangeLimitexVendedor()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                    <i class="bi bi-person-circle"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Numeros por Vendedor</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12  mt-4">
+                        <div style="cursor: pointer;" (click)="openModalChangeOneLimit()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="fas fa-chart-bar"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">De un Limite</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalChangeLimitoneVendedor()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                    <i class="bi bi-person-lines-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">De un Vendedor</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12  mt-4">
+                        <div style="cursor: pointer;" (click)="openModalChangeLimitWithoutAffectLimited()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Cambiar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Limite</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <i class="bi bi-capslock-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">Sin afectar Limitados</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalFreeNumberToSeller()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-default text-white rounded-circle shadow">
+                                    <i class="bi bi-123"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de vendedores</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-4">
+                        <div style="cursor: pointer;" (click)="openModalFreeNumberToRoute()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="bi bi-bus-front"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de las Rutas</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="cursor: pointer;" class="mt-4" (click)="openModalFreeNumberToBisness()">
+                          <div class="card card-stats mb-4 mb-lg-0">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title text-uppercase text-muted mb-0">Liberar</h5>
+                                  <span class="h2 font-weight-bold mb-0">Numeros</span>
+                                </div>
+                                <div class="col-auto">
+                                  <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i></span>
+                                <span class="text-nowrap">de los Negocios</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+    <!-- Modal Cambiar limite de numeros por ruta -->
+<div class="modal fade" id="modalchangelimitxruta" data-backdrop="static" tabindex="-1" role="dialog"
+aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+  <app-cambiar-limitnumx-ruta (onClose)="closemodalchangelimitxruta($event)"></app-cambiar-limitnumx-ruta>
+</div>
+
+
+  <!-- Modal Cambiar limite de numeros por vendedor -->
+  <div class="modal fade" id="modalchangelimitxvendedor" data-backdrop="static" tabindex="-1" role="dialog"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+    <app-cambiar-limitnumx-vendedor (onClose)="closeModalChangeLimitexVendedor($event)"></app-cambiar-limitnumx-vendedor>
+  </div>
+
+    <!-- Modal Cambiar un limite de un limite-->
+    <div class="modal fade" id="modalChangeOneLimit" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+      <app-cambiar-limitun-limite (onClose)="closeModalChangeOneLimit($event)"></app-cambiar-limitun-limite>
+    </div>
+
+      <!-- Modal Cambiar limite deun vendedor-->
+      <div class="modal fade" id="modalChangeLimitoneVendedor" data-backdrop="static" tabindex="-1" role="dialog"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+        <app-cambiar-limitnumun-vendedor (onClose)="closeModalChangeLimitoneVendedor($event)"></app-cambiar-limitnumun-vendedor>
+      </div>
+
+          <!-- Modal liberar numero de vendedores-->
+          <div class="modal fade" id="modalFreeNumberToSeller" data-backdrop="static" tabindex="-1" role="dialog"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+            <app-liberarnum-vendedor (onClose)="closefreeNumberToSeller($event)"></app-liberarnum-vendedor>
+          </div>
+
+             <!-- Modal liberar numero de rutas-->
+             <div class="modal fade" id="modalFreeNumberToRoute" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+               <app-liberarnum-rutas (onClose)="closefreeNumberToRoute($event)"></app-liberarnum-rutas>
+             </div>
+
+             <!-- Modal liberar numero de rutas-->
+             <div class="modal fade" id="modalFreeNumberToBisness" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+               <app-liberarnum-negocio (onClose)="closefreeNumberToBisness($event)"></app-liberarnum-negocio>
+             </div>
+
+             <!-- Modal cambiar limite sin afectar limitados-->
+             <div class="modal fade" id="modalFreeLimitWitOutLimit" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true" data-keyboard="false" >
+               <app-cambiar-limitsinafectarlimitados (onClose)="closeModalChangeLimitWithoutAffectLimited($event)"></app-cambiar-limitsinafectarlimitados>
+             </div>
+
+
+
+
